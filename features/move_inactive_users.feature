@@ -39,3 +39,14 @@ Feature: Move inactive users
 			When the bot runs on the repo
 			Then Matt should be in the alumni team
 			And Matt should not have any custom permissions on the cucumber-js repo
+
+	Rule: Formerly inactive users, who are now active again should remain in the alumni group
+
+		This helps us to know whether we have the right time-frame for retiring people - if there are lots of people
+		in both committers and alumni, it means we're maybe retiring people too soon.
+
+		Scenario: Demi who was formerly inactive, recently became active again
+			Given a user Demi is part of the alumni team
+			And the create date of their last commit was 1 day ago
+			When the bot runs on the repo
+			Then Demi should still be in the alumni team
