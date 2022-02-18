@@ -1,67 +1,89 @@
-import { Given, When, Then } from "@cucumber/cucumber"
+import { Given, When, Then, defineParameterType } from "@cucumber/cucumber"
 
-Given("a user Matt has write access to the cucumber-js repo", function () {
-  // Write code here that turns the phrase above into concrete actions
-  return "pending"
+defineParameterType({
+  regexp: /the ([\w-]+) team/,
+  transformer: (teamName: string) => teamName,
+  name: "team",
 })
 
-Given("a user {word} is part/member of the {word} team", function (who: string, team: string) {
-  // Write code here that turns the phrase above into concrete actions
-  return "pending" + who + team
+defineParameterType({
+  regexp: /([A-Z]\w+)/,
+  transformer: (userName: string) => userName,
+  name: "user",
 })
+
+Given(
+  "a user {user} has write access to the cucumber-js repo",
+  function (user: string) {
+    // Write code here that turns the phrase above into concrete actions
+    console.log(user)
+    return "pending"
+  }
+)
+
+Given(
+  "a user {user} is part/member of {team}",
+  function (user: string, team: string) {
+    console.log(user)
+    console.log(team)
+    // Write code here that turns the phrase above into concrete actions
+    return "pending"
+  }
+)
 
 Given(
   "the create date of their last commit was {int} day/days ago",
   function (daysAgo: number) {
     // Given('the create date of their last commit was {float} day ago', function (float) {
     // Write code here that turns the phrase above into concrete actions
-    return "pending" + daysAgo
+    console.log(daysAgo)
+    return "pending"
   }
 )
 
-Given("a user Julien is a member of the cucumber-js-admin team", function () {
-  // Write code here that turns the phrase above into concrete actions
-  return "pending"
-})
+Given(
+  "a user {user} is a member of {team}",
+  function (user: string, team: string) {
+    // Write code here that turns the phrase above into concrete actions
+    console.log(user)
+    console.log(team)
+    return "pending"
+  }
+)
 
 When("the bot runs on the repo", function () {
   // Write code here that turns the phrase above into concrete actions
   return "pending"
 })
 
-Then("Demi should still be in the alumni team", function () {
+Then("{user} should still be in {team}", function (user: string, team: string) {
+  console.log(user)
+  console.log(team)
   return "pending"
 })
 
-Then("{word} should be in the alumni team", function () {
+Then("{user} should be in {team}", function (user: string, team: string) {
   // "Writede here that turns the phrase above into concrete actions
+  console.log(user)
+  console.log(team)
   return "pending"
 })
 
 Then(
-  "Matt should not have any custom permissions on the cucumber-js repo",
-  function () {
+  "{user} should not have any custom permissions on the cucumber-js repo",
+  function (user: string) {
     // Write code here that turns the phrase above into concrete actions
+    console.log(user)
     return "pending"
   }
 )
 
-Then("Julien should not be in the cucumber-js-admin team anymore", function () {
-  // Write code here that turns the phrase above into concrete actions
-  return "pending"
-})
-
-Then("Aslak should not be in the alumni team", function () {
-  // Write code here that turns the phrase above into concrete actions
-  return "pending"
-})
-
-Then('Aslak should still be in the committers team', function () {
-  // Write code here that turns the phrase above into concrete actions
-  return 'pending'
-})
-
-Then('Greg should not be in the committers team', function () {
-  // Write code here that turns the phrase above into concrete actions
-  return 'pending'
-})
+Then(
+  "{user} should not be in {team}( anymore)",
+  function (user: string, team: string) {
+    // Write code here that turns the phrase above into concrete actions
+    console.log(user)
+    console.log(team)
+    return "pending"
+  }
+)
