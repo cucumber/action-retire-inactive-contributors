@@ -12,6 +12,11 @@ defineParameterType({
   name: "user",
 })
 
+Given("a GitHub organization {string}", function (organization: string) {
+  console.log(organization)
+  return "pending"
+})
+
 Given(
   "a user {user} has write access to the cucumber-js repo",
   function (user: string) {
@@ -51,7 +56,7 @@ Given(
   }
 )
 
-When("the bot runs on the repo", function () {
+When("the job is scheduled to run on the organization", function () {
   // Write code here that turns the phrase above into concrete actions
   return "pending"
 })
