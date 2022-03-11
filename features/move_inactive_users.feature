@@ -8,7 +8,6 @@ Feature: Move inactive users
 
 	Rule: Users become inactive after a year
 
-		@current
 		Scenario: Greg has been inactive for over a year
 			Given a user Greg is part of the committers team
 			And the create date of their last commit was 365 days ago
