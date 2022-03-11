@@ -1,4 +1,5 @@
 import { Given, When, Then, defineParameterType } from "@cucumber/cucumber"
+import { retireInactiveContributors } from "../../src/retireInactiveContributors"
 
 defineParameterType({
   regexp: /the ([\w-]+) team/,
@@ -58,7 +59,7 @@ Given(
 
 When("the job is scheduled to run on the organization", function () {
   // Write code here that turns the phrase above into concrete actions
-  return "pending"
+  retireInactiveContributors()
 })
 
 Then("{user} should still be in {team}", function (user: string, team: string) {
