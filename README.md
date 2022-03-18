@@ -1,26 +1,14 @@
-# inactive-contributor-bot
+# retire-inactive-contributor README.md
 
-> A GitHub App built with [Probot](https://github.com/probot/probot) that Retire inactive contributors from one team to another
+## Now as a Github action
+
+This a Github action which moves inactive  contributors from one team to another, (less-privileged) team.
+
+> Previously, a bot built with [Probot](https://github.com/probot/probot) that Retire inactive contributors from one team to another, now done using a GitHub Action
 
 ## Setup
 
-```sh
-# Install dependencies
-npm install
-
-# Run the bot
-npm start
-```
-
-## Docker
-
-```sh
-# 1. Build container
-docker build -t inactive-contributor-bot .
-
-# 2. Start container
-docker run -e APP_ID=<app-id> -e PRIVATE_KEY=<pem-value> inactive-contributor-bot
-```
+The current project code is based on the sample TypeScript action available at https://github.com/actions/typescript-action
 
 ## Contributing
 
