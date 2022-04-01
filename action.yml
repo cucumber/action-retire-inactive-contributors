@@ -1,0 +1,6 @@
+name: "Retire Inactive Contributors"
+description: "A github action to retire contributors after a period of inactivity."
+author: "Cucumber Open"
+runs:
+  using: "node16"
+  main: "dist/index.js"
