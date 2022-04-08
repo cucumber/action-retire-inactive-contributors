@@ -11,7 +11,9 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "cucumber-js"
+    "start": "probot run ./lib/index.js",
+    "test": "cucumber-js",
+    "test:wip": "cucumber-js --tags @wip"
   },
   "devDependencies": {
     "@cucumber/cucumber": "^7.3.2",

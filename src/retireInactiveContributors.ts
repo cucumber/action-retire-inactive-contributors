@@ -1,3 +1,3 @@
 export function retireInactiveContributors() {
-  throw new Error("Function not implemented.");
+  console.log("TODO: run the main function")
 }
