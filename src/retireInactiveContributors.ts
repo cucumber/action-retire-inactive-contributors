@@ -1,3 +1,3 @@
 export function retireInactiveContributors() {
-  throw new Error("Function not implemented.");
+  throw new Error("Hello from Blaise and Matt")
 }
