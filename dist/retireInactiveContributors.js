@@ -2,6 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.retireInactiveContributors = void 0;
 function retireInactiveContributors() {
-    throw new Error("Hello from Blaise and Matt");
+    console.log("TODO: run the main function");
 }
 exports.retireInactiveContributors = retireInactiveContributors;
