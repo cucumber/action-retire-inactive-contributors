@@ -2,6 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.retireInactiveContributors = void 0;
 function retireInactiveContributors() {
-    throw new Error("Function not implemented.");
+    throw new Error("Hello from Blaise and Matt");
 }
 exports.retireInactiveContributors = retireInactiveContributors;
