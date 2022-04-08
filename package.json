@@ -1,5 +1,5 @@
 {
-  "name": "inactive-contributor-bot",
+  "name": "action-retire-inactive-contributor",
   "version": "1.0.0",
   "private": true,
   "description": "Retire inactive contributors from one team to another",
@@ -7,9 +7,7 @@
   "license": "ISC",
   "homepage": "https://github.com/mattwynne/inactive-contributor-bot",
   "keywords": [
-    "probot",
     "github",
-    "probot-app"
   ],
   "scripts": {
     "build": "tsc",
@@ -17,17 +15,9 @@
     "test": "cucumber-js",
     "test:wip": "cucumber-js --tags @wip"
   },
-  "dependencies": {
-    "probot": "^11.0.1"
-  },
   "devDependencies": {
     "@cucumber/cucumber": "^7.3.2",
-    "@types/jest": "^26.0.19",
     "@types/node": "^14.14.19",
-    "jest": "^26.6.3",
-    "nock": "^13.0.5",
-    "smee-client": "^1.2.2",
-    "ts-jest": "^26.4.4",
     "ts-node": "^10.5.0",
     "typescript": "^4.1.3"
   },
