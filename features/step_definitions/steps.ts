@@ -17,10 +17,6 @@ class FakeGitHub {
     return this.membersOfTeam.get(team) || []
   }
 
-  createOrg(organization: string) {
-    console.log("TODO: create an org named", organization)
-  }
-
   createUser(user: string) {
     console.log("TODO: ensure a user exists named", user)
   }
@@ -54,13 +50,6 @@ defineParameterType({
   transformer: (userName: string) => userName,
   name: "user",
 })
-
-Given(
-  "a GitHub organization {string}",
-  function (this: World, organization: string) {
-    this.github.createOrg(organization)
-  }
-)
 
 Given(
   "a user {user} has write access to the cucumber-js repo",
@@ -97,7 +86,7 @@ Given(
   }
 )
 
-When("the job is scheduled to run on the organization", function () {
+When("the action runs", function () {
   // Write code here that turns the phrase above into concrete actions
   retireInactiveContributors()
 })

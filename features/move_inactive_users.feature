@@ -6,15 +6,12 @@ Feature: Move inactive users
 	For security reasons, we want to retire contributors who haven't been active recently
 	into the alumni group.
 
-	Background:
-		Given a GitHub organization "Cucumber"
-
 	Rule: Users become inactive after a year
 
 		Scenario: Greg has been inactive for over a year
 			And a user Greg is part of the committers team
 			And the create date of their last commit was 365 days ago
-			When the job is scheduled to run on the organization
+			When the action runs
 			Then Greg should be in the alumni team
 			And Greg should not be in the committers team
 
@@ -22,7 +19,7 @@ Feature: Move inactive users
 		Scenario: Aslak has been active within the past year
 			Given a user Aslak is part of the committers team
 			And the create date of their last commit was 364 days ago
-			When the job is scheduled to run on the organization
+			When the action runs
 			Then Aslak should still be in the committers team
 			And Aslak should not be in the alumni team
 
@@ -31,7 +28,7 @@ Feature: Move inactive users
 		Scenario: Julien is a member of the cucumber-js-admin tea
 			Given a user Julien is a member of the cucumber-js-admin team
 			And the create date of their last commit was 365 days ago
-			When the job is scheduled to run on the organization
+			When the action run
 			Then Julien should be in the alumni team
 			And Julien should not be in the cucumber-js-admin team anymore
 
@@ -40,7 +37,7 @@ Feature: Move inactive users
 		Scenario: Matt has custom permissions
 			Given a user Matt has write access to the cucumber-js repo
 			And the create date of their last commit was 365 days ago
-			When the job is scheduled to run on the organization
+			When the action runs
 			Then Matt should be in the alumni team
 			And Matt should not have any custom permissions on the cucumber-js repo
 
@@ -52,5 +49,5 @@ Feature: Move inactive users
 		Scenario: Demi who was formerly inactive, recently became active again
 			Given a user Demi is part of the alumni team
 			And the create date of their last commit was 1 day ago
-			When the job is scheduled to run on the organization
+			When the action runs
 			Then Demi should still be in the alumni team
