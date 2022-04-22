@@ -11,10 +11,12 @@ import { retireInactiveContributors } from "../../src/retireInactiveContributors
 type World = { github: FakeGitHub }
 
 class FakeGitHub {
+  private readonly membersOfTeam = new Map<string, string[]>()
+
   getMembersOf(team: string): string[] {
-    console.log("TODO: Get members of ", team)
-    return ["someuser", "anotheruser"]
+    return this.membersOfTeam.get(team) || []
   }
+
   createOrg(organization: string) {
     console.log("TODO: create an org named", organization)
   }
@@ -28,7 +30,8 @@ class FakeGitHub {
   }
 
   addUserToTeam(user: string, team: string) {
-    console.log("TODO: add user to", team)
+    const updatedUsers = [...this.getMembersOf(team), user]
+    this.membersOfTeam.set(team, updatedUsers)
   }
 
   createCommit(daysAgo: number) {
