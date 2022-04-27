@@ -6,11 +6,12 @@ import {
   defineParameterType,
 } from "@cucumber/cucumber"
 import assert from "assert"
+import {Github} from "../../src/retireInactiveContributors";
 import { retireInactiveContributors } from "../../src/retireInactiveContributors"
 
 type World = { github: FakeGitHub }
 
-class FakeGitHub {
+class FakeGitHub implements Github{
   private readonly membersOfTeam = new Map<string, string[]>()
 
   getMembersOf(team: string): string[] {
@@ -24,6 +25,10 @@ class FakeGitHub {
 
   createCommit(daysAgo: number) {
     console.log("TODO: create a commit", daysAgo, "days ago")
+  }
+
+  getAgeOfLastCommitBy(user: string): number {
+    return 365;
   }
 }
 
@@ -76,13 +81,13 @@ Given(
   }
 )
 
-When("the action runs", function () {
+When("the action runs", function (this: World) {
   // Write code here that turns the phrase above into concrete actions
-  retireInactiveContributors()
+  retireInactiveContributors(this.github)
 })
 
 Then(
-  "{user} should still be in {team}",
+  "{user} should be in {team}",
   function (this: World, user: string, team: string) {
     const users = this.github.getMembersOf(team)
     assert(
@@ -91,13 +96,6 @@ Then(
     )
   }
 )
-
-Then("{user} should be in {team}", function (user: string, team: string) {
-  // "Writede here that turns the phrase above into concrete actions
-  console.log(user)
-  console.log(team)
-  return "pending"
-})
 
 Then(
   "{user} should not have any custom permissions on the cucumber-js repo",

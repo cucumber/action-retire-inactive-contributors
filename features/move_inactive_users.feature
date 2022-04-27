@@ -8,6 +8,7 @@ Feature: Move inactive users
 
 	Rule: Users become inactive after a year
 
+		@wip
 		Scenario: Greg has been inactive for over a year
 			And a user Greg is part of the committers team
 			And the create date of their last commit was 365 days ago
@@ -20,7 +21,7 @@ Feature: Move inactive users
 			Given a user Aslak is part of the committers team
 			And the create date of their last commit was 364 days ago
 			When the action runs
-			Then Aslak should still be in the committers team
+			Then Aslak should be in the committers team
 			And Aslak should not be in the alumni team
 
 	Rule: Move inactive users into alumni team from any other team
