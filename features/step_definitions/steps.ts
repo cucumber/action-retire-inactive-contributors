@@ -17,14 +17,6 @@ class FakeGitHub {
     return this.membersOfTeam.get(team) || []
   }
 
-  createUser(user: string) {
-    console.log("TODO: ensure a user exists named", user)
-  }
-
-  createTeam(team: string) {
-    console.log("TODO: ensure a team exsits named", team)
-  }
-
   addUserToTeam(user: string, team: string) {
     const updatedUsers = [...this.getMembersOf(team), user]
     this.membersOfTeam.set(team, updatedUsers)
@@ -63,8 +55,6 @@ Given(
 Given(
   "a user {user} is part/member of {team}",
   function (this: World, user: string, team: string) {
-    this.github.createUser(user)
-    this.github.createTeam(team)
     this.github.addUserToTeam(user, team)
   }
 )
