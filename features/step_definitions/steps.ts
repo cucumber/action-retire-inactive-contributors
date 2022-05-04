@@ -6,12 +6,12 @@ import {
   defineParameterType,
 } from "@cucumber/cucumber"
 import assert from "assert"
-import {Github} from "../../src/retireInactiveContributors";
+import { Github } from "../../src/retireInactiveContributors"
 import { retireInactiveContributors } from "../../src/retireInactiveContributors"
 
 type World = { github: FakeGitHub }
 
-class FakeGitHub implements Github{
+class FakeGitHub implements Github {
   private readonly membersOfTeam = new Map<string, string[]>()
 
   getMembersOf(team: string): string[] {
@@ -23,12 +23,17 @@ class FakeGitHub implements Github{
     this.membersOfTeam.set(team, updatedUsers)
   }
 
+  removeUserFromTeam(user: string, team: string): void {
+    const updatedUsers = this.getMembersOf(team).filter(member => member !== user)
+    this.membersOfTeam.set(team, updatedUsers)
+  }
+
   createCommit(daysAgo: number) {
     console.log("TODO: create a commit", daysAgo, "days ago")
   }
 
   getAgeOfLastCommitBy(user: string): number {
-    return 365;
+    return 365
   }
 }
 
