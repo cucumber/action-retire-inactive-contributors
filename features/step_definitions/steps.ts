@@ -108,8 +108,11 @@ Then(
 
 Then(
   "{user} should not be in {team}( anymore)",
-  function (user: string, team: string) {
-    // Write code here that turns the phrase above into concrete actions
-    console.log("TODO: assert that", user, "is NOT in", team)
+  function (this: World, user: string, team: string) {
+    const users = this.github.getMembersOf(team)
+    assert(
+      !users.includes(user),
+      `Could not find user: ${user} in team: ${team}.`
+    )
   }
 )
