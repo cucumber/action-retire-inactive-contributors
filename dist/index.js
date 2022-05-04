@@ -12,7 +12,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const retireInactiveContributors_1 = require("./retireInactiveContributors");
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        yield (0, retireInactiveContributors_1.retireInactiveContributors)();
+        const github = {
+            getAgeOfLastCommitBy: function (user) {
+                console.log("TODO: Implement this using actual API calls to GitHub via Octokit library");
+                throw new Error("Function not implemented.");
+            },
+            addUserToTeam: function (user, alumniTeam) {
+                console.log("TODO: Implement this using actual API calls to GitHub via Octokit library");
+                throw new Error("Function not implemented.");
+            },
+        };
+        yield (0, retireInactiveContributors_1.retireInactiveContributors)(github);
     });
 }
 run();
