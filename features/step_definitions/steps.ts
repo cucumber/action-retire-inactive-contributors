@@ -35,6 +35,9 @@ class FakeGitHub implements Github {
   }
 
   getAgeOfLastCommitBy(user: string): number {
+    console.log(
+      "TODO: don't hard-code age of commit; look it up from a list of (fake) commits"
+    )
     return 365
   }
 }
