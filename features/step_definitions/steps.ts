@@ -24,7 +24,9 @@ class FakeGitHub implements Github {
   }
 
   removeUserFromTeam(user: string, team: string): void {
-    const updatedUsers = this.getMembersOf(team).filter(member => member !== user)
+    const updatedUsers = this.getMembersOf(team).filter(
+      (member) => member !== user
+    )
     this.membersOfTeam.set(team, updatedUsers)
   }
 
