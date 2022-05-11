@@ -23,6 +23,9 @@ function run() {
             removeUserFromTeam: function (user, committersTeam) {
                 throw new Error("Function not implemented.");
             },
+            getMembersOf(team) {
+                throw new Error("Function not implemented.");
+            }
         };
         yield (0, retireInactiveContributors_1.retireInactiveContributors)(github);
     });

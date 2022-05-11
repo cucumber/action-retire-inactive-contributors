@@ -17,6 +17,9 @@ async function run(): Promise<void> {
     removeUserFromTeam: function (user: string, committersTeam: string): void {
       throw new Error("Function not implemented.")
     },
+    getMembersOf(team: string): string[] {
+      throw new Error("Function not implemented.")
+    }
   }
   await retireInactiveContributors(github)
 }
