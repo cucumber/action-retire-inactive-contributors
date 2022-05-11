@@ -6,7 +6,7 @@ import {
   defineParameterType,
 } from "@cucumber/cucumber"
 import assert from "assert"
-import { Github } from "../../src/retireInactiveContributors"
+import {Commit, Github} from "../../src/retireInactiveContributors"
 import { retireInactiveContributors } from "../../src/retireInactiveContributors"
 
 type World = { github: FakeGitHub }
@@ -34,11 +34,11 @@ class FakeGitHub implements Github {
     console.log("TODO: create a commit", daysAgo, "days ago")
   }
 
-  getAgeOfLastCommitBy(user: string): number {
+  getLastCommitBy(user: string): Commit {
     console.log(
       "TODO: don't hard-code age of commit; look it up from a list of (fake) commits"
     )
-    return 365
+    return { user: "Blah", date: new Date() }
   }
 }
 

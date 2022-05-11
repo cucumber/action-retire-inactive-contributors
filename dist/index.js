@@ -14,7 +14,7 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("TODO: Implement this using actual API calls to GitHub via Octokit library");
         const github = {
-            getAgeOfLastCommitBy: function (user) {
+            getLastCommitBy(user) {
                 throw new Error("Function not implemented.");
             },
             addUserToTeam: function (user, alumniTeam) {

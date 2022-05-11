@@ -1,4 +1,5 @@
 import {
+  Commit,
   Github,
   retireInactiveContributors,
 } from "./retireInactiveContributors"
@@ -8,7 +9,7 @@ async function run(): Promise<void> {
     "TODO: Implement this using actual API calls to GitHub via Octokit library"
   )
   const github: Github = {
-    getAgeOfLastCommitBy: function (user: string): number {
+    getLastCommitBy(user: string): Commit {
       throw new Error("Function not implemented.")
     },
     addUserToTeam: function (user: string, alumniTeam: string): void {
