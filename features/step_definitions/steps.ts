@@ -13,6 +13,7 @@ type World = { github: FakeGitHub }
 
 class FakeGitHub implements Github {
   private readonly membersOfTeam = new Map<string, string[]>()
+  private readonly commitsByUser = new Map<string, Commit[]>()
 
   getMembersOf(team: string): string[] {
     return this.membersOfTeam.get(team) || []
@@ -31,14 +32,22 @@ class FakeGitHub implements Github {
   }
 
   createCommit(daysAgo: number) {
-    console.log("TODO: create a commit", daysAgo, "days ago")
+    const user = "Greg"
+    console.log("TODO: Pass in the user making the commit")
+    const today = new Date()
+    const date = new Date(today.setDate(today.getDate() - daysAgo))
+    const commit:Commit = {user, date}
+    const updatedCommits = [...this.getCommitsByUser(user), commit]
+    this.commitsByUser.set(user, updatedCommits)
+
+  }
+
+  getCommitsByUser(user: string): Commit[] {
+    return this.commitsByUser.get(user) || []
   }
 
   getLastCommitBy(user: string): Commit {
-    console.log(
-      "TODO: don't hard-code age of commit; look it up from a list of (fake) commits"
-    )
-    return { user: "Blah", date: new Date() }
+    return this.getCommitsByUser(user)[0]
   }
 }
 
