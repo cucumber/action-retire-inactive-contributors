@@ -6,7 +6,7 @@ import {
   defineParameterType,
 } from "@cucumber/cucumber"
 import assert from "assert"
-import {Commit, Github} from "../../src/retireInactiveContributors"
+import { Commit, Github } from "../../src/retireInactiveContributors"
 import { retireInactiveContributors } from "../../src/retireInactiveContributors"
 
 type World = { github: FakeGitHub }
@@ -31,15 +31,12 @@ class FakeGitHub implements Github {
     this.membersOfTeam.set(team, updatedUsers)
   }
 
-  createCommit(daysAgo: number) {
-    const user = "Greg"
-    console.log("TODO: Pass in the user making the commit")
+  createCommit(user: string, daysAgo: number) {
     const today = new Date()
     const date = new Date(today.setDate(today.getDate() - daysAgo))
-    const commit:Commit = {user, date}
+    const commit: Commit = { user, date }
     const updatedCommits = [...this.getCommitsByUser(user), commit]
     this.commitsByUser.set(user, updatedCommits)
-
   }
 
   getCommitsByUser(user: string): Commit[] {
@@ -84,9 +81,9 @@ Given(
 )
 
 Given(
-  "the create date of their last commit was {int} day/days ago",
-  function (this: World, daysAgo: number) {
-    this.github.createCommit(daysAgo)
+  "the create date of {user}'s last commit was {int} day/days ago",
+  function (this: World, user: string, daysAgo: number) {
+    this.github.createCommit(user, daysAgo)
   }
 )
 
