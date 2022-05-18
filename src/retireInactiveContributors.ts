@@ -10,8 +10,7 @@ export interface Github {
   getMembersOf(team: string): string[]
 }
 
-export function retireInactiveContributors(github: Github) {
-  // return alumni team, a member called Greg and the last commit date
+export function retireInactiveContributors(github: Github): void {
   const alumniTeam = "alumni"
   const committersTeam = "committers"
   const committersTeamMembers = github.getMembersOf(committersTeam)
