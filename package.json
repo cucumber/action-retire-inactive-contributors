@@ -11,8 +11,9 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "npm run test:unit && cucumber-js",
-    "test:wip": "cucumber-js --tags @wip",
+    "test": "npm run test:unit && npm run test:acceptance",
+    "test:acceptance": "cucumber-js --tags 'not @todo and not @wip'",
+    "test:acceptance:wip": "cucumber-js --tags @wip",
     "test:unit": "mocha src/**/*.test.ts"
   },
   "devDependencies": {
