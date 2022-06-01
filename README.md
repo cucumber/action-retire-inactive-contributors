@@ -2,13 +2,28 @@
 
 ## Now as a Github action
 
-This a Github action which moves inactive  contributors from one team to another, (less-privileged) team.
+This a Github action which moves inactive contributors from one team to another, (less-privileged) team.
 
 > Previously, a bot built with [Probot](https://github.com/probot/probot) that Retire inactive contributors from one team to another, now done using a GitHub Action
 
 ## Setup
 
 The current project code is based on the sample TypeScript action available at https://github.com/actions/typescript-action
+
+If you are using VSCode you can also use the following workspace settings for Prettier/ESLint:
+
+```
+{
+	"editor.formatOnSave": true,
+	"[typescript]": {
+		"editor.formatOnSave": false,
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": true
+	}
+}
+```
 
 ## Contributing
 
