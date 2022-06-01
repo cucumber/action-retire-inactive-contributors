@@ -11,15 +11,22 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "npm run test:unit && npm run test:acceptance",
-    "test:acceptance": "cucumber-js --tags 'not @todo and not @wip'",
-    "test:acceptance:wip": "cucumber-js --tags @wip",
-    "test:unit": "mocha src/**/*.test.ts"
+    "start": "probot run ./lib/index.js",
+    "test": "cucumber-js",
+    "test:wip": "cucumber-js --tags @wip",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --config .prettierrc 'src/**/*.ts' --write"
   },
   "devDependencies": {
     "@cucumber/cucumber": "^7.3.2",
     "@types/mocha": "^9.1.1",
     "@types/node": "^14.14.19",
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.27.0",
+    "eslint": "^8.16.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.6.2",
     "ts-node": "^10.5.0",
     "typescript": "^4.1.3"
   },
