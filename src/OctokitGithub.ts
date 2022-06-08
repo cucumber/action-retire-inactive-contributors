@@ -1,4 +1,4 @@
-import { Octokit } from '@octokit/core'
+import { Octokit } from '@octokit/rest'
 import { Commit, Github } from './retireInactiveContributors'
 // "TODO: Implement this using actual API calls to GitHub via Octokit library"
 
@@ -18,7 +18,12 @@ export class OctokitGithub implements Github {
   }
 
   getMembersOf(team: string): string[] {
-    // TODO: implement me!
+    // TODO: change interface to make these functions async (i.e. they need to return Promises)
+    const result = this.octokit.rest.teams.listMembersInOrg({
+      org: 'test-inactive-contributor-action',
+      team_slug: team,
+    })
+    // TODO: parse the result to return the names of the team members
     throw new Error('Function not implemented.')
   }
 }
