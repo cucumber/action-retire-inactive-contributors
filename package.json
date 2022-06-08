@@ -15,7 +15,7 @@
     "test": "cucumber-js",
     "test:wip": "cucumber-js --tags @wip",
     "lint": "eslint . --ext .ts",
-    "format": "prettier --config .prettierrc 'src/**/*.ts' --write"
+    "format": "prettier --config .prettierrc '{src,features}/**/*.ts' --write"
   },
   "devDependencies": {
     "@cucumber/cucumber": "^7.3.2",
