@@ -4,10 +4,10 @@ import {
   When,
   Then,
   defineParameterType,
-} from "@cucumber/cucumber"
-import assert from "assert"
-import { Commit, Github } from "../../src/retireInactiveContributors"
-import { retireInactiveContributors } from "../../src/retireInactiveContributors"
+} from '@cucumber/cucumber'
+import assert from 'assert'
+import { Commit, Github } from '../../src/retireInactiveContributors'
+import { retireInactiveContributors } from '../../src/retireInactiveContributors'
 
 type World = { github: FakeGitHub }
 
@@ -55,26 +55,26 @@ Before(function () {
 defineParameterType({
   regexp: /the ([\w-]+) team/,
   transformer: (teamName: string) => teamName,
-  name: "team",
+  name: 'team',
 })
 
 defineParameterType({
   regexp: /([A-Z]\w+)/,
   transformer: (userName: string) => userName,
-  name: "user",
+  name: 'user',
 })
 
 Given(
-  "a user {user} has write access to the cucumber-js repo",
+  'a user {user} has write access to the cucumber-js repo',
   function (user: string) {
     // Write code here that turns the phrase above into concrete actions
     console.log(user)
-    return "pending"
+    return 'pending'
   }
 )
 
 Given(
-  "a user {user} is part/member of {team}",
+  'a user {user} is part/member of {team}',
   function (this: World, user: string, team: string) {
     this.github.addUserToTeam(user, team)
   }
@@ -88,22 +88,22 @@ Given(
 )
 
 Given(
-  "a user {user} is a member of {team}",
+  'a user {user} is a member of {team}',
   function (user: string, team: string) {
     // Write code here that turns the phrase above into concrete actions
     console.log(user)
     console.log(team)
-    return "pending"
+    return 'pending'
   }
 )
 
-When("the action runs", function (this: World) {
+When('the action runs', function (this: World) {
   // Write code here that turns the phrase above into concrete actions
   retireInactiveContributors(this.github)
 })
 
 Then(
-  "{user} should be in {team}",
+  '{user} should be in {team}',
   function (this: World, user: string, team: string) {
     const users = this.github.getMembersOf(team)
     assert(
@@ -114,16 +114,16 @@ Then(
 )
 
 Then(
-  "{user} should not have any custom permissions on the cucumber-js repo",
+  '{user} should not have any custom permissions on the cucumber-js repo',
   function (user: string) {
     // Write code here that turns the phrase above into concrete actions
     console.log(user)
-    return "pending"
+    return 'pending'
   }
 )
 
 Then(
-  "{user} should not be in {team}( anymore)",
+  '{user} should not be in {team}( anymore)',
   function (this: World, user: string, team: string) {
     const users = this.github.getMembersOf(team)
     assert(
