@@ -16,7 +16,7 @@
     "test:acceptance:wip": "cucumber-js --tags @wip",
     "test:unit": "mocha src/**/*.test.ts",
     "lint": "eslint . --ext .ts",
-    "format": "prettier --config .prettierrc 'src/**/*.ts' --write"
+    "format": "prettier --config .prettierrc '{src,features}/**/*.ts' --write"
   },
   "devDependencies": {
     "@cucumber/cucumber": "^7.3.2",
