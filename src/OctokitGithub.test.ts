@@ -12,7 +12,7 @@ describe(OctokitGithub.name, () => {
     }
     const octokit = getOctokit(token)
     const githubAdapter = new OctokitGithub(octokit)
-    const members = githubAdapter.getMembersOf('fishcakes')
+    const members = await githubAdapter.getMembersOf('fishcakes')
     assert(members)
   })
 })

@@ -7,13 +7,15 @@ export interface Github {
   removeUserFromTeam(user: string, committersTeam: string): void
   getLastCommitBy(user: string): Commit
   addUserToTeam(user: string, alumniTeam: string): void
-  getMembersOf(team: string): string[]
+  getMembersOf(team: string): Promise<string[]>
 }
 
-export function retireInactiveContributors(github: Github): void {
+export async function retireInactiveContributors(
+  github: Github
+): Promise<void> {
   const alumniTeam = 'alumni'
   const committersTeam = 'committers'
-  const committersTeamMembers = github.getMembersOf(committersTeam)
+  const committersTeamMembers = await github.getMembersOf(committersTeam)
   for (const user of committersTeamMembers) {
     const lastCommit = github.getLastCommitBy(user)
     const oneDay = 1000 * 60 * 60 * 24

@@ -17,12 +17,13 @@ export class OctokitGithub implements Github {
     throw new Error('Function not implemented.')
   }
 
-  getMembersOf(team: string): string[] {
+  async getMembersOf(team: string): Promise<string[]> {
     // TODO: change interface to make these functions async (i.e. they need to return Promises)
-    const result = this.octokit.rest.teams.listMembersInOrg({
+    const result = await this.octokit.rest.teams.listMembersInOrg({
       org: 'test-inactive-contributor-action',
       team_slug: team,
     })
+    console.log(result)
     // TODO: parse the result to return the names of the team members
     throw new Error('Function not implemented.')
   }

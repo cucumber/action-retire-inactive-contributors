@@ -9,24 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const OctokitGithub_1 = require("./OctokitGithub");
 const retireInactiveContributors_1 = require("./retireInactiveContributors");
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("TODO: Implement this using actual API calls to GitHub via Octokit library");
-        const github = {
-            getLastCommitBy(user) {
-                throw new Error("Function not implemented.");
-            },
-            addUserToTeam: function (user, alumniTeam) {
-                throw new Error("Function not implemented.");
-            },
-            removeUserFromTeam: function (user, committersTeam) {
-                throw new Error("Function not implemented.");
-            },
-            getMembersOf(team) {
-                throw new Error("Function not implemented.");
-            }
-        };
+        const github = new OctokitGithub_1.OctokitGithub();
         yield (0, retireInactiveContributors_1.retireInactiveContributors)(github);
     });
 }
