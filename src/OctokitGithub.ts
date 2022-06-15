@@ -1,9 +1,9 @@
-import { Octokit } from '@octokit/rest'
+import { GitHub } from '@actions/github/lib/utils'
 import { Commit, Github } from './retireInactiveContributors'
 // "TODO: Implement this using actual API calls to GitHub via Octokit library"
 
 export class OctokitGithub implements Github {
-  constructor(private readonly octokit: Octokit) {}
+  constructor(private readonly octokit: InstanceType<typeof GitHub>) {}
 
   getLastCommitBy(user: string): Commit {
     throw new Error('Function not implemented.')
