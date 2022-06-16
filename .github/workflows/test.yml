@@ -2,7 +2,7 @@ name: Build & test
 
 on:
   push:
-    branches: [ "main", "setup-ci" ]
+    branches: [ "*" ]
   pull_request:
     branches: [ "main" ]
 
