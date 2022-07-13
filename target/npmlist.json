@@ -1,0 +1,1 @@
+{"version":"1.0.0","name":"action-retire-inactive-contributor","dependencies":{"@actions/core":{"version":"1.8.2"},"@actions/github":{"version":"5.0.3"},"@octokit/rest":{"version":"18.12.0"},"mocha":{"version":"10.0.0"}}}

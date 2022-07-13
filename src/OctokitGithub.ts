@@ -23,8 +23,7 @@ export class OctokitGithub implements Github {
       org: 'test-inactive-contributor-action',
       team_slug: team,
     })
-    console.log(result)
-    // TODO: parse the result to return the names of the team members
-    throw new Error('Function not implemented.')
+
+    return result.data.map((user) => user.login)
   }
 }

@@ -8,11 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const assert_1 = __importDefault(require("assert"));
 const OctokitGithub_1 = require("./OctokitGithub");
 const github_1 = require("@actions/github");
 describe(OctokitGithub_1.OctokitGithub.name, () => {
@@ -23,7 +19,7 @@ describe(OctokitGithub_1.OctokitGithub.name, () => {
         }
         const octokit = (0, github_1.getOctokit)(token);
         const githubAdapter = new OctokitGithub_1.OctokitGithub(octokit);
-        const members = githubAdapter.getMembersOf('fishcakes');
-        (0, assert_1.default)(members);
+        const members = yield githubAdapter.getMembersOf('fishcakes');
+        assertThat(members, equalTo(['blaisep']));
     }));
 });

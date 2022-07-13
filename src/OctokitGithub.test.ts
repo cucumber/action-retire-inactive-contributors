@@ -1,6 +1,6 @@
-import assert from 'assert'
 import { OctokitGithub } from './OctokitGithub'
 import { getOctokit } from '@actions/github'
+import { assertThat, equalTo } from 'hamjest'
 
 describe(OctokitGithub.name, () => {
   it('gets members of a team', async () => {
@@ -13,6 +13,6 @@ describe(OctokitGithub.name, () => {
     const octokit = getOctokit(token)
     const githubAdapter = new OctokitGithub(octokit)
     const members = await githubAdapter.getMembersOf('fishcakes')
-    assert(members)
+    assertThat(members, equalTo(['blaisep', 'funficient']))
   })
 })

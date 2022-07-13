@@ -31,6 +31,7 @@ class OctokitGithub {
                 org: 'test-inactive-contributor-action',
                 team_slug: team,
             });
+            console.log(result);
             // TODO: parse the result to return the names of the team members
             throw new Error('Function not implemented.');
         });
