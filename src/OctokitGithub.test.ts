@@ -11,7 +11,10 @@ describe(OctokitGithub.name, () => {
       )
     }
     const octokit = getOctokit(token)
-    const githubAdapter = new OctokitGithub(octokit)
+    const githubAdapter = new OctokitGithub(
+      octokit,
+      'test-inactive-contributor-action'
+    )
     const members = await githubAdapter.getMembersOf('fishcakes')
     assertThat(members, equalTo(['blaisep', 'funficient']))
   })

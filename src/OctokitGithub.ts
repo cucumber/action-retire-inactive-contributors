@@ -3,7 +3,10 @@ import { Commit, Github } from './retireInactiveContributors'
 // "TODO: Implement this using actual API calls to GitHub via Octokit library"
 
 export class OctokitGithub implements Github {
-  constructor(private readonly octokit: InstanceType<typeof GitHub>) {}
+  constructor(
+    private readonly octokit: InstanceType<typeof GitHub>,
+    private readonly org: string
+  ) {}
 
   getLastCommitBy(user: string): Commit {
     throw new Error('Function not implemented.')
@@ -20,7 +23,7 @@ export class OctokitGithub implements Github {
   async getMembersOf(team: string): Promise<string[]> {
     // TODO: change interface to make these functions async (i.e. they need to return Promises)
     const result = await this.octokit.rest.teams.listMembersInOrg({
-      org: 'test-inactive-contributor-action',
+      org: this.org,
       team_slug: team,
     })
 
