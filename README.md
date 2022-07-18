@@ -2,7 +2,12 @@
 
 ## Now as a Github action
 
-This a Github action which moves inactive contributors from one team to another, (less-privileged) team.
+When this Github action runs:
+    - It requests a list of all contributors
+    - Moves inactive contributors to a less-privileged alumni team 
+    - If an inactive contributor has custom permissions, these permissions are revoked
+
+![Sequence Diagram](diagrams/sequence.png)
 
 > Previously, a bot built with [Probot](https://github.com/probot/probot) that Retire inactive contributors from one team to another, now done using a GitHub Action
 
