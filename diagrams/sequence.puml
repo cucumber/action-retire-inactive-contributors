@@ -1,0 +1,22 @@
+@startuml
+entity Scheduler as s
+participant Github_Action as action
+database Github_Org as gh
+
+s -> action: Check for Inactive Contributors
+action -> gh: Get org members
+action <--  gh:(List of members)
+
+note right 
+This list includes all the attributes of each member
+end note
+
+group Last Commit is > 365 days?
+    action -> gh: move to Alumni
+    group has custom permission?
+    action -> gh: remove custom permissions
+    end
+    end
+
+group
+@enduml
