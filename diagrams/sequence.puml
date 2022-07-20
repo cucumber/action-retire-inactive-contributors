@@ -4,7 +4,7 @@ participant Github_Action as action
 database Github_Org as gh
 
 s -> action: Check for Inactive Contributors
-action -> gh: GetListofMembers
+action -> gh: GetListOfMembers
 action <--  gh:FullMemberInfo...
 
 note right 
