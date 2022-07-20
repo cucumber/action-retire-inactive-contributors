@@ -10,8 +10,10 @@
     "github"
   ],
   "scripts": {
-    "build": "tsc",
-    "test": "npm run lint && npm run build && npm run test:unit && npm run test:acceptance",
+    "build": "tsc --build",
+    "build:production": "tsc --build tsconfig.production.json",
+    "build:clean": "rm -rf dist",
+    "test": "npm run lint && npm run build && npm run test:unit && npm run test:acceptance && npm run build:production",
     "test:acceptance": "cucumber-js --tags 'not @todo and not @wip'",
     "test:acceptance:wip": "cucumber-js --tags @wip",
     "test:unit": "mocha src/**/*.test.ts",
