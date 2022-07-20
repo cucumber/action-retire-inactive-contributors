@@ -10,6 +10,10 @@ export class OctokitGithub implements Github {
 
   getLastCommitBy(user: string): Commit {
     throw new Error('Function not implemented.')
+    // TODO: build a request with the pattern: https://api.github.com/repos/{user}/{repo}commits/master
+    // Possible suggestion in https://stackoverflow.com/a/61548243/11799079 for get last commit
+    // To be implemented.
+
   }
 
   addUserToTeam(user: string, alumniTeam: string): void {
