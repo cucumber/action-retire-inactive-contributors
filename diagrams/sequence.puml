@@ -4,11 +4,11 @@ participant Github_Action as action
 database Github_Org as gh
 
 s -> action: Check for Inactive Contributors
-action -> gh: GetListOfMembers
-action <--  gh:FullMemberInfo...
+action -> gh: Get org members
+action <--  gh:(List of members)
 
 note right 
-The Memberlist has all the attributes of each member
+This list includes all the attributes of each member
 end note
 
 group Last Commit is > 365 days?
