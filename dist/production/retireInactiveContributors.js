@@ -16,7 +16,7 @@ function retireInactiveContributors(github) {
         const committersTeam = 'committers';
         const committersTeamMembers = yield github.getMembersOf(committersTeam);
         for (const user of committersTeamMembers) {
-            const lastCommit = github.getLastCommitBy(user);
+            const lastCommit = yield github.getLastCommitBy(user);
             const oneDay = 1000 * 60 * 60 * 24;
             const daysSinceLastCommit = Math.round((new Date().getTime() - lastCommit.date.getTime()) / oneDay);
             if (daysSinceLastCommit >= 365) {

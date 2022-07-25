@@ -9,12 +9,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const OctokitGithub_1 = require("./OctokitGithub");
-const retireInactiveContributors_1 = require("./retireInactiveContributors");
-function run() {
+exports.retireInactiveContributors = void 0;
+function retireInactiveContributors(github) {
     return __awaiter(this, void 0, void 0, function* () {
-        const github = new OctokitGithub_1.OctokitGithub();
-        yield (0, retireInactiveContributors_1.retireInactiveContributors)(github);
+        const alumniTeam = 'alumni';
+        const committersTeam = 'committers';
+        const committersTeamMembers = yield github.getMembersOf(committersTeam);
+        for (const user of committersTeamMembers) {
+            const lastCommit = yield github.getLastCommitBy(user);
+            const oneDay = 1000 * 60 * 60 * 24;
+            const daysSinceLastCommit = Math.round((new Date().getTime() - lastCommit.date.getTime()) / oneDay);
+            if (daysSinceLastCommit >= 365) {
+                github.addUserToTeam(user, alumniTeam);
+                github.removeUserFromTeam(user, committersTeam);
+            }
+        }
     });
 }
-run();
+exports.retireInactiveContributors = retireInactiveContributors;

@@ -8,19 +8,18 @@ export class OctokitGithub implements Github {
     private readonly org: string
   ) {}
 
-  getLastCommitBy(user: string): Commit {
+  getLastCommitBy(user: string): Promise<Commit> {
     throw new Error('Function not implemented.')
     // TODO: build a request with the pattern: https://api.github.com/repos/{user}/{repo}commits/master
     // Possible suggestion in https://stackoverflow.com/a/61548243/11799079 for get last commit
     // To be implemented.
-
   }
 
-  addUserToTeam(user: string, alumniTeam: string): void {
+  addUserToTeam(user: string, alumniTeam: string): Promise<void> {
     throw new Error('Function not implemented.')
   }
 
-  removeUserFromTeam(user: string, committersTeam: string): void {
+  removeUserFromTeam(user: string, committersTeam: string): Promise<void> {
     throw new Error('Function not implemented.')
   }
 
