@@ -17,10 +17,25 @@ class OctokitGithub {
         this.org = org;
     }
     getLastCommitBy(user) {
-        throw new Error('Function not implemented.');
-        // TODO: build a request with the pattern: https://api.github.com/repos/{user}/{repo}commits/master
-        // Possible suggestion in https://stackoverflow.com/a/61548243/11799079 for get last commit
-        // To be implemented.
+        throw new Error('Method not implemented.');
+    }
+    hasCommittedSince(author, date) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // TODO: Get the list of "repos" via https://docs.github.com/en/rest/teams/teams#list-team-repositories
+            const repos = ['.github'];
+            for (const repo of repos) {
+                const result = yield this.octokit.rest.repos.listCommits({
+                    owner: this.org,
+                    repo,
+                    author,
+                    since: date.toISOString(),
+                });
+                if (result.data.length > 0) {
+                    return true;
+                }
+            }
+            return false;
+        });
     }
     addUserToTeam(user, alumniTeam) {
         throw new Error('Function not implemented.');

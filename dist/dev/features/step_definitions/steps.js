@@ -37,6 +37,11 @@ class FakeGitHub {
             this.membersOfTeam.set(team, updatedUsers);
         });
     }
+    hasCommittedSince(author, date) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return false; // TODO: Make this settable & queryable.
+        });
+    }
     getLastCommitBy(user) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.getCommitsByUser(user)[0];
