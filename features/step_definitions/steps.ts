@@ -31,6 +31,10 @@ class FakeGitHub implements Github {
     this.membersOfTeam.set(team, updatedUsers)
   }
 
+  async hasCommittedSince(author: string, date: Date): Promise<boolean> {
+    return false // TODO: Make this settable & queryable.
+  }
+
   async getLastCommitBy(user: string): Promise<Commit> {
     return this.getCommitsByUser(user)[0]
   }
