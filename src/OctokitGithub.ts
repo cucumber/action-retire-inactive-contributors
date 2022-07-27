@@ -9,10 +9,18 @@ export class OctokitGithub implements Github {
   ) {}
 
   getLastCommitBy(user: string): Promise<Commit> {
-    throw new Error('Function not implemented.')
-    // TODO: build a request with the pattern: https://api.github.com/repos/{user}/{repo}commits/master
-    // Possible suggestion in https://stackoverflow.com/a/61548243/11799079 for get last commit
-    // To be implemented.
+    throw new Error('Method not implemented.')
+  }
+
+  async hasCommittedSince(author: string, date: Date): Promise<boolean> {
+    const repo = '.github' // TODO: loop over all repos in the org
+    const result = await this.octokit.rest.repos.listCommits({
+      owner: this.org,
+      repo,
+      author,
+      since: date.toISOString(),
+    })
+    return result.data.length > 0
   }
 
   addUserToTeam(user: string, alumniTeam: string): Promise<void> {

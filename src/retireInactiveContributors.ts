@@ -5,6 +5,8 @@ export type Commit = {
 
 export interface Github {
   removeUserFromTeam(user: string, committersTeam: string): Promise<void>
+  hasCommittedSince(author: string, date: Date): Promise<boolean>
+  // TODO: deprecated: remove this method and change usages to use hasCommittedSince
   getLastCommitBy(user: string): Promise<Commit>
   addUserToTeam(user: string, alumniTeam: string): Promise<void>
   getMembersOf(team: string): Promise<string[]>
