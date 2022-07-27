@@ -13,14 +13,19 @@ export class OctokitGithub implements Github {
   }
 
   async hasCommittedSince(author: string, date: Date): Promise<boolean> {
-    const repo = '.github' // TODO: loop over all repos in the org
-    const result = await this.octokit.rest.repos.listCommits({
-      owner: this.org,
-      repo,
-      author,
-      since: date.toISOString(),
-    })
-    return result.data.length > 0
+    const repos = ['.github'] // TODO: Get the list of "repos" via https://docs.github.com/en/rest/teams/teams#list-team-repositories
+    for (const repo of repos) {
+      const result = await this.octokit.rest.repos.listCommits({
+        owner: this.org,
+        repo,
+        author,
+        since: date.toISOString(),
+      })
+      if (result.data.length > 0) {
+        return true
+      }
+    }
+    return false
   }
 
   addUserToTeam(user: string, alumniTeam: string): Promise<void> {
