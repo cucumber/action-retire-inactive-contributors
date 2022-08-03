@@ -19,6 +19,7 @@ export async function retireInactiveContributors(
   const committersTeam = 'committers'
   const committersTeamMembers = await github.getMembersOf(committersTeam)
   for (const user of committersTeamMembers) {
+    //TODO NEXT : replace getLastCommitBy with hasCommittedSince
     const lastCommit = await github.getLastCommitBy(user)
     const oneDay = 1000 * 60 * 60 * 24
     const daysSinceLastCommit = Math.round(

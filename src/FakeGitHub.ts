@@ -26,7 +26,7 @@ export class FakeGitHub implements Github {
   }
 
   async getLastCommitBy(user: string): Promise<Commit> {
-    console.warn('Deprecated! Use hasCommittedSince instead')
+    console.warn('Deprecated! Use hasCommittedSince instead')  
     return this.getCommitsByUser(user)[0]
   }
 
