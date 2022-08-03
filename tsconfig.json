@@ -27,5 +27,5 @@
     "outDir": "dist/dev"
   },
   "include": ["features/**/*.ts"],
-  "files": ["src/index.ts"]
+  "files": ["src/index.ts", "./features/step_definitions/steps.ts"]
 }
