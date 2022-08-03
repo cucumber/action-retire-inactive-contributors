@@ -21,7 +21,8 @@ export class FakeGitHub implements Github {
   }
 
   async hasCommittedSince(author: string, date: Date): Promise<boolean> {
-    return false // TODO: Make this settable & queryable.
+    const commits = this.commitsByUser.get(author) || []
+    return commits.some((commit) => commit.date >= date)
   }
 
   async getLastCommitBy(user: string): Promise<Commit> {
