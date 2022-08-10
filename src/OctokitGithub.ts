@@ -1,8 +1,8 @@
 import { GitHub } from '@actions/github/lib/utils'
-import { GithubClient } from './retireInactiveContributors'
+import { GitHubClient } from './retireInactiveContributors'
 // "TODO: Implement this using actual API calls to GitHub via Octokit library"
 
-export class OctokitGithub implements GithubClient {
+export class OctokitGitHub implements GitHubClient {
   constructor(
     private readonly octokit: InstanceType<typeof GitHub>,
     private readonly org: string

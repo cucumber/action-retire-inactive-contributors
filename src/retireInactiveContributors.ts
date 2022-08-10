@@ -1,7 +1,7 @@
 const oneYearAgo = () =>
   new Date(new Date().setFullYear(new Date().getFullYear() - 1))
 
-export interface GithubClient {
+export interface GitHubClient {
   removeUserFromTeam(user: string, committersTeam: string): Promise<void>
   hasCommittedSince(author: string, date: Date): Promise<boolean>
   addUserToTeam(user: string, alumniTeam: string): Promise<void>
@@ -9,7 +9,7 @@ export interface GithubClient {
 }
 
 export async function retireInactiveContributors(
-  github: GithubClient
+  github: GitHubClient
 ): Promise<void> {
   const alumniTeam = 'alumni'
   const committersTeam = 'committers'

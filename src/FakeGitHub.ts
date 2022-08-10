@@ -1,11 +1,11 @@
-import { GithubClient } from './retireInactiveContributors'
+import { GitHubClient } from './retireInactiveContributors'
 
 export type Commit = {
   date: Date
   user: string
 }
 
-export class FakeGitHub implements GithubClient {
+export class FakeGitHub implements GitHubClient {
   private readonly membersOfTeam = new Map<string, string[]>()
   private readonly commitsByUser = new Map<string, Commit[]>()
 

@@ -1,5 +1,5 @@
 import { getOctokit } from '@actions/github'
-import { OctokitGithub } from './OctokitGithub'
+import { OctokitGitHub } from './OctokitGitHub'
 import { retireInactiveContributors } from './retireInactiveContributors'
 
 async function run(): Promise<void> {
@@ -10,7 +10,7 @@ async function run(): Promise<void> {
     )
   }
   const octokit = getOctokit(token)
-  const github = new OctokitGithub(
+  const github = new OctokitGitHub(
     octokit,
     'todo-get-org-from-action-parameters'
   )

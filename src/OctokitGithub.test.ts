@@ -1,8 +1,8 @@
-import { OctokitGithub } from './OctokitGithub'
+import { OctokitGitHub } from './OctokitGitHub'
 import { getOctokit } from '@actions/github'
 import { assertThat, equalTo, falsey, is } from 'hamjest'
 
-describe(OctokitGithub.name, () => {
+describe(OctokitGitHub.name, () => {
   context('working out if a user has committed recently', () => {
     it('returns false if they have not', async () => {
       const token = process.env.GITHUB_TOKEN
@@ -12,11 +12,11 @@ describe(OctokitGithub.name, () => {
         )
       }
       const octokit = getOctokit(token)
-      const githubAdapter = new OctokitGithub(
+      const gitHubClient = new OctokitGitHub(
         octokit,
         'test-inactive-contributor-action'
       )
-      const hasCommitted = await githubAdapter.hasCommittedSince(
+      const hasCommitted = await gitHubClient.hasCommittedSince(
         'olleolleolle',
         new Date()
       )
@@ -31,12 +31,12 @@ describe(OctokitGithub.name, () => {
         )
       }
       const octokit = getOctokit(token)
-      const githubAdapter = new OctokitGithub(
+      const gitHubClient = new OctokitGitHub(
         octokit,
         'test-inactive-contributor-action'
       )
       const dateOnWhichMattCommitted = new Date(2022, 3, 1) // April 1.
-      const hasCommitted = await githubAdapter.hasCommittedSince(
+      const hasCommitted = await gitHubClient.hasCommittedSince(
         'mattwynne',
         dateOnWhichMattCommitted
       )
@@ -52,11 +52,11 @@ describe(OctokitGithub.name, () => {
       )
     }
     const octokit = getOctokit(token)
-    const githubAdapter = new OctokitGithub(
+    const gitHubClient = new OctokitGitHub(
       octokit,
       'test-inactive-contributor-action'
     )
-    const members = await githubAdapter.getMembersOf('fishcakes')
+    const members = await gitHubClient.getMembersOf('fishcakes')
     assertThat(members, equalTo(['blaisep', 'funficient']))
   })
 })
