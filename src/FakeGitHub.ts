@@ -1,6 +1,11 @@
-import { Commit, Github } from './retireInactiveContributors'
+import { GithubClient } from './retireInactiveContributors'
 
-export class FakeGitHub implements Github {
+export type Commit = {
+  date: Date
+  user: string
+}
+
+export class FakeGitHub implements GithubClient {
   private readonly membersOfTeam = new Map<string, string[]>()
   private readonly commitsByUser = new Map<string, Commit[]>()
 
@@ -23,11 +28,6 @@ export class FakeGitHub implements Github {
   async hasCommittedSince(author: string, date: Date): Promise<boolean> {
     const commits = this.commitsByUser.get(author) || []
     return commits.some((commit) => commit.date >= date)
-  }
-
-  async getLastCommitBy(user: string): Promise<Commit> {
-    console.warn('Deprecated! Use hasCommittedSince instead')
-    return this.getCommitsByUser(user)[0]
   }
 
   createCommit(user: string, daysAgo: number) {

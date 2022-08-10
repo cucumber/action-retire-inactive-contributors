@@ -1,22 +1,15 @@
-export type Commit = {
-  date: Date
-  user: string
-}
-
 const oneYearAgo = () =>
   new Date(new Date().setFullYear(new Date().getFullYear() - 1))
 
-export interface Github {
+export interface GithubClient {
   removeUserFromTeam(user: string, committersTeam: string): Promise<void>
   hasCommittedSince(author: string, date: Date): Promise<boolean>
-  // TODO: deprecated: remove this method and change usages to use hasCommittedSince
-  getLastCommitBy(user: string): Promise<Commit>
   addUserToTeam(user: string, alumniTeam: string): Promise<void>
   getMembersOf(team: string): Promise<string[]>
 }
 
 export async function retireInactiveContributors(
-  github: Github
+  github: GithubClient
 ): Promise<void> {
   const alumniTeam = 'alumni'
   const committersTeam = 'committers'

@@ -1,16 +1,12 @@
 import { GitHub } from '@actions/github/lib/utils'
-import { Commit, Github } from './retireInactiveContributors'
+import { GithubClient } from './retireInactiveContributors'
 // "TODO: Implement this using actual API calls to GitHub via Octokit library"
 
-export class OctokitGithub implements Github {
+export class OctokitGithub implements GithubClient {
   constructor(
     private readonly octokit: InstanceType<typeof GitHub>,
     private readonly org: string
   ) {}
-
-  getLastCommitBy(user: string): Promise<Commit> {
-    throw new Error('Method not implemented.')
-  }
 
   async hasCommittedSince(author: string, date: Date): Promise<boolean> {
     const repos = ['.github'] // TODO: Get the list of "repos" via https://docs.github.com/en/rest/teams/teams#list-team-repositories
