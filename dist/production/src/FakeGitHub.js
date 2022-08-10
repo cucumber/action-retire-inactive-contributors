@@ -34,13 +34,8 @@ class FakeGitHub {
     }
     hasCommittedSince(author, date) {
         return __awaiter(this, void 0, void 0, function* () {
-            return false; // TODO: Make this settable & queryable.
-        });
-    }
-    getLastCommitBy(user) {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.warn('Deprecated! Use hasCommittedSince instead');
-            return this.getCommitsByUser(user)[0];
+            const commits = this.commitsByUser.get(author) || [];
+            return commits.some((commit) => commit.date >= date);
         });
     }
     createCommit(user, daysAgo) {

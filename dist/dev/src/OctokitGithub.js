@@ -9,15 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OctokitGithub = void 0;
+exports.OctokitGitHub = void 0;
 // "TODO: Implement this using actual API calls to GitHub via Octokit library"
-class OctokitGithub {
+class OctokitGitHub {
     constructor(octokit, org) {
         this.octokit = octokit;
         this.org = org;
-    }
-    getLastCommitBy(user) {
-        throw new Error('Method not implemented.');
     }
     hasCommittedSince(author, date) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -53,4 +50,4 @@ class OctokitGithub {
         });
     }
 }
-exports.OctokitGithub = OctokitGithub;
+exports.OctokitGitHub = OctokitGitHub;
