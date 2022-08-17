@@ -26,6 +26,6 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "outDir": "dist/dev"
   },
-  "include": ["features/**/*.ts"],
+  "include": ["features/**/*.ts", "src/**/*.ts"],
   "files": ["src/index.ts", "./features/step_definitions/steps.ts"]
 }
