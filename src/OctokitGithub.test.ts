@@ -1,8 +1,28 @@
 import { OctokitGitHub } from './OctokitGitHub'
 import { getOctokit } from '@actions/github'
-import { assertThat, equalTo, falsey, is } from 'hamjest'
+import { assertThat, equalTo, falsey, hasItem, is } from 'hamjest'
 
 describe(OctokitGitHub.name, () => {
+  context('adding someone to a team', () => {
+    it('adds a new member to a team', async () => {
+      const token = process.env.GITHUB_TOKEN
+      if (!token) {
+        throw new Error(
+          'Please set GITHUB_TOKEN. See https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token'
+        )
+      }
+      const octokit = getOctokit(token)
+      const gitHubClient = new OctokitGitHub(
+        octokit,
+        'test-inactive-contributor-action'
+      )
+      // TODO: prepare the test by emptying the test-Alumni team (using a direct octokit call here in the test)
+      gitHubClient.addUserToTeam('blaisep', 'test-Alumni')
+      const members = await gitHubClient.getMembersOf('test-Alumni')
+      assertThat(members, hasItem('blaisep'))
+    })
+  })
+
   context('working out if a user has committed recently', () => {
     it('returns false if they have not', async () => {
       const token = process.env.GITHUB_TOKEN
