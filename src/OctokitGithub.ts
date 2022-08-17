@@ -9,7 +9,8 @@ export class OctokitGitHub implements GitHubClient {
   ) {}
 
   async hasCommittedSince(author: string, date: Date): Promise<boolean> {
-    const repos = ['.github'] // TODO: Get the list of "repos" via https://docs.github.com/en/rest/teams/teams#list-team-repositories
+    const response = await this.octokit.rest.repos.listForOrg({ org: this.org })
+    const repos = response.data.map((repoData) => repoData.name)
     for (const repo of repos) {
       const result = await this.octokit.rest.repos.listCommits({
         owner: this.org,
