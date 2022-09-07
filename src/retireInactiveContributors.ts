@@ -1,30 +1,23 @@
-export type Commit = {
-  date: Date
-  user: string
-}
+const oneYearAgo = () =>
+  new Date(new Date().setFullYear(new Date().getFullYear() - 1))
 
-export interface Github {
+export interface GitHubClient {
   removeUserFromTeam(user: string, committersTeam: string): Promise<void>
-  getLastCommitBy(user: string): Promise<Commit>
+  hasCommittedSince(author: string, date: Date): Promise<boolean>
   addUserToTeam(user: string, alumniTeam: string): Promise<void>
   getMembersOf(team: string): Promise<string[]>
 }
 
 export async function retireInactiveContributors(
-  github: Github
+  github: GitHubClient
 ): Promise<void> {
   const alumniTeam = 'alumni'
   const committersTeam = 'committers'
   const committersTeamMembers = await github.getMembersOf(committersTeam)
-  for (const user of committersTeamMembers) {
-    const lastCommit = await github.getLastCommitBy(user)
-    const oneDay = 1000 * 60 * 60 * 24
-    const daysSinceLastCommit = Math.round(
-      (new Date().getTime() - lastCommit.date.getTime()) / oneDay
-    )
-    if (daysSinceLastCommit >= 365) {
-      github.addUserToTeam(user, alumniTeam)
-      github.removeUserFromTeam(user, committersTeam)
+  for (const author of committersTeamMembers) {
+    if (!(await github.hasCommittedSince(author, oneYearAgo()))) {
+      github.addUserToTeam(author, alumniTeam)
+      github.removeUserFromTeam(author, committersTeam)
     }
   }
 }

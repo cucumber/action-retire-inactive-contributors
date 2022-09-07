@@ -9,11 +9,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const github_1 = require("@actions/github");
 const OctokitGithub_1 = require("./OctokitGithub");
 const retireInactiveContributors_1 = require("./retireInactiveContributors");
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        const github = new OctokitGithub_1.OctokitGithub();
+        const token = process.env.GITHUB_TOKEN;
+        if (!token) {
+            throw new Error('Please set GITHUB_TOKEN. See https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token');
+        }
+        const octokit = (0, github_1.getOctokit)(token);
+        const github = new OctokitGithub_1.OctokitGithub(octokit, 'todo-get-org-from-action-parameters');
         yield (0, retireInactiveContributors_1.retireInactiveContributors)(github);
     });
 }
