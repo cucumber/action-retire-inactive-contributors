@@ -1,5 +1,5 @@
 import { FakeGitHub } from './FakeGitHub'
-import { assertThat, equalTo, falsey, is } from 'hamjest'
+import { assertThat, falsey, is } from 'hamjest'
 
 describe(FakeGitHub.name, () => {
   context('working out if a user has committed recently', () => {
