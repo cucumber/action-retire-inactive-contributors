@@ -1,3 +1,5 @@
+[![Cucumber Report](https://messages.cucumber.io/api/report-collections/e37b01e9-023e-43aa-b510-a79705ee932f/badge)](https://reports.cucumber.io/report-collections/e37b01e9-023e-43aa-b510-a79705ee932f)
+
 # retire-inactive-contributor README.md
 
 ## Now as a Github action
