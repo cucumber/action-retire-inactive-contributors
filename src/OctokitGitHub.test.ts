@@ -17,7 +17,7 @@ describe(OctokitGitHub.name, () => {
       const teamSlug = 'test-Alumni'
       const initialMembers = await gitHubClient.getMembersOf(teamSlug)
       for (const member of initialMembers) {
-        octokit.rest.teams.removeMembershipForUserInOrg({
+        await octokit.rest.teams.removeMembershipForUserInOrg({
           org,
           team_slug: teamSlug,
           username: member,
