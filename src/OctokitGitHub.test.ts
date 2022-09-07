@@ -2,7 +2,6 @@ import { OctokitGitHub } from './OctokitGitHub'
 import { getOctokit } from '@actions/github'
 import { assertThat, equalTo, falsey, hasItem, is } from 'hamjest'
 const org = 'test-inactive-contributor-action'
-const team_slug = 'test-Alumni'
 
 describe(OctokitGitHub.name, () => {
   context('adding someone to a team', () => {
@@ -15,16 +14,17 @@ describe(OctokitGitHub.name, () => {
       }
       const octokit = getOctokit(token)
       const gitHubClient = new OctokitGitHub(octokit, org)
-      const initialMembers = await gitHubClient.getMembersOf('test-Alumni')
+      const teamSlug = 'test-Alumni'
+      const initialMembers = await gitHubClient.getMembersOf(teamSlug)
       for (const member of initialMembers) {
         octokit.rest.teams.removeMembershipForUserInOrg({
           org,
-          team_slug,
+          team_slug: teamSlug,
           username: member,
         })
       }
-      await gitHubClient.addUserToTeam('blaisep', 'test-Alumni')
-      const members = await gitHubClient.getMembersOf('test-Alumni')
+      await gitHubClient.addUserToTeam('blaisep', teamSlug)
+      const members = await gitHubClient.getMembersOf(teamSlug)
       assertThat(members, hasItem('blaisep'))
     })
   })
@@ -38,10 +38,7 @@ describe(OctokitGitHub.name, () => {
         )
       }
       const octokit = getOctokit(token)
-      const gitHubClient = new OctokitGitHub(
-        octokit,
-        'test-inactive-contributor-action'
-      )
+      const gitHubClient = new OctokitGitHub(octokit, org)
       const hasCommitted = await gitHubClient.hasCommittedSince(
         'olleolleolle',
         new Date()
@@ -57,10 +54,7 @@ describe(OctokitGitHub.name, () => {
         )
       }
       const octokit = getOctokit(token)
-      const gitHubClient = new OctokitGitHub(
-        octokit,
-        'test-inactive-contributor-action'
-      )
+      const gitHubClient = new OctokitGitHub(octokit, org)
       const dateOnWhichMattCommitted = new Date(2022, 3, 1) // April 1.
       const hasCommitted = await gitHubClient.hasCommittedSince(
         'mattwynne',
@@ -78,10 +72,7 @@ describe(OctokitGitHub.name, () => {
       )
     }
     const octokit = getOctokit(token)
-    const gitHubClient = new OctokitGitHub(
-      octokit,
-      'test-inactive-contributor-action'
-    )
+    const gitHubClient = new OctokitGitHub(octokit, org)
     const members = await gitHubClient.getMembersOf('fishcakes')
     assertThat(members, equalTo(['blaisep', 'funficient']))
   })
