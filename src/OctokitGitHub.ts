@@ -24,9 +24,12 @@ export class OctokitGitHub implements GitHubClient {
     return false
   }
 
-  addUserToTeam(user: string, alumniTeam: string): Promise<void> {
-    // "TODO: Implement this using actual API calls to GitHub via Octokit library"
-    return Promise.resolve()
+  async addUserToTeam(user: string, alumniTeam: string): Promise<void> {
+    await this.octokit.rest.teams.addOrUpdateMembershipForUserInOrg({
+      org: this.org,
+      team_slug: alumniTeam,
+      username: user,
+    })
   }
 
   removeUserFromTeam(user: string, committersTeam: string): Promise<void> {

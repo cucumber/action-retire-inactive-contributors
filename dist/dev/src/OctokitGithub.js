@@ -34,8 +34,13 @@ class OctokitGitHub {
         });
     }
     addUserToTeam(user, alumniTeam) {
-        // "TODO: Implement this using actual API calls to GitHub via Octokit library"
-        return Promise.resolve();
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.octokit.rest.teams.addOrUpdateMembershipForUserInOrg({
+                org: this.org,
+                team_slug: alumniTeam,
+                username: user,
+            });
+        });
     }
     removeUserFromTeam(user, committersTeam) {
         // "TODO: Implement this using actual API calls to GitHub via Octokit library"

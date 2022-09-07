@@ -1,6 +1,8 @@
 import { OctokitGitHub } from './OctokitGitHub'
 import { getOctokit } from '@actions/github'
 import { assertThat, equalTo, falsey, hasItem, is } from 'hamjest'
+const org = 'test-inactive-contributor-action'
+const team_slug = 'test-Alumni'
 
 describe(OctokitGitHub.name, () => {
   context('adding someone to a team', () => {
@@ -12,12 +14,16 @@ describe(OctokitGitHub.name, () => {
         )
       }
       const octokit = getOctokit(token)
-      const gitHubClient = new OctokitGitHub(
-        octokit,
-        'test-inactive-contributor-action'
-      )
-      // TODO: prepare the test by emptying the test-Alumni team (using a direct octokit call here in the test)
-      gitHubClient.addUserToTeam('blaisep', 'test-Alumni')
+      const gitHubClient = new OctokitGitHub(octokit, org)
+      const initialMembers = await gitHubClient.getMembersOf('test-Alumni')
+      for (const member of initialMembers) {
+        octokit.rest.teams.removeMembershipForUserInOrg({
+          org,
+          team_slug,
+          username: member,
+        })
+      }
+      await gitHubClient.addUserToTeam('blaisep', 'test-Alumni')
       const members = await gitHubClient.getMembersOf('test-Alumni')
       assertThat(members, hasItem('blaisep'))
     })
