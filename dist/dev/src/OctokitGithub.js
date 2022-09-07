@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OctokitGitHub = void 0;
-// "TODO: Implement this using actual API calls to GitHub via Octokit library"
 class OctokitGitHub {
     constructor(octokit, org) {
         this.octokit = octokit;
@@ -18,7 +17,8 @@ class OctokitGitHub {
     }
     hasCommittedSince(author, date) {
         return __awaiter(this, void 0, void 0, function* () {
-            const repos = ['.github']; // TODO: Get the list of "repos" via https://docs.github.com/en/rest/teams/teams#list-team-repositories
+            const response = yield this.octokit.rest.repos.listForOrg({ org: this.org });
+            const repos = response.data.map((repoData) => repoData.name);
             for (const repo of repos) {
                 const result = yield this.octokit.rest.repos.listCommits({
                     owner: this.org,
@@ -34,14 +34,15 @@ class OctokitGitHub {
         });
     }
     addUserToTeam(user, alumniTeam) {
-        throw new Error('Function not implemented.');
+        // "TODO: Implement this using actual API calls to GitHub via Octokit library"
+        return Promise.resolve();
     }
     removeUserFromTeam(user, committersTeam) {
+        // "TODO: Implement this using actual API calls to GitHub via Octokit library"
         throw new Error('Function not implemented.');
     }
     getMembersOf(team) {
         return __awaiter(this, void 0, void 0, function* () {
-            // TODO: change interface to make these functions async (i.e. they need to return Promises)
             const result = yield this.octokit.rest.teams.listMembersInOrg({
                 org: this.org,
                 team_slug: team,
