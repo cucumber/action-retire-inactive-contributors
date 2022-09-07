@@ -1,7 +1,8 @@
 module.exports = {
-    default: [
-      "--require-module ts-node/register",
-      "--require features/**/*.ts",
-      "--publish-quiet",
-    ].join(" "),
+  default: [
+      '--require-module ts-node/register', 
+      '--require features/**/*.ts'
+    ]
+    .concat(process.env.CUCUMBER_PUBLISH_TOKEN ? "--publish" : "--publish-quiet")
+    .join(" "),
   };
