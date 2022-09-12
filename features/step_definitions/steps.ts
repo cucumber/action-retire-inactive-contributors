@@ -5,9 +5,9 @@ import {
   Then,
   defineParameterType,
 } from '@cucumber/cucumber'
-import assert from 'assert'
 import { retireInactiveContributors } from '../../src/retireInactiveContributors'
 import { FakeGitHub } from '../../src/FakeGitHub'
+import { assertThat, hasItem, not } from 'hamjest'
 
 type World = { github: FakeGitHub }
 
@@ -69,10 +69,7 @@ Then(
   '{user} should be in {team}',
   async function (this: World, user: string, team: string) {
     const users = await this.github.getMembersOf(team)
-    assert(
-      users.includes(user),
-      `Could not find user: ${user} in team: ${team}. Users found: ${users}`
-    )
+    assertThat(users, hasItem(user))
   }
 )
 
@@ -89,9 +86,6 @@ Then(
   '{user} should not be in {team}( anymore)',
   async function (this: World, user: string, team: string) {
     const users = await this.github.getMembersOf(team)
-    assert(
-      !users.includes(user),
-      `Could not find user: ${user} in team: ${team}.`
-    )
+    assertThat(users, not(hasItem(user)))
   }
 )
