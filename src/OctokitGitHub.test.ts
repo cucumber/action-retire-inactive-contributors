@@ -1,18 +1,13 @@
 import { OctokitGitHub } from './OctokitGitHub'
 import { getOctokit } from '@actions/github'
 import { assertThat, equalTo, falsey, hasItem, is } from 'hamjest'
+
 const org = 'test-inactive-contributor-action'
 
 describe(OctokitGitHub.name, () => {
   context('adding someone to a team', () => {
     it('adds a new member to a team', async () => {
-      const token = process.env.GITHUB_TOKEN
-      if (!token) {
-        throw new Error(
-          'Please set GITHUB_TOKEN. See https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token'
-        )
-      }
-      const octokit = getOctokit(token)
+      const octokit = getOctokit(token())
       const gitHubClient = new OctokitGitHub(octokit, org)
       const teamSlug = 'test-Alumni'
       const initialMembers = await gitHubClient.getMembersOf(teamSlug)
@@ -31,14 +26,7 @@ describe(OctokitGitHub.name, () => {
 
   context('working out if a user has committed recently', () => {
     it('returns false if they have not', async () => {
-      const token = process.env.GITHUB_TOKEN
-      if (!token) {
-        throw new Error(
-          'Please set GITHUB_TOKEN. See https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token'
-        )
-      }
-      const octokit = getOctokit(token)
-      const gitHubClient = new OctokitGitHub(octokit, org)
+      const gitHubClient = client()
       const hasCommitted = await gitHubClient.hasCommittedSince(
         'olleolleolle',
         new Date()
@@ -47,14 +35,7 @@ describe(OctokitGitHub.name, () => {
     })
 
     it('returns true if they have', async () => {
-      const token = process.env.GITHUB_TOKEN
-      if (!token) {
-        throw new Error(
-          'Please set GITHUB_TOKEN. See https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token'
-        )
-      }
-      const octokit = getOctokit(token)
-      const gitHubClient = new OctokitGitHub(octokit, org)
+      const gitHubClient = client()
       const dateOnWhichMattCommitted = new Date(2022, 3, 1) // April 1.
       const hasCommitted = await gitHubClient.hasCommittedSince(
         'mattwynne',
@@ -65,15 +46,23 @@ describe(OctokitGitHub.name, () => {
   })
 
   it('gets members of a team', async () => {
-    const token = process.env.GITHUB_TOKEN
-    if (!token) {
-      throw new Error(
-        'Please set GITHUB_TOKEN. See https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token'
-      )
-    }
-    const octokit = getOctokit(token)
-    const gitHubClient = new OctokitGitHub(octokit, org)
+    const gitHubClient = client()
     const members = await gitHubClient.getMembersOf('fishcakes')
     assertThat(members, equalTo(['blaisep', 'funficient']))
   })
 })
+
+function token() {
+  const token = process.env.GITHUB_TOKEN
+  if (!token) {
+    throw new Error(
+      'Please set GITHUB_TOKEN. See https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token'
+    )
+  }
+  return token
+}
+
+function client() {
+  const octokit = getOctokit(token())
+  return new OctokitGitHub(octokit, org)
+}
