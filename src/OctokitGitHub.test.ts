@@ -1,6 +1,6 @@
 import { OctokitGitHub } from './OctokitGitHub'
 import { getOctokit } from '@actions/github'
-import { assertThat, equalTo, falsey, hasItem, is } from 'hamjest'
+import { assertThat, equalTo, falsey, hasItem, is, not } from 'hamjest'
 
 const org = 'test-inactive-contributor-action'
 
@@ -21,6 +21,24 @@ describe(OctokitGitHub.name, () => {
       await gitHubClient.addUserToTeam('blaisep', teamSlug)
       const members = await gitHubClient.getMembersOf(teamSlug)
       assertThat(members, hasItem('blaisep'))
+    })
+  })
+
+  context('removing someone from the team', () => {
+    it('removes an existing member from a team', async () => {
+      // Given
+      const gitHubClient = client()
+      const teamSlug = 'test-Contributors'
+      await gitHubClient.addUserToTeam('blaisep', teamSlug)
+      const initialMembers = await gitHubClient.getMembersOf(teamSlug)
+      assertThat(initialMembers, hasItem('blaisep'))
+
+      // When
+      await gitHubClient.removeUserFromTeam('blaisep', teamSlug)
+
+      // Then
+      const members = await gitHubClient.getMembersOf(teamSlug)
+      assertThat(members, not(hasItem('blaisep')))
     })
   })
 

@@ -32,6 +32,21 @@ describe(OctokitGitHub_1.OctokitGitHub.name, () => {
             (0, hamjest_1.assertThat)(members, (0, hamjest_1.hasItem)('blaisep'));
         }));
     });
+    context('removing someone from the team', () => {
+        it('removes an existing member from a team', () => __awaiter(void 0, void 0, void 0, function* () {
+            // Given
+            const gitHubClient = client();
+            const teamSlug = 'test-Contributors';
+            yield gitHubClient.addUserToTeam('blaisep', teamSlug);
+            const initialMembers = yield gitHubClient.getMembersOf(teamSlug);
+            (0, hamjest_1.assertThat)(initialMembers, (0, hamjest_1.hasItem)('blaisep'));
+            // When
+            yield gitHubClient.removeUserFromTeam('blaisep', teamSlug);
+            // Then
+            const members = yield gitHubClient.getMembersOf(teamSlug);
+            (0, hamjest_1.assertThat)(members, (0, hamjest_1.not)((0, hamjest_1.hasItem)('blaisep')));
+        }));
+    });
     context('working out if a user has committed recently', () => {
         it('returns false if they have not', () => __awaiter(void 0, void 0, void 0, function* () {
             const gitHubClient = client();

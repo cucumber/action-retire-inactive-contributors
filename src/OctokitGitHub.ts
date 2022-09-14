@@ -32,9 +32,15 @@ export class OctokitGitHub implements GitHubClient {
     })
   }
 
-  removeUserFromTeam(user: string, committersTeam: string): Promise<void> {
-    // "TODO: Implement this using actual API calls to GitHub via Octokit library"
-    throw new Error('Function not implemented.')
+  async removeUserFromTeam(
+    user: string,
+    committersTeam: string
+  ): Promise<void> {
+    await this.octokit.rest.teams.removeMembershipForUserInOrg({
+      org: this.org,
+      team_slug: committersTeam,
+      username: user,
+    })
   }
 
   async getMembersOf(team: string): Promise<string[]> {

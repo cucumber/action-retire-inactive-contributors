@@ -43,8 +43,13 @@ class OctokitGitHub {
         });
     }
     removeUserFromTeam(user, committersTeam) {
-        // "TODO: Implement this using actual API calls to GitHub via Octokit library"
-        throw new Error('Function not implemented.');
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.octokit.rest.teams.removeMembershipForUserInOrg({
+                org: this.org,
+                team_slug: committersTeam,
+                username: user,
+            });
+        });
     }
     getMembersOf(team) {
         return __awaiter(this, void 0, void 0, function* () {
