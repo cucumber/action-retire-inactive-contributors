@@ -3,4 +3,4 @@ description: "A github action to retire contributors after a period of inactivit
 author: "Cucumber Open"
 runs:
   using: "node16"
-  main: "dist/production/index.js"
+  main: "dist/production/src/index.js"
