@@ -8,14 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const cucumber_1 = require("@cucumber/cucumber");
-const assert_1 = __importDefault(require("assert"));
 const retireInactiveContributors_1 = require("../../src/retireInactiveContributors");
 const FakeGitHub_1 = require("../../src/FakeGitHub");
+const hamjest_1 = require("hamjest");
 (0, cucumber_1.Before)(function () {
     this.github = new FakeGitHub_1.FakeGitHub();
 });
@@ -53,7 +50,7 @@ const FakeGitHub_1 = require("../../src/FakeGitHub");
 (0, cucumber_1.Then)('{user} should be in {team}', function (user, team) {
     return __awaiter(this, void 0, void 0, function* () {
         const users = yield this.github.getMembersOf(team);
-        (0, assert_1.default)(users.includes(user), `Could not find user: ${user} in team: ${team}. Users found: ${users}`);
+        (0, hamjest_1.assertThat)(users, (0, hamjest_1.hasItem)(user));
     });
 });
 (0, cucumber_1.Then)('{user} should not have any custom permissions on the cucumber-js repo', function (user) {
@@ -64,6 +61,6 @@ const FakeGitHub_1 = require("../../src/FakeGitHub");
 (0, cucumber_1.Then)('{user} should not be in {team}( anymore)', function (user, team) {
     return __awaiter(this, void 0, void 0, function* () {
         const users = yield this.github.getMembersOf(team);
-        (0, assert_1.default)(!users.includes(user), `Could not find user: ${user} in team: ${team}.`);
+        (0, hamjest_1.assertThat)(users, (0, hamjest_1.not)((0, hamjest_1.hasItem)(user)));
     });
 });
