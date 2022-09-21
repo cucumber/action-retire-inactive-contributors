@@ -9,6 +9,29 @@ When this Github action runs:
     - Moves inactive contributors to a less-privileged alumni team 
     - If an inactive contributor has custom permissions, these permissions are revoked
 
+## Usage Example
+
+Add this text to your workflow config `.github/workflows/main.yml`
+
+```yaml
+name: Retire inactive contributors
+on:
+  schedule:
+    # https://crontab.guru/every-night-at-midnight
+    - cron: "0 0 * * *"
+
+jobs:
+  retire-inactive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: cucumber/action-retire-inactive-contributor@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+		    with:
+					time-since-last-contribution: 1 year
+          alumni-team: Alumni
+```
+
 ![Sequence Diagram](diagrams/sequence.png)
 
 > Previously, a bot built with [Probot](https://github.com/probot/probot) that Retire inactive contributors from one team to another, now done using a GitHub Action
@@ -31,6 +54,8 @@ If you are using VSCode you can also use the following workspace settings for Pr
 	}
 }
 ```
+
+
 
 ## Contributing
 
