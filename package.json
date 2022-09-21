@@ -11,6 +11,7 @@
   ],
   "scripts": {
     "build": "tsc --build",
+    "package": "ncc build src/index.ts -o dist --source-map --license licenses.txt",
     "build:production": "tsc --build tsconfig.production.json",
     "build:clean": "rm -rf dist",
     "test": "npm run lint && npm run build && npm run test:unit && npm run test:acceptance && npm run build:clean && npm run build:production",
@@ -26,6 +27,7 @@
     "@types/node": "^14.14.19",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
     "@typescript-eslint/parser": "^5.27.0",
+    "@vercel/ncc": "^0.34.0",
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
