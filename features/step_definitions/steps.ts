@@ -1,18 +1,23 @@
 import {
   Before,
-  Given,
-  When,
-  Then,
   defineParameterType,
+  Given,
+  Then,
+  When,
 } from '@cucumber/cucumber'
-import { retireInactiveContributors } from '../../src/retireInactiveContributors'
-import { FakeGitHub } from '../../src/FakeGitHub'
 import { assertThat, hasItem, not } from 'hamjest'
+import { Configuration } from '../../src/Configuration'
+import { FakeGitHub } from '../../src/FakeGitHub'
+import { retireInactiveContributors } from '../../src/retireInactiveContributors'
 
-type World = { github: FakeGitHub }
+type World = {
+  configuration: Configuration
+  github: FakeGitHub
+}
 
 Before(function () {
   this.github = new FakeGitHub()
+  this.configuration = new Configuration()
 })
 
 defineParameterType({
@@ -87,5 +92,13 @@ Then(
   async function (this: World, user: string, team: string) {
     const users = await this.github.getMembersOf(team)
     assertThat(users, not(hasItem(user)))
+  }
+)
+
+Given(
+  'the maximum absence before retirement is {int} days',
+  function (this: World, maximumDaysAbsent: number) {
+    this.configuration.maximumAbsenceBeforeRetirement =
+      maximumDaysAbsent * 24 * 60 * 60 * 1000
   }
 )

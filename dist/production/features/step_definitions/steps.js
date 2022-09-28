@@ -10,11 +10,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const cucumber_1 = require("@cucumber/cucumber");
-const retireInactiveContributors_1 = require("../../src/retireInactiveContributors");
-const FakeGitHub_1 = require("../../src/FakeGitHub");
 const hamjest_1 = require("hamjest");
+const Configuration_1 = require("../../src/Configuration");
+const FakeGitHub_1 = require("../../src/FakeGitHub");
+const retireInactiveContributors_1 = require("../../src/retireInactiveContributors");
 (0, cucumber_1.Before)(function () {
     this.github = new FakeGitHub_1.FakeGitHub();
+    this.configuration = new Configuration_1.Configuration();
 });
 (0, cucumber_1.defineParameterType)({
     regexp: /the ([\w-]+) team/,
@@ -63,4 +65,8 @@ const hamjest_1 = require("hamjest");
         const users = yield this.github.getMembersOf(team);
         (0, hamjest_1.assertThat)(users, (0, hamjest_1.not)((0, hamjest_1.hasItem)(user)));
     });
+});
+(0, cucumber_1.Given)('the maximum absence before retirement is {int} days', function (maximumDaysAbsent) {
+    this.configuration.maximumAbsenceBeforeRetirement =
+        maximumDaysAbsent * 24 * 60 * 60 * 1000;
 });

@@ -5,6 +5,9 @@ Feature: Move inactive users
 	For security reasons, we want to retire contributors who haven't been active recently
 	into the alumni group.
 
+  Background:
+    Given the maximum absence before retirement is 365 days
+
   Rule: Users become inactive after a year
 
     Scenario: Greg has been inactive for over a year
