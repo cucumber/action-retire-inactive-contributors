@@ -67,7 +67,7 @@ Given(
 
 When('the action runs', function (this: World) {
   // Write code here that turns the phrase above into concrete actions
-  retireInactiveContributors(this.github)
+  retireInactiveContributors(this.github, this.configuration)
 })
 
 Then(

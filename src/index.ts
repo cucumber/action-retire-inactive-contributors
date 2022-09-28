@@ -1,4 +1,5 @@
 import { getOctokit } from '@actions/github'
+import { Configuration } from './Configuration'
 import { OctokitGitHub } from './OctokitGitHub'
 import { retireInactiveContributors } from './retireInactiveContributors'
 
@@ -14,7 +15,11 @@ async function run(): Promise<void> {
     octokit,
     'todo-get-org-from-action-parameters'
   )
-  await retireInactiveContributors(github)
+
+  // TODO: read max absence from action parameters
+  const configuration = new Configuration()
+
+  await retireInactiveContributors(github, configuration)
 }
 
 run()

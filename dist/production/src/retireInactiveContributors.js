@@ -10,14 +10,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.retireInactiveContributors = void 0;
-const oneYearAgo = () => new Date(new Date().setFullYear(new Date().getFullYear() - 1));
-function retireInactiveContributors(github) {
+function retireInactiveContributors(github, configuration) {
     return __awaiter(this, void 0, void 0, function* () {
+        const maximumAbsenceBeforeRetirement = configuration.maximumAbsenceBeforeRetirement;
+        const cutOffDate = new Date(new Date().getTime() - maximumAbsenceBeforeRetirement);
         const alumniTeam = 'alumni';
         const committersTeam = 'committers';
         const committersTeamMembers = yield github.getMembersOf(committersTeam);
         for (const author of committersTeamMembers) {
-            if (!(yield github.hasCommittedSince(author, oneYearAgo()))) {
+            if (!(yield github.hasCommittedSince(author, cutOffDate))) {
                 github.addUserToTeam(author, alumniTeam);
                 github.removeUserFromTeam(author, committersTeam);
             }

@@ -28,7 +28,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 		    with:
-					time-since-last-contribution: 1 year
+					maximum-absence-before-retirement: 1 year
           alumni-team: Alumni
 ```
 

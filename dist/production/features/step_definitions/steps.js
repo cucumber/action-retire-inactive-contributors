@@ -47,7 +47,7 @@ const retireInactiveContributors_1 = require("../../src/retireInactiveContributo
 });
 (0, cucumber_1.When)('the action runs', function () {
     // Write code here that turns the phrase above into concrete actions
-    (0, retireInactiveContributors_1.retireInactiveContributors)(this.github);
+    (0, retireInactiveContributors_1.retireInactiveContributors)(this.github, this.configuration);
 });
 (0, cucumber_1.Then)('{user} should be in {team}', function (user, team) {
     return __awaiter(this, void 0, void 0, function* () {

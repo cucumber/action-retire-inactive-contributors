@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const github_1 = require("@actions/github");
+const Configuration_1 = require("./Configuration");
 const OctokitGitHub_1 = require("./OctokitGitHub");
 const retireInactiveContributors_1 = require("./retireInactiveContributors");
 function run() {
@@ -20,7 +21,7 @@ function run() {
         }
         const octokit = (0, github_1.getOctokit)(token);
         const github = new OctokitGitHub_1.OctokitGitHub(octokit, 'todo-get-org-from-action-parameters');
-        yield (0, retireInactiveContributors_1.retireInactiveContributors)(github);
+        yield (0, retireInactiveContributors_1.retireInactiveContributors)(github, new Configuration_1.Configuration());
     });
 }
 run();
