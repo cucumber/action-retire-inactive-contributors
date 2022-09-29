@@ -1,4 +1,5 @@
 import { Configuration } from './Configuration'
+import { Today } from './Today'
 
 export interface GitHubClient {
   removeUserFromTeam(user: string, committersTeam: string): Promise<void>
@@ -11,11 +12,7 @@ export async function retireInactiveContributors(
   github: GitHubClient,
   configuration: Configuration
 ): Promise<void> {
-  const maximumAbsenceBeforeRetirement =
-    configuration.maximumAbsenceBeforeRetirement
-  const cutOffDate = new Date(
-    new Date().getTime() - maximumAbsenceBeforeRetirement
-  )
+  const cutOffDate = Today.minus(configuration.maximumAbsenceBeforeRetirement)
   const alumniTeam = 'alumni'
   const committersTeam = 'committers'
   const committersTeamMembers = await github.getMembersOf(committersTeam)

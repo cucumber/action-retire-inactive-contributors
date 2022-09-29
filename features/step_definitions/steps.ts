@@ -7,6 +7,7 @@ import {
 } from '@cucumber/cucumber'
 import { assertThat, hasItem, not } from 'hamjest'
 import { Configuration } from '../../src/Configuration'
+import { Duration } from '../../src/Duration'
 import { FakeGitHub } from '../../src/FakeGitHub'
 import { retireInactiveContributors } from '../../src/retireInactiveContributors'
 
@@ -99,6 +100,6 @@ Given(
   'the maximum absence before retirement is {int} days',
   function (this: World, maximumDaysAbsent: number) {
     this.configuration.maximumAbsenceBeforeRetirement =
-      maximumDaysAbsent * 24 * 60 * 60 * 1000
+      Duration.of(maximumDaysAbsent).days()
   }
 )
