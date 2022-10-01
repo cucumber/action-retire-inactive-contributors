@@ -1,9 +1,9 @@
 Feature: Move inactive users
-	We have a special team called alumni that has no special permissions and is used
-	to recognise past contributors.
+  We have a special team called alumni that has no special permissions and is used
+  to recognise past contributors.
 
-	For security reasons, we want to retire contributors who haven't been active recently
-	into the alumni group.
+  For security reasons, we want to retire contributors who haven't been active recently
+  into the alumni group.
 
   Background: 
     Given the maximum absence before retirement is 100 days
@@ -45,8 +45,9 @@ Feature: Move inactive users
       And Matt should not have any custom permissions on the cucumber-js repo
 
   Rule: Formerly inactive users, who are now active again should remain in the alumni group
-		This helps us to know whether we have the right time-frame for retiring people - if there are lots of people
-		in both committers and alumni, it means we're maybe retiring people too soon.
+    
+    This helps us to know whether we have the right time-frame for retiring people - if there are lots of people
+    in both committers and alumni, it means we're maybe retiring people too soon.
 
     @todo
     Scenario: Demi who was formerly inactive, recently became active again
