@@ -27,8 +27,8 @@ jobs:
       - uses: cucumber/action-retire-inactive-contributor@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-		    with:
-					maximum-absence-before-retirement: 1 year
+        with:
+          maximum-absence-before-retirement: 1 year
           alumni-team: Alumni
 ```
 
