@@ -7795,6 +7795,24 @@ exports.OctokitGitHub = OctokitGitHub;
 
 /***/ }),
 
+/***/ 1637:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Today = void 0;
+class Today {
+    static minus(duration) {
+        const today = new Date().getTime();
+        return new Date(today - duration.valueOf());
+    }
+}
+exports.Today = Today;
+
+
+/***/ }),
+
 /***/ 6144:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -7833,7 +7851,7 @@ run();
 /***/ }),
 
 /***/ 7391:
-/***/ (function(__unused_webpack_module, exports) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -7848,10 +7866,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.retireInactiveContributors = void 0;
+const Today_1 = __nccwpck_require__(1637);
 function retireInactiveContributors(github, configuration) {
     return __awaiter(this, void 0, void 0, function* () {
-        const maximumAbsenceBeforeRetirement = configuration.maximumAbsenceBeforeRetirement;
-        const cutOffDate = new Date(new Date().getTime() - maximumAbsenceBeforeRetirement);
+        const cutOffDate = Today_1.Today.minus(configuration.maximumAbsenceBeforeRetirement);
         const alumniTeam = 'alumni';
         const committersTeam = 'committers';
         const committersTeamMembers = yield github.getMembersOf(committersTeam);

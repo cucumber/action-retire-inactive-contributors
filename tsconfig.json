@@ -30,6 +30,7 @@
   "files": [
     "src/index.ts",
     "./features/step_definitions/steps.ts",
-    "src/Configuration.ts"
+    "src/Configuration.ts",
+    "./src/Today.ts"
   ]
 }
