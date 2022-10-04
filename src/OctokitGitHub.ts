@@ -46,12 +46,17 @@ export class OctokitGitHub implements GitHubClient {
 
   async removeUserFromTeam(
     user: string,
-    committersTeam: string
+    team: string
   ): Promise<void> {
     await this.octokit.rest.teams.removeMembershipForUserInOrg({
       org: this.org,
-      team_slug: committersTeam,
+      team_slug: team,
       username: user,
+    })
+    this.emitter.emit(CHANGE_EVENT, {
+      action: "remove",
+      team,
+      user,
     })
   }
 

@@ -5,6 +5,7 @@ import {deepStrictEqual} from "assert";
 
 const org = 'test-inactive-contributor-action'
 
+const testContributorsTeam = 'test-Contributors'
 const testAlumniTeam = 'test-Alumni'
 const testUser = 'blaisep';
 
@@ -52,17 +53,30 @@ describe(OctokitGitHub.name, () => {
     it('removes an existing member from a team', async () => {
       // Given
       const gitHubClient = client()
-      const teamSlug = 'test-Contributors'
-      await gitHubClient.addUserToTeam(testUser, teamSlug)
-      const initialMembers = await gitHubClient.getMembersOf(teamSlug)
+      await gitHubClient.addUserToTeam(testUser, testContributorsTeam)
+      const initialMembers = await gitHubClient.getMembersOf(testContributorsTeam)
       assertThat(initialMembers, hasItem(testUser))
 
       // When
-      await gitHubClient.removeUserFromTeam(testUser, teamSlug)
+      await gitHubClient.removeUserFromTeam(testUser, testContributorsTeam)
 
       // Then
-      const members = await gitHubClient.getMembersOf(teamSlug)
+      const members = await gitHubClient.getMembersOf(testContributorsTeam)
       assertThat(members, not(hasItem(testUser)))
+    })
+
+    it('says which members have been removed from teams', async () => {
+      const gitHubClient = client()
+      await gitHubClient.addUserToTeam(testUser, testContributorsTeam)
+      const initialMembers = await gitHubClient.getMembersOf(testContributorsTeam)
+      assertThat(initialMembers, hasItem(testUser))
+
+      // When
+      const changes = gitHubClient.trackChanges().data
+      await gitHubClient.removeUserFromTeam(testUser, testContributorsTeam)
+
+      // Then
+      assertThat(changes, equalTo([{action: "remove", user: testUser, team: testContributorsTeam }]))
     })
   })
 
