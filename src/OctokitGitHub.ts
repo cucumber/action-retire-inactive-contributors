@@ -1,7 +1,14 @@
-import { GitHub } from '@actions/github/lib/utils'
-import { GitHubClient } from './retireInactiveContributors'
+import {GitHub} from '@actions/github/lib/utils'
+import {GitHubClient} from './retireInactiveContributors'
+import {EventEmitter} from 'events'
+import {OutputTracker} from './OutputTracker'
+
+const CHANGE_EVENT = "changeEvent"
 
 export class OctokitGitHub implements GitHubClient {
+
+  private readonly emitter = new EventEmitter()
+
   constructor(
     private readonly octokit: InstanceType<typeof GitHub>,
     private readonly org: string
@@ -24,11 +31,16 @@ export class OctokitGitHub implements GitHubClient {
     return false
   }
 
-  async addUserToTeam(user: string, alumniTeam: string): Promise<void> {
+  async addUserToTeam(user: string, team: string): Promise<void> {
     await this.octokit.rest.teams.addOrUpdateMembershipForUserInOrg({
       org: this.org,
-      team_slug: alumniTeam,
+      team_slug: team,
       username: user,
+    })
+    this.emitter.emit(CHANGE_EVENT, {
+      action: "add",
+      team,
+      user,
     })
   }
 
@@ -49,5 +61,9 @@ export class OctokitGitHub implements GitHubClient {
       team_slug: team,
     })
     return result.data.map((user) => user.login)
+  }
+
+  trackChanges() {
+    return OutputTracker.create(this.emitter, CHANGE_EVENT);
   }
 }

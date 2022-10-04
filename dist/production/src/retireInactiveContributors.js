@@ -10,10 +10,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.retireInactiveContributors = void 0;
+const Today_1 = require("./Today");
 function retireInactiveContributors(github, configuration) {
     return __awaiter(this, void 0, void 0, function* () {
-        const maximumAbsenceBeforeRetirement = configuration.maximumAbsenceBeforeRetirement;
-        const cutOffDate = new Date(new Date().getTime() - maximumAbsenceBeforeRetirement);
+        const cutOffDate = Today_1.Today.minus(configuration.maximumAbsenceBeforeRetirement);
         const alumniTeam = 'alumni';
         const committersTeam = 'committers';
         const committersTeamMembers = yield github.getMembersOf(committersTeam);

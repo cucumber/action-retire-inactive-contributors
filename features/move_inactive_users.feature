@@ -11,18 +11,18 @@ Feature: Move inactive users
   Rule: Users become inactive after a year
 
     Scenario: Greg has been inactive recently
-      And a user Greg is part of the committers team
+#      And a user Greg is part of the committers team
       And the create date of Greg's last commit was 100 days ago
-      When the action runs
-      Then Greg should be in the alumni team
-      And Greg should not be in the committers team
+#      When the action runs
+#      Then Greg should be in the alumni team
+#      And Greg should not be in the committers team
 
     Scenario: Aslak has been active recently
-      Given a user Aslak is part of the committers team
+#      Given a user Aslak is part of the committers team
       And the create date of Aslak's last commit was 99 days ago
-      When the action runs
-      Then Aslak should be in the committers team
-      And Aslak should not be in the alumni team
+#      When the action runs
+#      Then Aslak should be in the committers team
+#      And Aslak should not be in the alumni team
 
   Rule: Move inactive users into alumni team from any other team
 

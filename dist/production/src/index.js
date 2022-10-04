@@ -21,7 +21,9 @@ function run() {
         }
         const octokit = (0, github_1.getOctokit)(token);
         const github = new OctokitGitHub_1.OctokitGitHub(octokit, 'todo-get-org-from-action-parameters');
-        yield (0, retireInactiveContributors_1.retireInactiveContributors)(github, new Configuration_1.Configuration());
+        // TODO: read max absence from action parameters
+        const configuration = new Configuration_1.Configuration();
+        yield (0, retireInactiveContributors_1.retireInactiveContributors)(github, configuration);
     });
 }
 run();

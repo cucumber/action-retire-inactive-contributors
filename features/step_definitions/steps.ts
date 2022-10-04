@@ -1,23 +1,29 @@
-import {
-  Before,
-  defineParameterType,
-  Given,
-  Then,
-  When,
-} from '@cucumber/cucumber'
-import { assertThat, hasItem, not } from 'hamjest'
-import { Configuration } from '../../src/Configuration'
-import { Duration } from '../../src/Duration'
-import { FakeGitHub } from '../../src/FakeGitHub'
-import { retireInactiveContributors } from '../../src/retireInactiveContributors'
+import {Before, defineParameterType, Given, Then, When,} from '@cucumber/cucumber'
+import {assertThat, hasItem, not} from 'hamjest'
+import {Configuration} from '../../src/Configuration'
+import {Duration} from '../../src/Duration'
+import {FakeGitHub} from '../../src/FakeGitHub'
+import {GitHubClient, retireInactiveContributors} from '../../src/retireInactiveContributors'
+import {getOctokit} from "@actions/github";
+import {OctokitGitHub} from "../../src/OctokitGitHub";
 
 type World = {
   configuration: Configuration
-  github: FakeGitHub
+  github: GitHubClient
 }
 
 Before(function () {
-  this.github = new FakeGitHub()
+  const token = process.env.GITHUB_TOKEN
+  if (!token) {
+    throw new Error(
+        'Please set GITHUB_TOKEN. See https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token'
+    )
+  }
+  const octokit = getOctokit(token)
+  this.github = new OctokitGitHub(
+      octokit,
+      'todo-get-org-from-action-parameters'
+  )
   this.configuration = new Configuration()
 })
 
@@ -44,15 +50,16 @@ Given(
 
 Given(
   'a user {user} is part/member of {team}',
-  function (this: World, user: string, team: string) {
-    this.github.addUserToTeam(user, team)
+  async function (this: World, user: string, team: string) {
+    await this.github.addUserToTeam(user, team)
   }
 )
 
 Given(
   "the create date of {user}'s last commit was {int} day/days ago",
   function (this: World, user: string, daysAgo: number) {
-    this.github.createCommit(user, daysAgo)
+    // TODO: fix this
+    // this.github.createCommit(user, daysAgo)
   }
 )
 

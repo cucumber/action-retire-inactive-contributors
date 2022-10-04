@@ -1,27 +1,51 @@
 import { OctokitGitHub } from './OctokitGitHub'
 import { getOctokit } from '@actions/github'
 import { assertThat, equalTo, falsey, hasItem, is, not } from 'hamjest'
+import {deepStrictEqual} from "assert";
 
 const org = 'test-inactive-contributor-action'
 
+const testAlumniTeam = 'test-Alumni'
+const testUser = 'blaisep';
+
 describe(OctokitGitHub.name, () => {
   context('adding someone to a team', () => {
-    it('adds a new member to a team', async () => {
+
+    beforeEach(async () => {
       const octokit = getOctokit(token())
       const gitHubClient = new OctokitGitHub(octokit, org)
-      const teamSlug = 'test-Alumni'
-      const initialMembers = await gitHubClient.getMembersOf(teamSlug)
+
+      const initialMembers = await gitHubClient.getMembersOf(testAlumniTeam)
       for (const member of initialMembers) {
         await octokit.rest.teams.removeMembershipForUserInOrg({
           org,
-          team_slug: teamSlug,
+          team_slug: testAlumniTeam,
           username: member,
         })
       }
-      await gitHubClient.addUserToTeam('blaisep', teamSlug)
-      const members = await gitHubClient.getMembersOf(teamSlug)
-      assertThat(members, hasItem('blaisep'))
     })
+
+    it('adds a new member to a team', async () => {
+      const gitHubClient = client()
+
+      await gitHubClient.addUserToTeam(testUser, testAlumniTeam)
+      const members = await gitHubClient.getMembersOf(testAlumniTeam)
+      assertThat(members, hasItem(testUser))
+    })
+
+    it('says which members have been added to teams', async () => {
+      const gitHubClient = client()
+      const changes = gitHubClient.trackChanges().data
+      assertThat(changes, equalTo([]))
+
+      await gitHubClient.addUserToTeam(testUser, testAlumniTeam)
+      assertThat(changes, equalTo([{
+        action: "add",
+        user: testUser,
+        team: testAlumniTeam,
+      }]))
+    })
+
   })
 
   context('removing someone from the team', () => {
@@ -29,16 +53,16 @@ describe(OctokitGitHub.name, () => {
       // Given
       const gitHubClient = client()
       const teamSlug = 'test-Contributors'
-      await gitHubClient.addUserToTeam('blaisep', teamSlug)
+      await gitHubClient.addUserToTeam(testUser, teamSlug)
       const initialMembers = await gitHubClient.getMembersOf(teamSlug)
-      assertThat(initialMembers, hasItem('blaisep'))
+      assertThat(initialMembers, hasItem(testUser))
 
       // When
-      await gitHubClient.removeUserFromTeam('blaisep', teamSlug)
+      await gitHubClient.removeUserFromTeam(testUser, teamSlug)
 
       // Then
       const members = await gitHubClient.getMembersOf(teamSlug)
-      assertThat(members, not(hasItem('blaisep')))
+      assertThat(members, not(hasItem(testUser)))
     })
   })
 
@@ -66,7 +90,7 @@ describe(OctokitGitHub.name, () => {
   it('gets members of a team', async () => {
     const gitHubClient = client()
     const members = await gitHubClient.getMembersOf('fishcakes')
-    assertThat(members, equalTo(['blaisep', 'funficient']))
+    assertThat(members, equalTo([testUser, 'funficient']))
   })
 })
 
