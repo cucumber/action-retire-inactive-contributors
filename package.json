@@ -11,8 +11,7 @@
   ],
   "scripts": {
     "build": "tsc --build",
-    "package": "ncc build src/index.ts -o dist --source-map --license licenses.txt",
-    "build:production": "tsc --build tsconfig.production.json",
+    "build:production": "ncc build src/index.ts -o dist --source-map --license licenses.txt",
     "build:clean": "rm -rf dist",
     "test": "npm run lint && npm run build && npm run test:unit && npm run test:acceptance && npm run build:clean && npm run build:production",
     "test:acceptance": "cucumber-js --tags 'not @todo and not @wip'",
