@@ -86,9 +86,8 @@ describe(OctokitGitHub.name, () => {
     const org = 'non-existent-org'
     const octokit = getOctokit(token())
     const gitHubClient = new OctokitGitHub(octokit, org)
-    const gettingMembers = gitHubClient.getMembersOf('fishcakes')
     await promiseThat(
-      gettingMembers,
+      gitHubClient.getMembersOf('fishcakes'),
       rejected(instanceOf(UnableToGetMembersError))
     )
   })
