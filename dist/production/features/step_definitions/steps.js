@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cucumber_1 = require("@cucumber/cucumber");
 const hamjest_1 = require("hamjest");
 const Configuration_1 = require("../../src/Configuration");
+const Duration_1 = require("../../src/Duration");
 const FakeGitHub_1 = require("../../src/FakeGitHub");
 const retireInactiveContributors_1 = require("../../src/retireInactiveContributors");
 (0, cucumber_1.Before)(function () {
@@ -68,5 +69,5 @@ const retireInactiveContributors_1 = require("../../src/retireInactiveContributo
 });
 (0, cucumber_1.Given)('the maximum absence before retirement is {int} days', function (maximumDaysAbsent) {
     this.configuration.maximumAbsenceBeforeRetirement =
-        maximumDaysAbsent * 24 * 60 * 60 * 1000;
+        Duration_1.Duration.of(maximumDaysAbsent).days();
 });
