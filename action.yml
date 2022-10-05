@@ -3,3 +3,10 @@ author: "Cucumber Open"
 runs:
   using: "node16"
   main: "dist/index.js"
+inputs: 
+  maximum-absence-before-retirement: 
+    required: true
+    description: "maximum period of inactivity"
+
+
+
