@@ -1,7 +1,20 @@
 import { OctokitGitHub } from './OctokitGitHub'
 import { getOctokit } from '@actions/github'
-import { assertThat, equalTo, falsey, hasItem, is, not } from 'hamjest'
+import {
+  assertThat,
+  equalTo,
+  falsey,
+  hasItem,
+  instanceOf,
+  is,
+  not,
+  promiseThat,
+  throws,
+} from 'hamjest'
+import { UnableToGetMembersError } from './Errors'
+import assert from 'assert'
 
+// This really exists on GitHub
 const org = 'test-inactive-contributor-action'
 
 describe(OctokitGitHub.name, () => {
@@ -67,6 +80,15 @@ describe(OctokitGitHub.name, () => {
     const gitHubClient = client()
     const members = await gitHubClient.getMembersOf('fishcakes')
     assertThat(members, equalTo(['blaisep', 'funficient']))
+  })
+
+  it.skip('throws a useful error when trying to get members of a non-existent org', async () => {
+    // TODO: make this pass
+    const org = 'non-existent-org'
+    const octokit = getOctokit(token())
+    const gitHubClient = new OctokitGitHub(octokit, org)
+    const gettingMembers = gitHubClient.getMembersOf('fishcakes')
+    await assert.rejects(gettingMembers, UnableToGetMembersError)
   })
 })
 
