@@ -1,12 +1,11 @@
-import {GitHub} from '@actions/github/lib/utils'
-import {GitHubClient} from './retireInactiveContributors'
-import {EventEmitter} from 'events'
-import {OutputTracker} from './OutputTracker'
+import { GitHub } from '@actions/github/lib/utils'
+import { GitHubClient } from './retireInactiveContributors'
+import { EventEmitter } from 'events'
+import { OutputTracker } from './OutputTracker'
 
-const CHANGE_EVENT = "changeEvent"
+const CHANGE_EVENT = 'changeEvent'
 
 export class OctokitGitHub implements GitHubClient {
-
   private readonly emitter = new EventEmitter()
 
   static createNull(options: any = {}) {
@@ -43,23 +42,20 @@ export class OctokitGitHub implements GitHubClient {
       username: user,
     })
     this.emitter.emit(CHANGE_EVENT, {
-      action: "add",
+      action: 'add',
       team,
       user,
     })
   }
 
-  async removeUserFromTeam(
-    user: string,
-    team: string
-  ): Promise<void> {
+  async removeUserFromTeam(user: string, team: string): Promise<void> {
     await this.octokit.rest.teams.removeMembershipForUserInOrg({
       org: this.org,
       team_slug: team,
       username: user,
     })
     this.emitter.emit(CHANGE_EVENT, {
-      action: "remove",
+      action: 'remove',
       team,
       user,
     })
@@ -74,16 +70,15 @@ export class OctokitGitHub implements GitHubClient {
   }
 
   trackChanges() {
-    return OutputTracker.create(this.emitter, CHANGE_EVENT);
+    return OutputTracker.create(this.emitter, CHANGE_EVENT)
   }
-
 }
 
 class NullOctokit {
   private teamMembers: any
   private hasCommitted: any
 
-  constructor({ teamMembers = [ [] ], hasCommitted = [] }) {
+  constructor({ teamMembers = [[]], hasCommitted = [] }) {
     this.teamMembers = teamMembers
     this.hasCommitted = hasCommitted
   }
@@ -95,30 +90,43 @@ class NullOctokit {
       teams: {
         addOrUpdateMembershipForUserInOrg() {},
         removeMembershipForUserInOrg() {},
-        listMembersInOrg(): any { return new NullMembersList(teamMembers.shift()) },
+        listMembersInOrg(): any {
+          return new NullMembersList(teamMembers.shift())
+        },
       },
       repos: {
-        listForOrg() { return new NullRepoList() },
-        listCommits() { return new NullCommitList(hasCommitted.shift()) },
-      }
+        listForOrg() {
+          return new NullRepoList()
+        },
+        listCommits() {
+          return new NullCommitList(hasCommitted.shift())
+        },
+      },
     }
   }
 }
 
 class NullRepoList {
-  get data() { return [{
-    name: "null_octokit_repo"
-  }] }
+  get data() {
+    return [
+      {
+        name: 'null_octokit_repo',
+      },
+    ]
+  }
 }
 
 class NullCommitList {
-  constructor (private readonly hasCommitted: any) {}
-  get data() { return this.hasCommitted ? [ 'null_octokit_commit' ] : [] }
+  constructor(private readonly hasCommitted: any) {}
+  get data() {
+    return this.hasCommitted ? ['null_octokit_commit'] : []
+  }
 }
 
 class NullMembersList {
-  constructor (private readonly teamMembers: any) {
-  }
+  constructor(private readonly teamMembers: any) {}
 
-  get data() { return this.teamMembers.map((login: string) => ({ login })) }
+  get data() {
+    return this.teamMembers.map((login: string) => ({ login }))
+  }
 }
