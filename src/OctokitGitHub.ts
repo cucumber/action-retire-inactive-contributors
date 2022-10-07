@@ -66,10 +66,11 @@ type Octokit = {
 export class OctokitGitHub implements GitHubClient {
   private readonly emitter = new EventEmitter()
 
-  static createNull(
-    options: NullOctokitOptions = { teamMembers: [[]], hasCommitted: [] }
-  ) {
-    return new OctokitGitHub(new NullOctokit(options), '')
+  static createNull(options: NullOctokitOptions = {}) {
+    return new OctokitGitHub(
+      new NullOctokit({ ...defaultOptions, ...options }),
+      'an-org'
+    )
   }
 
   static create(octokit: InstanceType<typeof GitHub>, org: string) {
@@ -77,7 +78,6 @@ export class OctokitGitHub implements GitHubClient {
   }
 
   constructor(
-    // TODO: private readonly octokit: (InstanceType<typeof GitHub> || null),
     private readonly octokit: Octokit,
     private readonly org: string
   ) {}
@@ -146,6 +146,13 @@ type NullOctokitOptions = {
   hasCommitted?: NullOctokitHasCommitted[]
 }
 
+const defaultTeamMembers: string[] = []
+const defaultHasCommitted = false
+const defaultOptions: NullOctokitOptions = {
+  teamMembers: [defaultTeamMembers],
+  hasCommitted: [defaultHasCommitted],
+}
+
 class NullOctokit implements Octokit {
   constructor(private readonly options: NullOctokitOptions) {}
 
@@ -159,8 +166,8 @@ class NullOctokit implements Octokit {
           return Promise.resolve()
         },
         listMembersInOrg: () => {
-          const teamMembers = (this.options.teamMembers || []).shift()
-          if (!teamMembers) throw new Error('No more teamMembers configured!')
+          const teamMembers =
+            (this.options.teamMembers || []).shift() || defaultTeamMembers
           return Promise.resolve(new NullMembersList(teamMembers))
         },
       },
@@ -169,8 +176,8 @@ class NullOctokit implements Octokit {
           return Promise.resolve(new NullRepoList())
         },
         listCommits: () => {
-          const hasCommitted = (this.options.hasCommitted || []).shift()
-          if (!hasCommitted) throw new Error('No more hasCommmited configured!')
+          const hasCommitted =
+            (this.options.hasCommitted || []).shift() || defaultHasCommitted
           return Promise.resolve(new NullCommitList(hasCommitted))
         },
       },
