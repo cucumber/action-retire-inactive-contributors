@@ -1,11 +1,19 @@
-import {Before, defineParameterType, Given, Then, When,} from '@cucumber/cucumber'
-import {assertThat, hasItem, not} from 'hamjest'
-import {Configuration} from '../../src/Configuration'
-import {Duration} from '../../src/Duration'
-import {FakeGitHub} from '../../src/FakeGitHub'
-import {GitHubClient, retireInactiveContributors} from '../../src/retireInactiveContributors'
-import {getOctokit} from "@actions/github";
-import {OctokitGitHub} from "../../src/OctokitGitHub";
+import { getOctokit } from '@actions/github'
+import {
+  Before,
+  defineParameterType,
+  Given,
+  Then,
+  When,
+} from '@cucumber/cucumber'
+import { assertThat, hasItem, not } from 'hamjest'
+import { Configuration } from '../../src/Configuration'
+import { Duration } from '../../src/Duration'
+import { OctokitGitHub } from '../../src/OctokitGitHub'
+import {
+  GitHubClient,
+  retireInactiveContributors,
+} from '../../src/retireInactiveContributors'
 
 type World = {
   configuration: Configuration
@@ -16,13 +24,13 @@ Before(function () {
   const token = process.env.GITHUB_TOKEN
   if (!token) {
     throw new Error(
-        'Please set GITHUB_TOKEN. See https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token'
+      'Please set GITHUB_TOKEN. See https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token'
     )
   }
   const octokit = getOctokit(token)
   this.github = new OctokitGitHub(
-      octokit,
-      'todo-get-org-from-action-parameters'
+    octokit,
+    'todo-get-org-from-action-parameters'
   )
   this.configuration = new Configuration()
 })
