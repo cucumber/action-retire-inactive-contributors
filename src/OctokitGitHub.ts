@@ -1,16 +1,32 @@
-import {GitHub} from '@actions/github/lib/utils'
-import {GitHubClient} from './retireInactiveContributors'
-import {EventEmitter} from 'events'
-import {OutputTracker} from './OutputTracker'
+import { GitHubClient } from './retireInactiveContributors'
+import { EventEmitter } from 'events'
+import { OutputTracker } from './OutputTracker'
 
-const CHANGE_EVENT = "changeEvent"
+const CHANGE_EVENT = 'changeEvent'
+
+type GithubTeamName = string
+type GithubUsername = string
+
+type NullOctokitTeamMembers = {
+  [teamName: GithubTeamName]: GithubUsername[]
+}
+
+type NullOctokitCommitDates = {
+  [memberName: GithubUsername]: Date
+}
+
+export class NullOctokitConfig {
+  constructor(
+    public readonly teamMembers: NullOctokitTeamMembers = {},
+    public readonly commitDates: NullOctokitCommitDates = {}
+  ) {}
+}
 
 export class OctokitGitHub implements GitHubClient {
-
   private readonly emitter = new EventEmitter()
 
-  static createNull(options: any = {}) {
-    return new OctokitGitHub(new NullOctokit(options), '')
+  static createNull(config: NullOctokitConfig = new NullOctokitConfig()) {
+    return new OctokitGitHub(new NullOctokit(config), '')
   }
 
   constructor(
@@ -43,23 +59,20 @@ export class OctokitGitHub implements GitHubClient {
       username: user,
     })
     this.emitter.emit(CHANGE_EVENT, {
-      action: "add",
+      action: 'add',
       team,
       user,
     })
   }
 
-  async removeUserFromTeam(
-    user: string,
-    team: string
-  ): Promise<void> {
+  async removeUserFromTeam(user: string, team: string): Promise<void> {
     await this.octokit.rest.teams.removeMembershipForUserInOrg({
       org: this.org,
       team_slug: team,
       username: user,
     })
     this.emitter.emit(CHANGE_EVENT, {
-      action: "remove",
+      action: 'remove',
       team,
       user,
     })
@@ -74,51 +87,59 @@ export class OctokitGitHub implements GitHubClient {
   }
 
   trackChanges() {
-    return OutputTracker.create(this.emitter, CHANGE_EVENT);
+    return OutputTracker.create(this.emitter, CHANGE_EVENT)
   }
-
 }
 
 class NullOctokit {
-  private teamMembers: any
-  private hasCommitted: any
-
-  constructor({ teamMembers = [ [] ], hasCommitted = [] }) {
-    this.teamMembers = teamMembers
-    this.hasCommitted = hasCommitted
-  }
+  constructor(private readonly config: NullOctokitConfig) {}
 
   get rest() {
-    const teamMembers = this.teamMembers
-    const hasCommitted = this.hasCommitted
     return {
       teams: {
-        addOrUpdateMembershipForUserInOrg() {},
-        removeMembershipForUserInOrg() {},
-        listMembersInOrg(): any { return new NullMembersList(teamMembers.shift()) },
+        addOrUpdateMembershipForUserInOrg: () => {},
+        removeMembershipForUserInOrg: () => {},
+        listMembersInOrg: ({ team_slug }: { team_slug: string }) => {
+          return new NullMembersList(this.config.teamMembers[team_slug] ?? [])
+        },
       },
       repos: {
-        listForOrg() { return new NullRepoList() },
-        listCommits() { return new NullCommitList(hasCommitted.shift()) },
-      }
+        listForOrg: () => new NullRepoList(),
+        listCommits: ({ author, since }: { author: string; since: string }) => {
+          const commitDate = this.config.commitDates[author]
+          if (commitDate === undefined)
+            throw new Error(
+              `Attempted to discover commits for null user '${author}', but it wasn't configured`
+            )
+          return new NullCommitList(new Date(since) <= commitDate)
+        },
+      },
     }
   }
 }
 
 class NullRepoList {
-  get data() { return [{
-    name: "null_octokit_repo"
-  }] }
+  get data() {
+    return [
+      {
+        name: 'null_octokit_repo',
+      },
+    ]
+  }
 }
 
 class NullCommitList {
-  constructor (private readonly hasCommitted: any) {}
-  get data() { return this.hasCommitted ? [ 'null_octokit_commit' ] : [] }
+  constructor(private readonly hasCommits: boolean) {}
+
+  get data() {
+    return this.hasCommits ? ['null_octokit_commit'] : []
+  }
 }
 
 class NullMembersList {
-  constructor (private readonly teamMembers: any) {
-  }
+  constructor(private readonly teamMembers: any) {}
 
-  get data() { return this.teamMembers.map((login: string) => ({ login })) }
+  get data() {
+    return this.teamMembers.map((login: string) => ({ login }))
+  }
 }
