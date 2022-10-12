@@ -9,10 +9,9 @@ import {
   is,
   not,
   promiseThat,
-  throws,
+  rejected,
 } from 'hamjest'
 import { UnableToGetMembersError } from './Errors'
-import assert from 'assert'
 
 // This really exists on GitHub
 const org = 'test-inactive-contributor-action'
@@ -86,8 +85,10 @@ describe(OctokitGitHub.name, () => {
     const org = 'non-existent-org'
     const octokit = getOctokit(token())
     const gitHubClient = new OctokitGitHub(octokit, org)
-    const gettingMembers = gitHubClient.getMembersOf('fishcakes')
-    await assert.rejects(gettingMembers, UnableToGetMembersError)
+    await promiseThat(
+      gitHubClient.getMembersOf('fishcakes'),
+      rejected(instanceOf(UnableToGetMembersError))
+    )
   })
 })
 
