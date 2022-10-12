@@ -87,7 +87,10 @@ describe(OctokitGitHub.name, () => {
     const octokit = getOctokit(token())
     const gitHubClient = new OctokitGitHub(octokit, org)
     const gettingMembers = gitHubClient.getMembersOf('fishcakes')
-    await assert.rejects(gettingMembers, UnableToGetMembersError)
+    await assert.rejects(gettingMembers, {
+      message:
+        'Not Found, unable to get members of fishcakes from: https://api.github.com/orgs/non-existent-org/teams/fishcakes/members',
+    })
   })
 })
 

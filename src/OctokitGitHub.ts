@@ -51,8 +51,28 @@ export class OctokitGitHub implements GitHubClient {
         team_slug: team,
       })
       return result.data.map((user) => user.login)
-    } catch (err) {
-      throw new UnableToGetMembersError()
+    } catch (err: unknown) {
+      if (isGithubRequestError(err)) {
+        throw new UnableToGetMembersError(
+          `${err.message}, unable to get members of ${team} from: ${err.request.url}`
+        )
+      }
+      throw err
     }
   }
+}
+
+type GithubRequestError = {
+  message: string
+  request: {
+    url: string
+  }
+}
+
+function isGithubRequestError(
+  candidate: unknown
+): candidate is GithubRequestError {
+  return Boolean(
+    candidate && typeof candidate == 'object' && 'request' in candidate
+  )
 }
