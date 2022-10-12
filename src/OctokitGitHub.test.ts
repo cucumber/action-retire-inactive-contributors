@@ -82,8 +82,7 @@ describe(OctokitGitHub.name, () => {
     assertThat(members, equalTo(['blaisep', 'funficient']))
   })
 
-  it.skip('throws a useful error when trying to get members of a non-existent org', async () => {
-    // TODO: make this pass
+  it('throws a useful error when trying to get members of a non-existent org', async () => {
     const org = 'non-existent-org'
     const octokit = getOctokit(token())
     const gitHubClient = new OctokitGitHub(octokit, org)

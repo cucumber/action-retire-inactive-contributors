@@ -7723,8 +7723,22 @@ exports.Configuration = Configuration;
 
 /***/ }),
 
+/***/ 4934:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UnableToGetMembersError = void 0;
+class UnableToGetMembersError extends Error {
+}
+exports.UnableToGetMembersError = UnableToGetMembersError;
+
+
+/***/ }),
+
 /***/ 2312:
-/***/ (function(__unused_webpack_module, exports) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -7739,6 +7753,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OctokitGitHub = void 0;
+const Errors_1 = __nccwpck_require__(4934);
 class OctokitGitHub {
     constructor(octokit, org) {
         this.octokit = octokit;
@@ -7782,11 +7797,16 @@ class OctokitGitHub {
     }
     getMembersOf(team) {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield this.octokit.rest.teams.listMembersInOrg({
-                org: this.org,
-                team_slug: team,
-            });
-            return result.data.map((user) => user.login);
+            try {
+                const result = yield this.octokit.rest.teams.listMembersInOrg({
+                    org: this.org,
+                    team_slug: team,
+                });
+                return result.data.map((user) => user.login);
+            }
+            catch (err) {
+                throw new Errors_1.UnableToGetMembersError();
+            }
         });
     }
 }

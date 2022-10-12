@@ -1,4 +1,5 @@
 import { GitHub } from '@actions/github/lib/utils'
+import { UnableToGetMembersError } from './Errors'
 import { GitHubClient } from './retireInactiveContributors'
 
 export class OctokitGitHub implements GitHubClient {
@@ -44,10 +45,14 @@ export class OctokitGitHub implements GitHubClient {
   }
 
   async getMembersOf(team: string): Promise<string[]> {
-    const result = await this.octokit.rest.teams.listMembersInOrg({
-      org: this.org,
-      team_slug: team,
-    })
-    return result.data.map((user) => user.login)
+    try {
+      const result = await this.octokit.rest.teams.listMembersInOrg({
+        org: this.org,
+        team_slug: team,
+      })
+      return result.data.map((user) => user.login)
+    } catch (err) {
+      throw new UnableToGetMembersError()
+    }
   }
 }
