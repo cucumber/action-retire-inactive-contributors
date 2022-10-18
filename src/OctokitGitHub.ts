@@ -1,26 +1,19 @@
 import { GitHubClient } from './retireInactiveContributors'
 import { EventEmitter } from 'events'
 import { OutputTracker } from './OutputTracker'
+import {
+  Octokit,
+  OctokitCommitList,
+  OctokitMember,
+  OctokitMemberList,
+  OctokitRepo,
+  OctokitRepoList,
+} from './Octokit'
 
 const CHANGE_EVENT = 'changeEvent'
 
 type GithubTeamName = string
 type GithubUsername = string
-
-type NullOctokitTeamMembers = {
-  [teamName: GithubTeamName]: GithubUsername[]
-}
-
-type NullOctokitCommitDates = {
-  [memberName: GithubUsername]: Date
-}
-
-export class NullOctokitConfig {
-  constructor(
-    public readonly teamMembers: NullOctokitTeamMembers = {},
-    public readonly commitDates: NullOctokitCommitDates = {}
-  ) {}
-}
 
 export class OctokitGitHub implements GitHubClient {
   private readonly emitter = new EventEmitter()
@@ -30,14 +23,13 @@ export class OctokitGitHub implements GitHubClient {
   }
 
   constructor(
-    // TODO: private readonly octokit: (InstanceType<typeof GitHub> || null),
-    private readonly octokit: any,
+    private readonly octokit: Octokit,
     private readonly org: string
   ) {}
 
   async hasCommittedSince(author: string, date: Date): Promise<boolean> {
     const response = await this.octokit.rest.repos.listForOrg({ org: this.org })
-    const repos = response.data.map((repoData: any) => repoData.name)
+    const repos = response.data.map((repoData: OctokitRepo) => repoData.name)
     for (const repo of repos) {
       const result = await this.octokit.rest.repos.listCommits({
         owner: this.org,
@@ -83,7 +75,7 @@ export class OctokitGitHub implements GitHubClient {
       org: this.org,
       team_slug: team,
     })
-    return result.data.map((user: any) => user.login)
+    return result.data.map((user: OctokitMember) => user.login)
   }
 
   trackChanges() {
@@ -91,21 +83,27 @@ export class OctokitGitHub implements GitHubClient {
   }
 }
 
-class NullOctokit {
+class NullOctokit implements Octokit {
   constructor(private readonly config: NullOctokitConfig) {}
 
   get rest() {
     return {
       teams: {
-        addOrUpdateMembershipForUserInOrg: () => {},
-        removeMembershipForUserInOrg: () => {},
-        listMembersInOrg: ({ team_slug }: { team_slug: string }) => {
+        addOrUpdateMembershipForUserInOrg: async () => {},
+        removeMembershipForUserInOrg: async () => {},
+        listMembersInOrg: async ({ team_slug }: { team_slug: string }) => {
           return new NullMembersList(this.config.teamMembers[team_slug] ?? [])
         },
       },
       repos: {
-        listForOrg: () => new NullRepoList(),
-        listCommits: ({ author, since }: { author: string; since: string }) => {
+        listForOrg: async () => new NullRepoList(),
+        listCommits: async ({
+          author,
+          since,
+        }: {
+          author: string
+          since: string
+        }) => {
           const commitDate = this.config.commitDates[author]
           if (commitDate === undefined)
             throw new Error(
@@ -118,7 +116,7 @@ class NullOctokit {
   }
 }
 
-class NullRepoList {
+class NullRepoList implements OctokitRepoList {
   get data() {
     return [
       {
@@ -128,7 +126,7 @@ class NullRepoList {
   }
 }
 
-class NullCommitList {
+class NullCommitList implements OctokitCommitList {
   constructor(private readonly hasCommits: boolean) {}
 
   get data() {
@@ -136,10 +134,25 @@ class NullCommitList {
   }
 }
 
-class NullMembersList {
-  constructor(private readonly teamMembers: any) {}
+class NullMembersList implements OctokitMemberList {
+  constructor(private readonly teamMembers: GithubUsername[]) {}
 
   get data() {
     return this.teamMembers.map((login: string) => ({ login }))
   }
+}
+
+type NullOctokitTeamMembers = {
+  [teamName: GithubTeamName]: GithubUsername[]
+}
+
+type NullOctokitCommitDates = {
+  [memberName: GithubUsername]: Date
+}
+
+export class NullOctokitConfig {
+  constructor(
+    public readonly teamMembers: NullOctokitTeamMembers = {},
+    public readonly commitDates: NullOctokitCommitDates = {}
+  ) {}
 }

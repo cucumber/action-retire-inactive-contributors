@@ -1,4 +1,3 @@
-import { NullOctokitConfig, OctokitGitHub } from './OctokitGitHub'
 import { getOctokit } from '@actions/github'
 import {
   assertThat,
@@ -10,11 +9,10 @@ import {
   not,
   promiseThat,
   rejected,
-  truthy,
 } from 'hamjest'
-import { deepStrictEqual, equal } from 'assert'
-import { Today } from './Today'
 import { Duration } from './Duration'
+import { NullOctokitConfig, OctokitGitHub } from './OctokitGitHub'
+import { Today } from './Today'
 
 const org = 'test-inactive-contributor-action'
 
@@ -189,7 +187,6 @@ describe(OctokitGitHub.name, () => {
       const nineDaysAgo = Today.minus(Duration.of(9).days())
       const tenDaysAgo = Today.minus(Duration.of(10).days())
       const elevenDaysAgo = Today.minus(Duration.of(11).days())
-      const twentyDaysAgo = Today.minus(Duration.of(20).days())
 
       const config = new NullOctokitConfig(
         {},
