@@ -1,4 +1,5 @@
 import { getOctokit } from '@actions/github'
+import { getInput } from '@actions/core'
 import { Configuration } from './Configuration'
 import { OctokitGitHub } from './OctokitGitHub'
 import { retireInactiveContributors } from './retireInactiveContributors'
@@ -11,10 +12,8 @@ async function run(): Promise<void> {
     )
   }
   const octokit = getOctokit(token)
-  const github = new OctokitGitHub(
-    octokit,
-    'todo-get-org-from-action-parameters'
-  )
+  const githubOrgname = getInput('github-orgname')
+  const github = new OctokitGitHub(octokit, githubOrgname)
 
   // TODO: read max absence from action parameters
   const configuration = new Configuration()

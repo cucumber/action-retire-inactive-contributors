@@ -28,6 +28,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          github-orgname: cucumber
           maximum-absence-before-retirement: 1 year
           alumni-team: Alumni
 ```

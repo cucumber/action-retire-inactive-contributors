@@ -4,6 +4,9 @@ runs:
   using: "node16"
   main: "dist/index.js"
 inputs: 
+  github-orgname:
+    required: true
+    description: "The github org where this action should operate to retire inactive contributors"
   maximum-absence-before-retirement: 
     required: true
     description: "maximum period of inactivity"
