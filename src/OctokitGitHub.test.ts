@@ -1,4 +1,3 @@
-import { OctokitGitHub } from './OctokitGitHub'
 import { getOctokit } from '@actions/github'
 import {
   allOf,
@@ -6,7 +5,6 @@ import {
   equalTo,
   falsey,
   hasItem,
-  hasProperties,
   hasProperty,
   instanceOf,
   is,
@@ -15,6 +13,7 @@ import {
   rejected,
 } from 'hamjest'
 import { UnableToGetMembersError } from './Errors'
+import { OctokitGitHub } from './OctokitGitHub'
 
 // This really exists on GitHub
 const org = 'test-inactive-contributor-action'

@@ -7805,12 +7805,18 @@ class OctokitGitHub {
                 return result.data.map((user) => user.login);
             }
             catch (err) {
-                throw new Errors_1.UnableToGetMembersError();
+                if (isGithubRequestError(err)) {
+                    throw new Errors_1.UnableToGetMembersError(`${err.message}, unable to get members of ${team} from: ${err.request.url}`);
+                }
+                throw err;
             }
         });
     }
 }
 exports.OctokitGitHub = OctokitGitHub;
+function isGithubRequestError(candidate) {
+    return Boolean(candidate && typeof candidate == 'object' && 'request' in candidate);
+}
 
 
 /***/ }),
