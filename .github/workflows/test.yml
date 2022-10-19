@@ -12,7 +12,8 @@ jobs:
     - uses: ./
       with:
         github-orgname: test-inactive-contributor-action
-
+      env:
+        GITHUB_TOKEN: ${{ secrets.OCTOKIT_TOKEN }}
   run-tests:
     runs-on: ubuntu-latest
     strategy:
