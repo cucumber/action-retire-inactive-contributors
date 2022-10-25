@@ -13,10 +13,16 @@ const cucumber_1 = require("@cucumber/cucumber");
 const hamjest_1 = require("hamjest");
 const Configuration_1 = require("../../src/Configuration");
 const Duration_1 = require("../../src/Duration");
-const FakeGitHub_1 = require("../../src/FakeGitHub");
 const retireInactiveContributors_1 = require("../../src/retireInactiveContributors");
+const github_1 = require("@actions/github");
+const OctokitGitHub_1 = require("../../src/OctokitGitHub");
 (0, cucumber_1.Before)(function () {
-    this.github = new FakeGitHub_1.FakeGitHub();
+    const token = process.env.GITHUB_TOKEN;
+    if (!token) {
+        throw new Error('Please set GITHUB_TOKEN. See https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token');
+    }
+    const octokit = (0, github_1.getOctokit)(token);
+    this.github = new OctokitGitHub_1.OctokitGitHub(octokit, 'todo-get-org-from-action-parameters');
     this.configuration = new Configuration_1.Configuration();
 });
 (0, cucumber_1.defineParameterType)({
@@ -35,10 +41,13 @@ const retireInactiveContributors_1 = require("../../src/retireInactiveContributo
     return 'pending';
 });
 (0, cucumber_1.Given)('a user {user} is part/member of {team}', function (user, team) {
-    this.github.addUserToTeam(user, team);
+    return __awaiter(this, void 0, void 0, function* () {
+        yield this.github.addUserToTeam(user, team);
+    });
 });
 (0, cucumber_1.Given)("the create date of {user}'s last commit was {int} day/days ago", function (user, daysAgo) {
-    this.github.createCommit(user, daysAgo);
+    // TODO: fix this
+    // this.github.createCommit(user, daysAgo)
 });
 (0, cucumber_1.Given)('a user {user} is a member of {team}', function (user, team) {
     // Write code here that turns the phrase above into concrete actions
