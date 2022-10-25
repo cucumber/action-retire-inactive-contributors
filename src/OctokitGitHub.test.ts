@@ -1,4 +1,5 @@
 import { getOctokit } from '@actions/github'
+import { assert } from 'console'
 import {
   assertThat,
   equalTo,
@@ -134,21 +135,27 @@ describe(OctokitGitHub.name, () => {
 
   context('null instance', () => {
     it('does not actually add user to team', async () => {
-      const gitHubClient = OctokitGitHub.createNull()
-      await gitHubClient.addUserToTeam(testUser, testAlumniTeam)
+      await assertAsynchronous(async () => {
+        const gitHubClient = OctokitGitHub.createNull()
+        await gitHubClient.addUserToTeam(testUser, testAlumniTeam)
+      })
     })
 
     it('does not actually remove user from team', async () => {
-      const gitHubClient = OctokitGitHub.createNull()
-      await gitHubClient.removeUserFromTeam(testUser, testContributorsTeam)
+      await assertAsynchronous(async () => {
+        const gitHubClient = OctokitGitHub.createNull()
+        await gitHubClient.removeUserFromTeam(testUser, testAlumniTeam)
+      })
     })
 
     it('by default, teams have no members', async () => {
-      const gitHubClient = OctokitGitHub.createNull()
-      assertThat(
-        await gitHubClient.getMembersOf(testContributorsTeam),
-        equalTo([])
-      )
+      await assertAsynchronous(async () => {
+        const gitHubClient = OctokitGitHub.createNull()
+        assertThat(
+          await gitHubClient.getMembersOf(testContributorsTeam),
+          equalTo([])
+        )
+      })
     })
 
     it('users with no configured commits throw an exception', async () => {
@@ -165,49 +172,53 @@ describe(OctokitGitHub.name, () => {
     })
 
     it('allows team members to be configured', async () => {
-      const config = new NullOctokitConfig({
-        team1: ['user1', 'user2'],
-        team2: ['user3', 'user4'],
+      await assertAsynchronous(async () => {
+        const config = new NullOctokitConfig({
+          team1: ['user1', 'user2'],
+          team2: ['user3', 'user4'],
+        })
+
+        const gitHubClient = OctokitGitHub.createNull(config)
+
+        assertThat(
+          await gitHubClient.getMembersOf('team1'),
+          equalTo(['user1', 'user2'])
+        )
+        assertThat(
+          await gitHubClient.getMembersOf('team2'),
+          equalTo(['user3', 'user4'])
+        )
+        assertThat(await gitHubClient.getMembersOf('noSuchTeam'), equalTo([]))
       })
-
-      const gitHubClient = OctokitGitHub.createNull(config)
-
-      assertThat(
-        await gitHubClient.getMembersOf('team1'),
-        equalTo(['user1', 'user2'])
-      )
-      assertThat(
-        await gitHubClient.getMembersOf('team2'),
-        equalTo(['user3', 'user4'])
-      )
-      assertThat(await gitHubClient.getMembersOf('noSuchTeam'), equalTo([]))
     })
 
     it('allows last commit date to be configured per user', async () => {
-      const nineDaysAgo = Today.minus(Duration.of(9).days())
-      const tenDaysAgo = Today.minus(Duration.of(10).days())
-      const elevenDaysAgo = Today.minus(Duration.of(11).days())
+      await assertAsynchronous(async () => {
+        const nineDaysAgo = Today.minus(Duration.of(9).days())
+        const tenDaysAgo = Today.minus(Duration.of(10).days())
+        const elevenDaysAgo = Today.minus(Duration.of(11).days())
 
-      const config = new NullOctokitConfig(
-        {},
-        {
-          user1: tenDaysAgo,
-        }
-      )
-      const gitHubClient = OctokitGitHub.createNull(config)
+        const config = new NullOctokitConfig(
+          {},
+          {
+            user1: tenDaysAgo,
+          }
+        )
+        const gitHubClient = OctokitGitHub.createNull(config)
 
-      assertThat(
-        await gitHubClient.hasCommittedSince('user1', elevenDaysAgo),
-        equalTo(true)
-      )
-      assertThat(
-        await gitHubClient.hasCommittedSince('user1', tenDaysAgo),
-        equalTo(true)
-      )
-      assertThat(
-        await gitHubClient.hasCommittedSince('user1', nineDaysAgo),
-        equalTo(false)
-      )
+        assertThat(
+          await gitHubClient.hasCommittedSince('user1', elevenDaysAgo),
+          equalTo(true)
+        )
+        assertThat(
+          await gitHubClient.hasCommittedSince('user1', tenDaysAgo),
+          equalTo(true)
+        )
+        assertThat(
+          await gitHubClient.hasCommittedSince('user1', nineDaysAgo),
+          equalTo(false)
+        )
+      })
     })
   })
 })
@@ -225,4 +236,12 @@ function token() {
 function client() {
   const octokit = getOctokit(token())
   return new OctokitGitHub(octokit, org)
+}
+
+async function assertAsynchronous(fn: () => Promise<void>) {
+  let tickElapsed = false
+  setImmediate(() => (tickElapsed = true))
+
+  await fn()
+  assertThat(tickElapsed, equalTo(true))
 }

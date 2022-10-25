@@ -101,42 +101,52 @@ describe(OctokitGitHub_1.OctokitGitHub.name, () => {
     });
     context('null instance', () => {
         it('does not actually add user to team', () => __awaiter(void 0, void 0, void 0, function* () {
-            const gitHubClient = OctokitGitHub_1.OctokitGitHub.createNull();
-            yield gitHubClient.addUserToTeam(testUser, testAlumniTeam);
+            yield assertAsynchronous(() => __awaiter(void 0, void 0, void 0, function* () {
+                const gitHubClient = OctokitGitHub_1.OctokitGitHub.createNull();
+                yield gitHubClient.addUserToTeam(testUser, testAlumniTeam);
+            }));
         }));
         it('does not actually remove user from team', () => __awaiter(void 0, void 0, void 0, function* () {
-            const gitHubClient = OctokitGitHub_1.OctokitGitHub.createNull();
-            yield gitHubClient.removeUserFromTeam(testUser, testContributorsTeam);
+            yield assertAsynchronous(() => __awaiter(void 0, void 0, void 0, function* () {
+                const gitHubClient = OctokitGitHub_1.OctokitGitHub.createNull();
+                yield gitHubClient.removeUserFromTeam(testUser, testAlumniTeam);
+            }));
         }));
         it('by default, teams have no members', () => __awaiter(void 0, void 0, void 0, function* () {
-            const gitHubClient = OctokitGitHub_1.OctokitGitHub.createNull();
-            (0, hamjest_1.assertThat)(yield gitHubClient.getMembersOf(testContributorsTeam), (0, hamjest_1.equalTo)([]));
+            yield assertAsynchronous(() => __awaiter(void 0, void 0, void 0, function* () {
+                const gitHubClient = OctokitGitHub_1.OctokitGitHub.createNull();
+                (0, hamjest_1.assertThat)(yield gitHubClient.getMembersOf(testContributorsTeam), (0, hamjest_1.equalTo)([]));
+            }));
         }));
         it('users with no configured commits throw an exception', () => __awaiter(void 0, void 0, void 0, function* () {
             const gitHubClient = OctokitGitHub_1.OctokitGitHub.createNull();
             yield (0, hamjest_1.promiseThat)(gitHubClient.hasCommittedSince(testUser, new Date()), (0, hamjest_1.rejected)((0, hamjest_1.hasProperty)('message', `Attempted to discover commits for null user '${testUser}', but it wasn't configured`)));
         }));
         it('allows team members to be configured', () => __awaiter(void 0, void 0, void 0, function* () {
-            const config = new OctokitGitHub_1.NullOctokitConfig({
-                team1: ['user1', 'user2'],
-                team2: ['user3', 'user4'],
-            });
-            const gitHubClient = OctokitGitHub_1.OctokitGitHub.createNull(config);
-            (0, hamjest_1.assertThat)(yield gitHubClient.getMembersOf('team1'), (0, hamjest_1.equalTo)(['user1', 'user2']));
-            (0, hamjest_1.assertThat)(yield gitHubClient.getMembersOf('team2'), (0, hamjest_1.equalTo)(['user3', 'user4']));
-            (0, hamjest_1.assertThat)(yield gitHubClient.getMembersOf('noSuchTeam'), (0, hamjest_1.equalTo)([]));
+            yield assertAsynchronous(() => __awaiter(void 0, void 0, void 0, function* () {
+                const config = new OctokitGitHub_1.NullOctokitConfig({
+                    team1: ['user1', 'user2'],
+                    team2: ['user3', 'user4'],
+                });
+                const gitHubClient = OctokitGitHub_1.OctokitGitHub.createNull(config);
+                (0, hamjest_1.assertThat)(yield gitHubClient.getMembersOf('team1'), (0, hamjest_1.equalTo)(['user1', 'user2']));
+                (0, hamjest_1.assertThat)(yield gitHubClient.getMembersOf('team2'), (0, hamjest_1.equalTo)(['user3', 'user4']));
+                (0, hamjest_1.assertThat)(yield gitHubClient.getMembersOf('noSuchTeam'), (0, hamjest_1.equalTo)([]));
+            }));
         }));
         it('allows last commit date to be configured per user', () => __awaiter(void 0, void 0, void 0, function* () {
-            const nineDaysAgo = Today_1.Today.minus(Duration_1.Duration.of(9).days());
-            const tenDaysAgo = Today_1.Today.minus(Duration_1.Duration.of(10).days());
-            const elevenDaysAgo = Today_1.Today.minus(Duration_1.Duration.of(11).days());
-            const config = new OctokitGitHub_1.NullOctokitConfig({}, {
-                user1: tenDaysAgo,
-            });
-            const gitHubClient = OctokitGitHub_1.OctokitGitHub.createNull(config);
-            (0, hamjest_1.assertThat)(yield gitHubClient.hasCommittedSince('user1', elevenDaysAgo), (0, hamjest_1.equalTo)(true));
-            (0, hamjest_1.assertThat)(yield gitHubClient.hasCommittedSince('user1', tenDaysAgo), (0, hamjest_1.equalTo)(true));
-            (0, hamjest_1.assertThat)(yield gitHubClient.hasCommittedSince('user1', nineDaysAgo), (0, hamjest_1.equalTo)(false));
+            yield assertAsynchronous(() => __awaiter(void 0, void 0, void 0, function* () {
+                const nineDaysAgo = Today_1.Today.minus(Duration_1.Duration.of(9).days());
+                const tenDaysAgo = Today_1.Today.minus(Duration_1.Duration.of(10).days());
+                const elevenDaysAgo = Today_1.Today.minus(Duration_1.Duration.of(11).days());
+                const config = new OctokitGitHub_1.NullOctokitConfig({}, {
+                    user1: tenDaysAgo,
+                });
+                const gitHubClient = OctokitGitHub_1.OctokitGitHub.createNull(config);
+                (0, hamjest_1.assertThat)(yield gitHubClient.hasCommittedSince('user1', elevenDaysAgo), (0, hamjest_1.equalTo)(true));
+                (0, hamjest_1.assertThat)(yield gitHubClient.hasCommittedSince('user1', tenDaysAgo), (0, hamjest_1.equalTo)(true));
+                (0, hamjest_1.assertThat)(yield gitHubClient.hasCommittedSince('user1', nineDaysAgo), (0, hamjest_1.equalTo)(false));
+            }));
         }));
     });
 });
@@ -150,4 +160,12 @@ function token() {
 function client() {
     const octokit = (0, github_1.getOctokit)(token());
     return new OctokitGitHub_1.OctokitGitHub(octokit, org);
+}
+function assertAsynchronous(fn) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let tickElapsed = false;
+        setImmediate(() => (tickElapsed = true));
+        yield fn();
+        (0, hamjest_1.assertThat)(tickElapsed, (0, hamjest_1.equalTo)(true));
+    });
 }

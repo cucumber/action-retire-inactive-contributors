@@ -89,14 +89,18 @@ class NullOctokit implements Octokit {
   get rest() {
     return {
       teams: {
-        addOrUpdateMembershipForUserInOrg: async () => {},
-        removeMembershipForUserInOrg: async () => {},
+        addOrUpdateMembershipForUserInOrg: async () => nextTick(),
+        removeMembershipForUserInOrg: async () => nextTick(),
         listMembersInOrg: async ({ team_slug }: { team_slug: string }) => {
+          await nextTick()
           return new NullMembersList(this.config.teamMembers[team_slug] ?? [])
         },
       },
       repos: {
-        listForOrg: async () => new NullRepoList(),
+        listForOrg: async () => {
+          await nextTick()
+          return new NullRepoList()
+        },
         listCommits: async ({
           author,
           since,
@@ -109,11 +113,16 @@ class NullOctokit implements Octokit {
             throw new Error(
               `Attempted to discover commits for null user '${author}', but it wasn't configured`
             )
+          await nextTick()
           return new NullCommitList(new Date(since) <= commitDate)
         },
       },
     }
   }
+}
+
+async function nextTick() {
+  return new Promise((resolve) => setImmediate(resolve))
 }
 
 class NullRepoList implements OctokitRepoList {
