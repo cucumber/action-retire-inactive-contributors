@@ -9579,9 +9579,9 @@ function run() {
         }
         const octokit = (0, github_1.getOctokit)(token);
         const githubOrgname = (0, core_1.getInput)('github-orgname');
+        const maximumAbsenceBeforeRetirement = Number((0, core_1.getInput)('maximum-absence-before-retirement'));
         const github = new OctokitGitHub_1.OctokitGitHub(octokit, githubOrgname);
-        // TODO: read max absence from action parameters
-        const configuration = new Configuration_1.Configuration();
+        const configuration = new Configuration_1.Configuration(maximumAbsenceBeforeRetirement);
         yield (0, retireInactiveContributors_1.retireInactiveContributors)(github, configuration);
     });
 }

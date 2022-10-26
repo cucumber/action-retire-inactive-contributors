@@ -13,10 +13,12 @@ async function run(): Promise<void> {
   }
   const octokit = getOctokit(token)
   const githubOrgname = getInput('github-orgname')
+  const maximumAbsenceBeforeRetirement = Number(
+    getInput('maximum-absence-before-retirement')
+  )
   const github = new OctokitGitHub(octokit, githubOrgname)
 
-  // TODO: read max absence from action parameters
-  const configuration = new Configuration()
+  const configuration = new Configuration(maximumAbsenceBeforeRetirement)
 
   await retireInactiveContributors(github, configuration)
 }

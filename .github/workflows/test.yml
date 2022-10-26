@@ -9,9 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - uses: ./
+    - name: Run the action itself, on the https://github.com/test-inactive-contributor-action org
+      uses: ./
       with:
         github-orgname: test-inactive-contributor-action
+        maximum-absence-before-retirement: abc
       env:
         GITHUB_TOKEN: ${{ secrets.OCTOKIT_TOKEN }} 
   run-tests:
