@@ -18,8 +18,8 @@ export async function retireInactiveContributors(
   const committersTeamMembers = await github.getMembersOf(committersTeam)
   for (const author of committersTeamMembers) {
     if (!(await github.hasCommittedSince(author, cutOffDate))) {
-      github.addUserToTeam(author, alumniTeam)
-      github.removeUserFromTeam(author, committersTeam)
+      await github.addUserToTeam(author, alumniTeam)
+      await github.removeUserFromTeam(author, committersTeam)
     }
   }
 }

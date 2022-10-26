@@ -201,22 +201,25 @@ describe(OctokitGitHub.name, () => {
         const config = new NullOctokitConfig(
           {},
           {
-            user1: tenDaysAgo,
+            user1: elevenDaysAgo,
+            user2: tenDaysAgo,
+            user3: nineDaysAgo,
           }
         )
         const gitHubClient = OctokitGitHub.createNull(config)
 
+        const cutOffDate = tenDaysAgo
         assertThat(
-          await gitHubClient.hasCommittedSince('user1', elevenDaysAgo),
-          equalTo(true)
-        )
-        assertThat(
-          await gitHubClient.hasCommittedSince('user1', tenDaysAgo),
-          equalTo(true)
-        )
-        assertThat(
-          await gitHubClient.hasCommittedSince('user1', nineDaysAgo),
+          await gitHubClient.hasCommittedSince('user1', cutOffDate),
           equalTo(false)
+        )
+        assertThat(
+          await gitHubClient.hasCommittedSince('user2', cutOffDate),
+          equalTo(true)
+        )
+        assertThat(
+          await gitHubClient.hasCommittedSince('user3', cutOffDate),
+          equalTo(true)
         )
       })
     })
