@@ -9582,6 +9582,7 @@ function run() {
         const maximumAbsenceBeforeRetirement = Number((0, core_1.getInput)('maximum-absence-before-retirement'));
         const github = new OctokitGitHub_1.OctokitGitHub(octokit, githubOrgname);
         const configuration = new Configuration_1.Configuration(maximumAbsenceBeforeRetirement);
+        console.log({ configuration });
         yield (0, retireInactiveContributors_1.retireInactiveContributors)(github, configuration);
     });
 }

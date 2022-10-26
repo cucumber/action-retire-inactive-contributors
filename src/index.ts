@@ -20,6 +20,7 @@ async function run(): Promise<void> {
 
   const configuration = new Configuration(maximumAbsenceBeforeRetirement)
 
+  console.log({ configuration })
   await retireInactiveContributors(github, configuration)
 }
 
