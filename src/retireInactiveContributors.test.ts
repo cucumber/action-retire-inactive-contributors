@@ -1,7 +1,8 @@
 import { assertThat, equalTo } from 'hamjest'
 import { Configuration } from './Configuration'
 import { Duration } from './Duration'
-import { NullOctokitConfig, OctokitGitHub } from './OctokitGitHub'
+import { OctokitGitHub } from './OctokitGitHub'
+import { NullOctokitConfig } from './NullOctokitConfig'
 import { retireInactiveContributors } from './retireInactiveContributors'
 import { Today } from './Today'
 

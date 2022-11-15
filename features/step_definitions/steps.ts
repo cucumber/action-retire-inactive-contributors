@@ -15,10 +15,12 @@ import {
 } from '../../src/retireInactiveContributors'
 import { getOctokit } from '@actions/github'
 import { OctokitGitHub } from '../../src/OctokitGitHub'
+import { NullOctokitConfig } from '../../src/NullOctokitConfig'
 
 type World = {
   configuration: Configuration
   github: GitHubClient
+  nullOctokitConfig: NullOctokitConfig
 }
 
 Before(function () {
@@ -34,6 +36,7 @@ Before(function () {
     'todo-get-org-from-action-parameters'
   )
   this.configuration = new Configuration()
+  this.nullOctokitConfig = new NullOctokitConfig()
 })
 
 defineParameterType({
@@ -60,7 +63,7 @@ Given(
 Given(
   'a user {user} is part/member of {team}',
   async function (this: World, user: string, team: string) {
-    await this.github.addUserToTeam(user, team)
+    this.nullOctokitConfig = this.nullOctokitConfig.withTeamMember(user, team)
   }
 )
 
@@ -117,5 +120,12 @@ Given(
   function (this: World, maximumDaysAbsent: number) {
     this.configuration.maximumAbsenceBeforeRetirement =
       Duration.of(maximumDaysAbsent).days()
+  }
+)
+
+Then(
+  '{user} should have been added to {team}',
+  (user: string, team: string) => {
+    // Write code here that turns the phrase above into concrete actions
   }
 )

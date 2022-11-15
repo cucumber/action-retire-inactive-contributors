@@ -12,7 +12,8 @@ import {
   rejected,
 } from 'hamjest'
 import { Duration } from './Duration'
-import { NullOctokitConfig, OctokitGitHub } from './OctokitGitHub'
+import { OctokitGitHub } from './OctokitGitHub'
+import { NullOctokitConfig } from './NullOctokitConfig'
 import { Today } from './Today'
 
 const org = 'test-inactive-contributor-action'

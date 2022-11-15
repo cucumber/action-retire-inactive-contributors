@@ -32,6 +32,7 @@
     "./features/step_definitions/steps.ts",
     "src/Configuration.ts",
     "./src/Today.ts",
-    "./src/Octokit.ts"
+    "./src/Octokit.ts",
+    "./src/NullOctokitConfig.ts"
   ]
 }

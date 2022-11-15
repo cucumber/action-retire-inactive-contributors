@@ -9,11 +9,12 @@ import {
   OctokitRepo,
   OctokitRepoList,
 } from './Octokit'
+import { NullOctokitConfig } from './NullOctokitConfig'
 
 const CHANGE_EVENT = 'changeEvent'
 
-type GithubTeamName = string
-type GithubUsername = string
+export type GithubTeamName = string
+export type GithubUsername = string
 
 export class OctokitGitHub implements GitHubClient {
   private readonly emitter = new EventEmitter()
@@ -149,19 +150,4 @@ class NullMembersList implements OctokitMemberList {
   get data() {
     return this.teamMembers.map((login: string) => ({ login }))
   }
-}
-
-type NullOctokitTeamMembers = {
-  [teamName: GithubTeamName]: GithubUsername[]
-}
-
-type NullOctokitCommitDates = {
-  [memberName: GithubUsername]: Date
-}
-
-export class NullOctokitConfig {
-  constructor(
-    public readonly teamMembers: NullOctokitTeamMembers = {},
-    public readonly commitDates: NullOctokitCommitDates = {}
-  ) {}
 }

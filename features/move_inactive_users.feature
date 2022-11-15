@@ -10,19 +10,20 @@ Feature: Move inactive users
 
   Rule: Users become inactive after a year
 
+    @wip
     Scenario: Greg has been inactive recently
-#      And a user Greg is part of the committers team
+      Given a user Greg is part of the committers team
       And the create date of Greg's last commit was 100 days ago
-#      When the action runs
-#      Then Greg should be in the alumni team
-#      And Greg should not be in the committers team
+      When the action runs
+      Then Greg should have been added to the alumni team
+      And Greg should have been removed from the committers team
 
     Scenario: Aslak has been active recently
-#      Given a user Aslak is part of the committers team
+      Given a user Aslak is part of the committers team
       And the create date of Aslak's last commit was 99 days ago
-#      When the action runs
-#      Then Aslak should be in the committers team
-#      And Aslak should not be in the alumni team
+      When the action runs
+      Then Aslak should be in the committers team
+      And Aslak should not be in the alumni team
 
   Rule: Move inactive users into alumni team from any other team
 
@@ -45,7 +46,6 @@ Feature: Move inactive users
       And Matt should not have any custom permissions on the cucumber-js repo
 
   Rule: Formerly inactive users, who are now active again should remain in the alumni group
-    
     This helps us to know whether we have the right time-frame for retiring people - if there are lots of people
     in both committers and alumni, it means we're maybe retiring people too soon.
 
