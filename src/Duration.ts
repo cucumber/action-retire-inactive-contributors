@@ -1,3 +1,5 @@
+import parse from 'parse-duration'
+
 class DurationBuilder {
   constructor(private readonly length: number) {}
 
@@ -9,5 +11,12 @@ class DurationBuilder {
 export class Duration extends Number {
   static of(length: number): DurationBuilder {
     return new DurationBuilder(length)
+  }
+  static parse(raw: string): Duration {
+    const milliSeconds = parse(raw)
+    if (milliSeconds === null) {
+      throw new Error('invalid duration')
+    }
+    return new Duration(milliSeconds)
   }
 }

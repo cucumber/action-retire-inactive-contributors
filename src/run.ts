@@ -1,3 +1,4 @@
+import { Duration } from './Duration'
 import { getOctokit } from '@actions/github'
 import { Configuration } from './Configuration'
 import { OctokitGitHub } from './OctokitGitHub'
@@ -9,7 +10,7 @@ export async function run(
   token: string
 ): Promise<void> {
   const octokit = getOctokit(token)
-  const maximumAbsenceBeforeRetirement = Number(
+  const maximumAbsenceBeforeRetirement = Duration.parse(
     maximumAbsenceBeforeRetirementInput
   )
   const github = new OctokitGitHub(octokit, githubOrgname)
