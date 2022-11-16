@@ -13,7 +13,7 @@ jobs:
       uses: ./
       with:
         github-orgname: test-inactive-contributor-action
-        maximum-absence-before-retirement: abc
+        maximum-absence-before-retirement: 1 second
       env:
         GITHUB_TOKEN: ${{ secrets.OCTOKIT_TOKEN }} 
   run-tests:
