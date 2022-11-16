@@ -6263,6 +6263,88 @@ function onceStrict (fn) {
 
 /***/ }),
 
+/***/ 3805:
+/***/ ((module) => {
+
+"use strict";
+
+
+var durationRE = /(-?(?:\d+\.?\d*|\d*\.?\d+)(?:e[-+]?\d+)?)\s*([\p{L}]*)/uig
+
+module.exports = parse
+// enable default import syntax in typescript
+module.exports["default"] = parse
+
+/**
+ * conversion ratios
+ */
+
+parse.nanosecond =
+parse.ns = 1 / 1e6
+
+parse['µs'] =
+parse['μs'] =
+parse.us =
+parse.microsecond = 1 / 1e3
+
+parse.millisecond =
+parse.ms =
+parse[''] = 1
+
+parse.second =
+parse.sec =
+parse.s = parse.ms * 1000
+
+parse.minute =
+parse.min =
+parse.m = parse.s * 60
+
+parse.hour =
+parse.hr =
+parse.h = parse.m * 60
+
+parse.day =
+parse.d = parse.h * 24
+
+parse.week =
+parse.wk =
+parse.w = parse.d * 7
+
+parse.month =
+parse.b =
+parse.d * (365.25 / 12)
+
+parse.year =
+parse.yr =
+parse.y = parse.d * 365.25
+
+/**
+ * convert `str` to ms
+ *
+ * @param {String} str
+ * @param {String} format
+ * @return {Number}
+ */
+
+function parse(str='', format='ms'){
+  var result = null
+  // ignore commas/placeholders
+  str = (str+'').replace(/(\d)[,_](\d)/g, '$1$2')
+  str.replace(durationRE, function(_, n, units){
+    units = unitRatio(units)
+    if (units) result = (result || 0) + parseFloat(n, 10) * units
+  })
+
+  return result && (result / (unitRatio(format) || 1))
+}
+
+function unitRatio(str) {
+  return parse[str] || parse[str.toLowerCase().replace(/s$/, '')]
+}
+
+
+/***/ }),
+
 /***/ 4256:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -9435,6 +9517,42 @@ exports.Configuration = Configuration;
 
 /***/ }),
 
+/***/ 5055:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Duration = void 0;
+const parse_duration_1 = __importDefault(__nccwpck_require__(3805));
+class DurationBuilder {
+    constructor(length) {
+        this.length = length;
+    }
+    days() {
+        return new Duration(this.length * 24 * 60 * 60 * 1000);
+    }
+}
+class Duration extends Number {
+    static of(length) {
+        return new DurationBuilder(length);
+    }
+    static parse(raw) {
+        const milliSeconds = (0, parse_duration_1.default)(raw);
+        if (milliSeconds === null) {
+            throw new Error('invalid duration');
+        }
+        return new Duration(milliSeconds);
+    }
+}
+exports.Duration = Duration;
+
+
+/***/ }),
+
 /***/ 4934:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -9551,46 +9669,6 @@ exports.Today = Today;
 
 /***/ }),
 
-/***/ 6144:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const github_1 = __nccwpck_require__(5438);
-const core_1 = __nccwpck_require__(2186);
-const Configuration_1 = __nccwpck_require__(1031);
-const OctokitGitHub_1 = __nccwpck_require__(2312);
-const retireInactiveContributors_1 = __nccwpck_require__(7391);
-function run() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const token = process.env.GITHUB_TOKEN;
-        if (!token) {
-            throw new Error('Please set GITHUB_TOKEN. See https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token');
-        }
-        const octokit = (0, github_1.getOctokit)(token);
-        const githubOrgname = (0, core_1.getInput)('github-orgname');
-        const maximumAbsenceBeforeRetirement = Number((0, core_1.getInput)('maximum-absence-before-retirement'));
-        const github = new OctokitGitHub_1.OctokitGitHub(octokit, githubOrgname);
-        const configuration = new Configuration_1.Configuration(maximumAbsenceBeforeRetirement);
-        console.log({ configuration });
-        yield (0, retireInactiveContributors_1.retireInactiveContributors)(github, configuration);
-    });
-}
-run();
-
-
-/***/ }),
-
 /***/ 7391:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -9623,6 +9701,42 @@ function retireInactiveContributors(github, configuration) {
     });
 }
 exports.retireInactiveContributors = retireInactiveContributors;
+
+
+/***/ }),
+
+/***/ 7764:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.run = void 0;
+const Duration_1 = __nccwpck_require__(5055);
+const github_1 = __nccwpck_require__(5438);
+const Configuration_1 = __nccwpck_require__(1031);
+const OctokitGitHub_1 = __nccwpck_require__(2312);
+const retireInactiveContributors_1 = __nccwpck_require__(7391);
+function run(maximumAbsenceBeforeRetirementInput, githubOrgname, token) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const octokit = (0, github_1.getOctokit)(token);
+        const maximumAbsenceBeforeRetirement = Duration_1.Duration.parse(maximumAbsenceBeforeRetirementInput);
+        const github = new OctokitGitHub_1.OctokitGitHub(octokit, githubOrgname);
+        const configuration = new Configuration_1.Configuration(maximumAbsenceBeforeRetirement);
+        console.log({ configuration });
+        yield (0, retireInactiveContributors_1.retireInactiveContributors)(github, configuration);
+    });
+}
+exports.run = run;
 
 
 /***/ }),
@@ -9801,13 +9915,24 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(6144);
-/******/ 	module.exports = __webpack_exports__;
-/******/ 	
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+(() => {
+"use strict";
+var exports = __webpack_exports__;
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core_1 = __nccwpck_require__(2186);
+const run_1 = __nccwpck_require__(7764);
+const token = process.env.GITHUB_TOKEN;
+if (!token) {
+    throw new Error('Please set GITHUB_TOKEN. See https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token');
+}
+(0, run_1.run)((0, core_1.getInput)('maximum-absence-before-retirement'), (0, core_1.getInput)('github-orgname'), token);
+
+})();
+
+module.exports = __webpack_exports__;
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map
