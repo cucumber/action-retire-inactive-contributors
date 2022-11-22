@@ -106,3 +106,7 @@ Then(
     assertThat(this.githubChanges, equalTo(expectedChanges.hashes()))
   }
 )
+
+Then('we should have told GitHub nothing', function (this: World) {
+  assertThat(this.githubChanges, equalTo([]))
+})

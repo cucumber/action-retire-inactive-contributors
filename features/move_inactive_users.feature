@@ -19,13 +19,11 @@ Feature: Move inactive users
         | add    | Greg | alumni     |
         | remove | Greg | committers |
 
-    @todo
     Scenario: Aslak has been active recently
       Given a user Aslak is part of the committers team
       And the create date of Aslak's last commit was 99 days ago
       When the action runs
-      Then Aslak should be in the committers team
-      And Aslak should not be in the alumni team
+      Then we should have told GitHub nothing
 
   Rule: Move inactive users into alumni team from any other team
 
