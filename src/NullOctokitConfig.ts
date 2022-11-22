@@ -1,4 +1,6 @@
+import { Duration } from './Duration'
 import { GithubTeamName, GithubUsername } from './OctokitGitHub'
+import { Today } from './Today'
 
 export type NullOctokitTeamMembers = {
   [teamName: GithubTeamName]: GithubUsername[]
@@ -23,5 +25,10 @@ export class NullOctokitConfig {
       [team]: newTeam,
     }
     return new NullOctokitConfig(newTeamMembers, this.commitDates)
+  }
+
+  withLastCommit(user: string, date: Date): NullOctokitConfig {
+    const commitDates = { ...this.commitDates, [user]: date }
+    return new NullOctokitConfig(this.teamMembers, commitDates)
   }
 }

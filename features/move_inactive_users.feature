@@ -10,14 +10,16 @@ Feature: Move inactive users
 
   Rule: Users become inactive after a year
 
-    @wip
     Scenario: Greg has been inactive recently
       Given a user Greg is part of the committers team
       And the create date of Greg's last commit was 100 days ago
       When the action runs
-      Then Greg should have been added to the alumni team
-      And Greg should have been removed from the committers team
+      Then we should have told GitHub:
+        | action | user | team       |
+        | add    | Greg | alumni     |
+        | remove | Greg | committers |
 
+    @todo
     Scenario: Aslak has been active recently
       Given a user Aslak is part of the committers team
       And the create date of Aslak's last commit was 99 days ago

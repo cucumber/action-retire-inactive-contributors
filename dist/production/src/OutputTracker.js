@@ -8,7 +8,7 @@ class OutputTracker {
         this._emitter = _emitter;
         this._event = _event;
         this._data = [];
-        this._trackerFn = (text) => this._data.push(text);
+        this._trackerFn = (data) => this._data.push(data);
         this._emitter.on(this._event, this._trackerFn);
     }
     static create(emitter, event) {

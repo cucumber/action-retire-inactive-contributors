@@ -15,6 +15,11 @@ const CHANGE_EVENT = 'changeEvent'
 
 export type GithubTeamName = string
 export type GithubUsername = string
+export type GithubChange = {
+  action: 'add' | 'remove'
+  user: string
+  team: string
+}
 
 export class OctokitGitHub implements GitHubClient {
   private readonly emitter = new EventEmitter()
@@ -79,11 +84,10 @@ export class OctokitGitHub implements GitHubClient {
     return result.data.map((user: OctokitMember) => user.login)
   }
 
-  trackChanges() {
-    return OutputTracker.create(this.emitter, CHANGE_EVENT)
+  trackChanges(): OutputTracker<GithubChange> {
+    return OutputTracker.create<GithubChange>(this.emitter, CHANGE_EVENT)
   }
 }
-
 class NullOctokit implements Octokit {
   constructor(private readonly config: NullOctokitConfig) {}
 

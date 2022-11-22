@@ -13,16 +13,12 @@ const cucumber_1 = require("@cucumber/cucumber");
 const hamjest_1 = require("hamjest");
 const Configuration_1 = require("../../src/Configuration");
 const Duration_1 = require("../../src/Duration");
-const retireInactiveContributors_1 = require("../../src/retireInactiveContributors");
-const github_1 = require("@actions/github");
+const NullOctokitConfig_1 = require("../../src/NullOctokitConfig");
 const OctokitGitHub_1 = require("../../src/OctokitGitHub");
+const retireInactiveContributors_1 = require("../../src/retireInactiveContributors");
+const Today_1 = require("../../src/Today");
 (0, cucumber_1.Before)(function () {
-    const token = process.env.GITHUB_TOKEN;
-    if (!token) {
-        throw new Error('Please set GITHUB_TOKEN. See https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token');
-    }
-    const octokit = (0, github_1.getOctokit)(token);
-    this.github = new OctokitGitHub_1.OctokitGitHub(octokit, 'todo-get-org-from-action-parameters');
+    this.nullOctokitConfig = new NullOctokitConfig_1.NullOctokitConfig();
     this.configuration = new Configuration_1.Configuration();
 });
 (0, cucumber_1.defineParameterType)({
@@ -42,12 +38,12 @@ const OctokitGitHub_1 = require("../../src/OctokitGitHub");
 });
 (0, cucumber_1.Given)('a user {user} is part/member of {team}', function (user, team) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield this.github.addUserToTeam(user, team);
+        this.nullOctokitConfig = this.nullOctokitConfig.withTeamMember(user, team);
     });
 });
 (0, cucumber_1.Given)("the create date of {user}'s last commit was {int} day/days ago", function (user, daysAgo) {
-    // TODO: fix this
-    // this.github.createCommit(user, daysAgo)
+    const date = Today_1.Today.minus(Duration_1.Duration.of(daysAgo).days());
+    this.nullOctokitConfig = this.nullOctokitConfig.withLastCommit(user, date);
 });
 (0, cucumber_1.Given)('a user {user} is a member of {team}', function (user, team) {
     // Write code here that turns the phrase above into concrete actions
@@ -56,27 +52,23 @@ const OctokitGitHub_1 = require("../../src/OctokitGitHub");
     return 'pending';
 });
 (0, cucumber_1.When)('the action runs', function () {
-    // Write code here that turns the phrase above into concrete actions
-    (0, retireInactiveContributors_1.retireInactiveContributors)(this.github, this.configuration);
-});
-(0, cucumber_1.Then)('{user} should be in {team}', function (user, team) {
     return __awaiter(this, void 0, void 0, function* () {
-        const users = yield this.github.getMembersOf(team);
-        (0, hamjest_1.assertThat)(users, (0, hamjest_1.hasItem)(user));
-    });
-});
-(0, cucumber_1.Then)('{user} should not have any custom permissions on the cucumber-js repo', function (user) {
-    // Write code here that turns the phrase above into concrete actions
-    console.log(user);
-    return 'pending';
-});
-(0, cucumber_1.Then)('{user} should not be in {team}( anymore)', function (user, team) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const users = yield this.github.getMembersOf(team);
-        (0, hamjest_1.assertThat)(users, (0, hamjest_1.not)((0, hamjest_1.hasItem)(user)));
+        // Write code here that turns the phrase above into concrete actions
+        const github = OctokitGitHub_1.OctokitGitHub.createNull(this.nullOctokitConfig);
+        this.githubChanges = github.trackChanges().data;
+        yield (0, retireInactiveContributors_1.retireInactiveContributors)(github, this.configuration);
     });
 });
 (0, cucumber_1.Given)('the maximum absence before retirement is {int} days', function (maximumDaysAbsent) {
     this.configuration.maximumAbsenceBeforeRetirement =
         Duration_1.Duration.of(maximumDaysAbsent).days();
+});
+(0, cucumber_1.Then)('{user} should have been added to {team}', (user, team) => {
+    // Write code here that turns the phrase above into concrete actions
+});
+(0, cucumber_1.Then)('{user} should have been removed from {team}', (user, team) => {
+    // Write code here that turns the phrase above into concrete actions
+});
+(0, cucumber_1.Then)('we should have told GitHub:', function (expectedChanges) {
+    (0, hamjest_1.assertThat)(this.githubChanges, (0, hamjest_1.equalTo)(expectedChanges.hashes()));
 });

@@ -15,14 +15,15 @@
     "build:production": "tsc --build tsconfig.production.json",
     "build:clean": "rm -rf dist",
     "test": "npm run lint && npm run build && npm run test:unit && npm run test:acceptance && npm run build:clean && npm run build:production",
-    "test:acceptance": "cucumber-js --tags 'not @todo and not @wip'",
-    "test:acceptance:wip": "cucumber-js --tags @wip",
+    "test:acceptance": "cucumber-js --tags 'not @todo and not @wip' --format @cucumber/pretty-formatter",
+    "test:acceptance:wip": "cucumber-js --tags @wip --format @cucumber/pretty-formatter",
     "test:unit": "mocha src/**/*.test.ts",
     "lint": "eslint . --ext .ts",
     "format": "prettier --config .prettierrc '{src,features}/**/*.ts' --write"
   },
   "devDependencies": {
     "@cucumber/cucumber": "^7.3.2",
+    "@cucumber/pretty-formatter": "^1.0.0",
     "@types/mocha": "^9.1.1",
     "@types/node": "^14.14.19",
     "@typescript-eslint/eslint-plugin": "^5.27.0",

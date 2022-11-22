@@ -1,42 +1,28 @@
 import {
   Before,
+  DataTable,
   defineParameterType,
   Given,
   Then,
   When,
 } from '@cucumber/cucumber'
-import { assertThat, hasItem, not } from 'hamjest'
+import { assertThat, equalTo } from 'hamjest'
 import { Configuration } from '../../src/Configuration'
 import { Duration } from '../../src/Duration'
-import { FakeGitHub } from '../../src/FakeGitHub'
-import {
-  GitHubClient,
-  retireInactiveContributors,
-} from '../../src/retireInactiveContributors'
-import { getOctokit } from '@actions/github'
-import { OctokitGitHub } from '../../src/OctokitGitHub'
 import { NullOctokitConfig } from '../../src/NullOctokitConfig'
+import { GithubChange, OctokitGitHub } from '../../src/OctokitGitHub'
+import { retireInactiveContributors } from '../../src/retireInactiveContributors'
+import { Today } from '../../src/Today'
 
 type World = {
   configuration: Configuration
-  github: GitHubClient
   nullOctokitConfig: NullOctokitConfig
+  githubChanges: GithubChange[]
 }
 
-Before(function () {
-  const token = process.env.GITHUB_TOKEN
-  if (!token) {
-    throw new Error(
-      'Please set GITHUB_TOKEN. See https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token'
-    )
-  }
-  const octokit = getOctokit(token)
-  this.github = new OctokitGitHub(
-    octokit,
-    'todo-get-org-from-action-parameters'
-  )
-  this.configuration = new Configuration()
+Before(function (this: World) {
   this.nullOctokitConfig = new NullOctokitConfig()
+  this.configuration = new Configuration()
 })
 
 defineParameterType({
@@ -70,8 +56,8 @@ Given(
 Given(
   "the create date of {user}'s last commit was {int} day/days ago",
   function (this: World, user: string, daysAgo: number) {
-    // TODO: fix this
-    // this.github.createCommit(user, daysAgo)
+    const date = Today.minus(Duration.of(daysAgo).days())
+    this.nullOctokitConfig = this.nullOctokitConfig.withLastCommit(user, date)
   }
 )
 
@@ -85,35 +71,12 @@ Given(
   }
 )
 
-When('the action runs', function (this: World) {
+When('the action runs', async function (this: World) {
   // Write code here that turns the phrase above into concrete actions
-  retireInactiveContributors(this.github, this.configuration)
+  const github = OctokitGitHub.createNull(this.nullOctokitConfig)
+  this.githubChanges = github.trackChanges().data
+  await retireInactiveContributors(github, this.configuration)
 })
-
-Then(
-  '{user} should be in {team}',
-  async function (this: World, user: string, team: string) {
-    const users = await this.github.getMembersOf(team)
-    assertThat(users, hasItem(user))
-  }
-)
-
-Then(
-  '{user} should not have any custom permissions on the cucumber-js repo',
-  function (user: string) {
-    // Write code here that turns the phrase above into concrete actions
-    console.log(user)
-    return 'pending'
-  }
-)
-
-Then(
-  '{user} should not be in {team}( anymore)',
-  async function (this: World, user: string, team: string) {
-    const users = await this.github.getMembersOf(team)
-    assertThat(users, not(hasItem(user)))
-  }
-)
 
 Given(
   'the maximum absence before retirement is {int} days',
@@ -127,5 +90,19 @@ Then(
   '{user} should have been added to {team}',
   (user: string, team: string) => {
     // Write code here that turns the phrase above into concrete actions
+  }
+)
+
+Then(
+  '{user} should have been removed from {team}',
+  (user: string, team: string) => {
+    // Write code here that turns the phrase above into concrete actions
+  }
+)
+
+Then(
+  'we should have told GitHub:',
+  function (this: World, expectedChanges: DataTable) {
+    assertThat(this.githubChanges, equalTo(expectedChanges.hashes()))
   }
 )

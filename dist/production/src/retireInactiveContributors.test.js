@@ -9,25 +9,36 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const retireInactiveContributors_1 = require("./retireInactiveContributors");
 const hamjest_1 = require("hamjest");
 const Configuration_1 = require("./Configuration");
-const OctokitGitHub_1 = require("./OctokitGitHub");
-const Today_1 = require("./Today");
 const Duration_1 = require("./Duration");
+const OctokitGitHub_1 = require("./OctokitGitHub");
+const NullOctokitConfig_1 = require("./NullOctokitConfig");
+const retireInactiveContributors_1 = require("./retireInactiveContributors");
+const Today_1 = require("./Today");
 describe(retireInactiveContributors_1.retireInactiveContributors.name, () => {
-    it.skip('retires inactive members', () => __awaiter(void 0, void 0, void 0, function* () {
-        const maximumAbsenceBeforeRetirement = 100;
+    it('retires inactive members', () => __awaiter(void 0, void 0, void 0, function* () {
+        const maximumAbsenceBeforeRetirement = Duration_1.Duration.of(100).days();
         const configuration = new Configuration_1.Configuration(maximumAbsenceBeforeRetirement);
-        const github = OctokitGitHub_1.OctokitGitHub.createNull(new OctokitGitHub_1.NullOctokitConfig({
+        const github = OctokitGitHub_1.OctokitGitHub.createNull(new NullOctokitConfig_1.NullOctokitConfig({
             committers: ['activeMember', 'inactiveMember'],
         }, {
             activeMember: Today_1.Today.minus(Duration_1.Duration.of(99).days()),
-            inactiveMember: Today_1.Today.minus(Duration_1.Duration.of(100).days()),
+            inactiveMember: Today_1.Today.minus(Duration_1.Duration.of(101).days()),
         }));
         const githubChanges = github.trackChanges().data;
         yield (0, retireInactiveContributors_1.retireInactiveContributors)(github, configuration);
-        // TODO: fix this assertion
-        (0, hamjest_1.assertThat)(githubChanges, (0, hamjest_1.equalTo)([]));
+        (0, hamjest_1.assertThat)(githubChanges, (0, hamjest_1.equalTo)([
+            {
+                action: 'add',
+                team: 'alumni',
+                user: 'inactiveMember',
+            },
+            {
+                action: 'remove',
+                team: 'committers',
+                user: 'inactiveMember',
+            },
+        ]));
     }));
 });

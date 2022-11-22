@@ -19,8 +19,8 @@ function retireInactiveContributors(github, configuration) {
         const committersTeamMembers = yield github.getMembersOf(committersTeam);
         for (const author of committersTeamMembers) {
             if (!(yield github.hasCommittedSince(author, cutOffDate))) {
-                github.addUserToTeam(author, alumniTeam);
-                github.removeUserFromTeam(author, committersTeam);
+                yield github.addUserToTeam(author, alumniTeam);
+                yield github.removeUserFromTeam(author, committersTeam);
             }
         }
     });

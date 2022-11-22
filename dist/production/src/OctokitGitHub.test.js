@@ -13,6 +13,7 @@ const github_1 = require("@actions/github");
 const hamjest_1 = require("hamjest");
 const Duration_1 = require("./Duration");
 const OctokitGitHub_1 = require("./OctokitGitHub");
+const NullOctokitConfig_1 = require("./NullOctokitConfig");
 const Today_1 = require("./Today");
 const org = 'test-inactive-contributor-action';
 const testContributorsTeam = 'test-Contributors';
@@ -124,7 +125,7 @@ describe(OctokitGitHub_1.OctokitGitHub.name, () => {
         }));
         it('allows team members to be configured', () => __awaiter(void 0, void 0, void 0, function* () {
             yield assertAsynchronous(() => __awaiter(void 0, void 0, void 0, function* () {
-                const config = new OctokitGitHub_1.NullOctokitConfig({
+                const config = new NullOctokitConfig_1.NullOctokitConfig({
                     team1: ['user1', 'user2'],
                     team2: ['user3', 'user4'],
                 });
@@ -139,13 +140,16 @@ describe(OctokitGitHub_1.OctokitGitHub.name, () => {
                 const nineDaysAgo = Today_1.Today.minus(Duration_1.Duration.of(9).days());
                 const tenDaysAgo = Today_1.Today.minus(Duration_1.Duration.of(10).days());
                 const elevenDaysAgo = Today_1.Today.minus(Duration_1.Duration.of(11).days());
-                const config = new OctokitGitHub_1.NullOctokitConfig({}, {
-                    user1: tenDaysAgo,
+                const config = new NullOctokitConfig_1.NullOctokitConfig({}, {
+                    user1: elevenDaysAgo,
+                    user2: tenDaysAgo,
+                    user3: nineDaysAgo,
                 });
                 const gitHubClient = OctokitGitHub_1.OctokitGitHub.createNull(config);
-                (0, hamjest_1.assertThat)(yield gitHubClient.hasCommittedSince('user1', elevenDaysAgo), (0, hamjest_1.equalTo)(true));
-                (0, hamjest_1.assertThat)(yield gitHubClient.hasCommittedSince('user1', tenDaysAgo), (0, hamjest_1.equalTo)(true));
-                (0, hamjest_1.assertThat)(yield gitHubClient.hasCommittedSince('user1', nineDaysAgo), (0, hamjest_1.equalTo)(false));
+                const cutOffDate = tenDaysAgo;
+                (0, hamjest_1.assertThat)(yield gitHubClient.hasCommittedSince('user1', cutOffDate), (0, hamjest_1.equalTo)(false));
+                (0, hamjest_1.assertThat)(yield gitHubClient.hasCommittedSince('user2', cutOffDate), (0, hamjest_1.equalTo)(true));
+                (0, hamjest_1.assertThat)(yield gitHubClient.hasCommittedSince('user3', cutOffDate), (0, hamjest_1.equalTo)(true));
             }));
         }));
     });

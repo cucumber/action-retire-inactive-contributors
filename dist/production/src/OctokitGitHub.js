@@ -9,9 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.NullOctokitConfig = exports.OctokitGitHub = void 0;
+exports.OctokitGitHub = void 0;
 const events_1 = require("events");
 const OutputTracker_1 = require("./OutputTracker");
+const NullOctokitConfig_1 = require("./NullOctokitConfig");
 const CHANGE_EVENT = 'changeEvent';
 class OctokitGitHub {
     constructor(octokit, org) {
@@ -19,7 +20,7 @@ class OctokitGitHub {
         this.org = org;
         this.emitter = new events_1.EventEmitter();
     }
-    static createNull(config = new NullOctokitConfig()) {
+    static createNull(config = new NullOctokitConfig_1.NullOctokitConfig()) {
         return new OctokitGitHub(new NullOctokit(config), '');
     }
     hasCommittedSince(author, date) {
@@ -143,10 +144,3 @@ class NullMembersList {
         return this.teamMembers.map((login) => ({ login }));
     }
 }
-class NullOctokitConfig {
-    constructor(teamMembers = {}, commitDates = {}) {
-        this.teamMembers = teamMembers;
-        this.commitDates = commitDates;
-    }
-}
-exports.NullOctokitConfig = NullOctokitConfig;

@@ -4,12 +4,12 @@
 import EventEmitter from 'events'
 
 /** A utility class for infrastructure wrappers to use track output */
-export class OutputTracker {
-  private _data: string[]
-  private _trackerFn: (eventName: string) => void
+export class OutputTracker<Change> {
+  private _data: Change[]
+  private _trackerFn: (data: Change) => void
 
-  static create(emitter: EventEmitter, event: string) {
-    return new OutputTracker(emitter, event)
+  static create<T>(emitter: EventEmitter, event: string) {
+    return new OutputTracker<T>(emitter, event)
   }
 
   constructor(
@@ -18,7 +18,7 @@ export class OutputTracker {
   ) {
     this._data = []
 
-    this._trackerFn = (text: string) => this._data.push(text)
+    this._trackerFn = (data: Change) => this._data.push(data)
     this._emitter.on(this._event, this._trackerFn)
   }
 
