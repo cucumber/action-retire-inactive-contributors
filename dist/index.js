@@ -9507,9 +9507,11 @@ function wrappy (fn, cb) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Configuration = void 0;
 const DEFAULT_MAXIMUM_ABSENCE = 365;
+const DEFAULT_ALUMNI_TEAM = 'alumni';
 class Configuration {
-    constructor(maximumAbsenceBeforeRetirement = DEFAULT_MAXIMUM_ABSENCE) {
+    constructor(maximumAbsenceBeforeRetirement = DEFAULT_MAXIMUM_ABSENCE, alumniTeam = DEFAULT_ALUMNI_TEAM) {
         this.maximumAbsenceBeforeRetirement = maximumAbsenceBeforeRetirement;
+        this.alumniTeam = alumniTeam;
     }
 }
 exports.Configuration = Configuration;
@@ -9678,7 +9680,7 @@ const Today_1 = __nccwpck_require__(1637);
 function retireInactiveContributors(github, configuration) {
     return __awaiter(this, void 0, void 0, function* () {
         const cutOffDate = Today_1.Today.minus(configuration.maximumAbsenceBeforeRetirement);
-        const alumniTeam = 'alumni';
+        const alumniTeam = configuration.alumniTeam;
         const committersTeam = 'committers';
         const committersTeamMembers = yield github.getMembersOf(committersTeam);
         for (const author of committersTeamMembers) {
@@ -9715,12 +9717,12 @@ const github_1 = __nccwpck_require__(5438);
 const Configuration_1 = __nccwpck_require__(1031);
 const OctokitGitHub_1 = __nccwpck_require__(2312);
 const retireInactiveContributors_1 = __nccwpck_require__(7391);
-function run(maximumAbsenceBeforeRetirementInput, githubOrgname, token) {
+function run(maximumAbsenceBeforeRetirementInput, githubOrgname, alumniTeam, token) {
     return __awaiter(this, void 0, void 0, function* () {
         const octokit = (0, github_1.getOctokit)(token);
         const maximumAbsenceBeforeRetirement = Duration_1.Duration.parse(maximumAbsenceBeforeRetirementInput);
         const github = new OctokitGitHub_1.OctokitGitHub(octokit, githubOrgname);
-        const configuration = new Configuration_1.Configuration(maximumAbsenceBeforeRetirement);
+        const configuration = new Configuration_1.Configuration(maximumAbsenceBeforeRetirement, alumniTeam);
         console.log({ configuration });
         yield (0, retireInactiveContributors_1.retireInactiveContributors)(github, configuration);
     });
@@ -9917,7 +9919,7 @@ const token = process.env.GITHUB_TOKEN;
 if (!token) {
     throw new Error('Please set GITHUB_TOKEN. See https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token');
 }
-(0, run_1.run)((0, core_1.getInput)('maximum-absence-before-retirement'), (0, core_1.getInput)('github-orgname'), token);
+(0, run_1.run)((0, core_1.getInput)('maximum-absence-before-retirement'), (0, core_1.getInput)('github-orgname'), (0, core_1.getInput)('alumni-team'), token);
 
 })();
 

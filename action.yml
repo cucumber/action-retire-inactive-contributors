@@ -10,6 +10,9 @@ inputs:
   maximum-absence-before-retirement: 
     required: true
     description: "maximum period of inactivity"
+  alumni-team: 
+    required: true
+    description: "name of the alumni team, where inactive users will be retired to"
 
 
 

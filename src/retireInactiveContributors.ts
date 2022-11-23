@@ -13,7 +13,7 @@ export async function retireInactiveContributors(
   configuration: Configuration
 ): Promise<void> {
   const cutOffDate = Today.minus(configuration.maximumAbsenceBeforeRetirement)
-  const alumniTeam = 'alumni'
+  const alumniTeam = configuration.alumniTeam
   const committersTeam = 'committers'
   const committersTeamMembers = await github.getMembersOf(committersTeam)
   for (const author of committersTeamMembers) {
