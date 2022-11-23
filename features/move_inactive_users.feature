@@ -8,9 +8,9 @@ Feature: Move inactive users
   Background: 
     Given the maximum absence before retirement is 100 days
 
-  Rule: Users become inactive after a year
+  Rule: Users become inactive after a specified time
 
-    Scenario: Greg has been inactive recently
+    Scenario: Greg has become inactive
       And a user Greg is part of the committers team
       And the create date of Greg's last commit was 100 days ago
       When the action runs
@@ -45,7 +45,6 @@ Feature: Move inactive users
       And Matt should not have any custom permissions on the cucumber-js repo
 
   Rule: Formerly inactive users, who are now active again should remain in the alumni group
-    
     This helps us to know whether we have the right time-frame for retiring people - if there are lots of people
     in both committers and alumni, it means we're maybe retiring people too soon.
 
