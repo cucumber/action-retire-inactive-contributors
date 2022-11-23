@@ -1,9 +1,9 @@
 import { assertThat, equalTo, hasProperty, throws } from 'hamjest'
 import { Duration } from './Duration'
 
-describe.only(Duration.name, () => {
+describe(Duration.name, () => {
   it('it parses a valid duration', () => {
-    const expected = Duration.of(1).days()
+    const expected = 1000 * 60 * 60 * 24
     assertThat(Duration.parse('1 day'), equalTo(expected))
   })
 

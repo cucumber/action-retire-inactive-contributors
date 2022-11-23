@@ -99,7 +99,8 @@ Then(
 Given(
   'the maximum absence before retirement is {int} days',
   function (this: World, maximumDaysAbsent: number) {
-    this.configuration.maximumAbsenceBeforeRetirement =
-      Duration.of(maximumDaysAbsent).days()
+    this.configuration.maximumAbsenceBeforeRetirement = Duration.parse(
+      `${maximumDaysAbsent} days`
+    )
   }
 )

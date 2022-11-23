@@ -9528,22 +9528,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Duration = void 0;
 const parse_duration_1 = __importDefault(__nccwpck_require__(3805));
-class DurationBuilder {
-    constructor(length) {
-        this.length = length;
-    }
-    days() {
-        return new Duration(this.length * 24 * 60 * 60 * 1000);
-    }
-}
 class Duration extends Number {
-    static of(length) {
-        return new DurationBuilder(length);
-    }
     static parse(raw) {
         const milliSeconds = (0, parse_duration_1.default)(raw);
         if (milliSeconds === null) {
-            throw new Error('invalid duration');
+            throw new Error(`Invalid duration: "${raw}"`);
         }
         return new Duration(milliSeconds);
     }
