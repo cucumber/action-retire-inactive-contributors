@@ -7,6 +7,7 @@ import { retireInactiveContributors } from './retireInactiveContributors'
 export async function run(
   maximumAbsenceBeforeRetirementInput: string,
   githubOrgname: string,
+  alumniTeam: string,
   token: string
 ): Promise<void> {
   const octokit = getOctokit(token)
@@ -15,7 +16,10 @@ export async function run(
   )
   const github = new OctokitGitHub(octokit, githubOrgname)
 
-  const configuration = new Configuration(maximumAbsenceBeforeRetirement)
+  const configuration = new Configuration(
+    maximumAbsenceBeforeRetirement,
+    alumniTeam
+  )
 
   console.log({ configuration })
   await retireInactiveContributors(github, configuration)
