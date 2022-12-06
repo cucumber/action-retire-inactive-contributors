@@ -10,10 +10,10 @@ import {
   promiseThat,
   rejected,
 } from 'hamjest'
-import { Duration } from '../Duration'
-import { Today } from '../Today'
+import { Duration } from '../../Duration'
+import { Today } from '../../Today'
 import { GitHubClient } from './GitHubClient'
-import { NullOctokitConfig } from './NullOctokitConfig'
+import { GitHubClientNullConfig } from './GitHubClientNullConfig'
 
 const org = 'test-inactive-contributor-action'
 
@@ -173,7 +173,7 @@ describe(GitHubClient.name, () => {
 
     it('allows team members to be configured', async () => {
       await assertAsynchronous(async () => {
-        const config = new NullOctokitConfig({
+        const config = new GitHubClientNullConfig({
           team1: ['user1', 'user2'],
           team2: ['user3', 'user4'],
         })
@@ -198,7 +198,7 @@ describe(GitHubClient.name, () => {
         const tenDaysAgo = Today.minus(Duration.of(10).days())
         const elevenDaysAgo = Today.minus(Duration.of(11).days())
 
-        const config = new NullOctokitConfig(
+        const config = new GitHubClientNullConfig(
           {},
           {
             user1: elevenDaysAgo,

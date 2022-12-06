@@ -1,8 +1,10 @@
 import { assertThat, equalTo } from 'hamjest'
 import { Configuration } from './Configuration'
 import { Duration } from './Duration'
-import { GitHubClient } from './infrastructure/GitHubClient'
-import { NullOctokitConfig } from './infrastructure/NullOctokitConfig'
+import {
+  GitHubClient,
+  GitHubClientNullConfig,
+} from './infrastructure/GitHubClient'
 import { retireInactiveContributors } from './retireInactiveContributors'
 import { Today } from './Today'
 
@@ -12,7 +14,7 @@ describe(retireInactiveContributors.name, () => {
     const configuration = new Configuration(maximumAbsenceBeforeRetirement)
 
     const github = GitHubClient.createNull(
-      new NullOctokitConfig(
+      new GitHubClientNullConfig(
         {
           committers: ['activeMember', 'inactiveMember'],
         },

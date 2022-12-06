@@ -1,17 +1,20 @@
 import { assertThat, equalTo } from 'hamjest'
-import { Duration } from '../Duration'
-import { NullOctokitConfig } from './NullOctokitConfig'
-import { Today } from '../Today'
+import { Duration } from '../../Duration'
+import { GitHubClientNullConfig } from './GitHubClientNullConfig'
+import { Today } from '../../Today'
 
-describe(NullOctokitConfig.name, () => {
+describe(GitHubClientNullConfig.name, () => {
   describe('adding team members', () => {
     it('can add a team member', () => {
-      const config = new NullOctokitConfig().withTeamMember('matt', 'admin')
+      const config = new GitHubClientNullConfig().withTeamMember(
+        'matt',
+        'admin'
+      )
       assertThat(config.teamMembers.admin, equalTo(['matt']))
     })
 
     it('remembers existing team members', () => {
-      const config = new NullOctokitConfig()
+      const config = new GitHubClientNullConfig()
         .withTeamMember('admin1', 'admin')
         .withTeamMember('admin2', 'admin')
         .withTeamMember('teamMember', 'myTeam')
@@ -26,7 +29,7 @@ describe(NullOctokitConfig.name, () => {
 
     it('remembers existing commit dates', () => {
       const date = Today.minus(Duration.of(1).days())
-      const config = new NullOctokitConfig(
+      const config = new GitHubClientNullConfig(
         {},
         {
           myUser: date,
@@ -45,7 +48,10 @@ describe(NullOctokitConfig.name, () => {
   describe('adding last commit dates', () => {
     it('adds a commit date', () => {
       const date = Today.minus(Duration.of(1).days())
-      const config = new NullOctokitConfig().withLastCommit('someUser', date)
+      const config = new GitHubClientNullConfig().withLastCommit(
+        'someUser',
+        date
+      )
       assertThat(
         config.commitDates,
         equalTo({
@@ -59,7 +65,7 @@ describe(NullOctokitConfig.name, () => {
       const date2 = Today.minus(Duration.of(2).days())
       const date3 = Today.minus(Duration.of(3).days())
 
-      const config = new NullOctokitConfig()
+      const config = new GitHubClientNullConfig()
         .withLastCommit('user1', date1)
         .withLastCommit('user2', date2)
         .withLastCommit('user3', date3)
@@ -76,7 +82,7 @@ describe(NullOctokitConfig.name, () => {
 
     it('preserves exsiting team members', () => {
       const date = Today.minus(Duration.of(1).days())
-      const config = new NullOctokitConfig()
+      const config = new GitHubClientNullConfig()
         .withTeamMember('someUser', 'someTeam')
         .withLastCommit('someUser', date)
       assertThat(

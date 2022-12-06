@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events'
-import { OutputTracker } from './OutputTracker'
+import { OutputTracker } from '../common/OutputTracker'
 import {
   Octokit,
   OctokitCommitList,
@@ -8,13 +8,13 @@ import {
   OctokitRepo,
   OctokitRepoList,
 } from './Octokit'
-import { NullOctokitConfig } from './NullOctokitConfig'
+import { GitHubClientNullConfig } from './GitHubClientNullConfig'
 
 const CHANGE_EVENT = 'changeEvent'
 
-export type GithubTeamName = string
-export type GithubUsername = string
-export type GithubChange = {
+export type GitHubTeamName = string
+export type GitHubUsername = string
+export type GitHubChange = {
   action: 'add' | 'remove'
   user: string
   team: string
@@ -23,7 +23,9 @@ export type GithubChange = {
 export class GitHubClient {
   private readonly emitter = new EventEmitter()
 
-  static createNull(config: NullOctokitConfig = new NullOctokitConfig()) {
+  static createNull(
+    config: GitHubClientNullConfig = new GitHubClientNullConfig()
+  ) {
     return new GitHubClient(new NullOctokit(config), '')
   }
 
@@ -83,12 +85,12 @@ export class GitHubClient {
     return result.data.map((user: OctokitMember) => user.login)
   }
 
-  trackChanges(): OutputTracker<GithubChange> {
-    return OutputTracker.create<GithubChange>(this.emitter, CHANGE_EVENT)
+  trackChanges(): OutputTracker<GitHubChange> {
+    return OutputTracker.create<GitHubChange>(this.emitter, CHANGE_EVENT)
   }
 }
 class NullOctokit implements Octokit {
-  constructor(private readonly config: NullOctokitConfig) {}
+  constructor(private readonly config: GitHubClientNullConfig) {}
 
   get rest() {
     return {
@@ -148,7 +150,7 @@ class NullCommitList implements OctokitCommitList {
 }
 
 class NullMembersList implements OctokitMemberList {
-  constructor(private readonly teamMembers: GithubUsername[]) {}
+  constructor(private readonly teamMembers: GitHubUsername[]) {}
 
   get data() {
     return this.teamMembers.map((login: string) => ({ login }))

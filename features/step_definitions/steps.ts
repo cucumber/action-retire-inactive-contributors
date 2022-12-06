@@ -9,9 +9,9 @@ import {
 import { assertThat, equalTo } from 'hamjest'
 import { Configuration } from '../../src/Configuration'
 import { Duration } from '../../src/Duration'
-import { NullOctokitConfig } from '../../src/infrastructure/NullOctokitConfig'
+import { GitHubClientNullConfig } from '../../src/infrastructure/GitHubClient'
 import {
-  GithubChange,
+  GitHubChange,
   GitHubClient,
 } from '../../src/infrastructure/GitHubClient'
 import { retireInactiveContributors } from '../../src/retireInactiveContributors'
@@ -19,12 +19,12 @@ import { Today } from '../../src/Today'
 
 type World = {
   configuration: Configuration
-  nullOctokitConfig: NullOctokitConfig
-  githubChanges: GithubChange[]
+  githubClientNullConfig: GitHubClientNullConfig
+  githubChanges: GitHubChange[]
 }
 
 Before(function (this: World) {
-  this.nullOctokitConfig = new NullOctokitConfig()
+  this.githubClientNullConfig = new GitHubClientNullConfig()
   this.configuration = new Configuration()
 })
 
@@ -52,7 +52,10 @@ Given(
 Given(
   'a user {user} is part/member of {team}',
   async function (this: World, user: string, team: string) {
-    this.nullOctokitConfig = this.nullOctokitConfig.withTeamMember(user, team)
+    this.githubClientNullConfig = this.githubClientNullConfig.withTeamMember(
+      user,
+      team
+    )
   }
 )
 
@@ -60,7 +63,10 @@ Given(
   "the create date of {user}'s last commit was {int} day/days ago",
   function (this: World, user: string, daysAgo: number) {
     const date = Today.minus(Duration.of(daysAgo).days())
-    this.nullOctokitConfig = this.nullOctokitConfig.withLastCommit(user, date)
+    this.githubClientNullConfig = this.githubClientNullConfig.withLastCommit(
+      user,
+      date
+    )
   }
 )
 
@@ -76,7 +82,7 @@ Given(
 
 When('the action runs', async function (this: World) {
   // Write code here that turns the phrase above into concrete actions
-  const github = GitHubClient.createNull(this.nullOctokitConfig)
+  const github = GitHubClient.createNull(this.githubClientNullConfig)
   this.githubChanges = github.trackChanges().data
   await retireInactiveContributors(github, this.configuration)
 })
