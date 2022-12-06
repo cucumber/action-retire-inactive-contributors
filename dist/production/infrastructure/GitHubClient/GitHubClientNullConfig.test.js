@@ -1,17 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const hamjest_1 = require("hamjest");
-const Duration_1 = require("../Duration");
-const NullOctokitConfig_1 = require("./NullOctokitConfig");
-const Today_1 = require("../Today");
-describe(NullOctokitConfig_1.NullOctokitConfig.name, () => {
+const Duration_1 = require("../../Duration");
+const GitHubClientNullConfig_1 = require("./GitHubClientNullConfig");
+const Today_1 = require("../../Today");
+describe(GitHubClientNullConfig_1.GitHubClientNullConfig.name, () => {
     describe('adding team members', () => {
         it('can add a team member', () => {
-            const config = new NullOctokitConfig_1.NullOctokitConfig().withTeamMember('matt', 'admin');
+            const config = new GitHubClientNullConfig_1.GitHubClientNullConfig().withTeamMember('matt', 'admin');
             (0, hamjest_1.assertThat)(config.teamMembers.admin, (0, hamjest_1.equalTo)(['matt']));
         });
         it('remembers existing team members', () => {
-            const config = new NullOctokitConfig_1.NullOctokitConfig()
+            const config = new GitHubClientNullConfig_1.GitHubClientNullConfig()
                 .withTeamMember('admin1', 'admin')
                 .withTeamMember('admin2', 'admin')
                 .withTeamMember('teamMember', 'myTeam');
@@ -22,7 +22,7 @@ describe(NullOctokitConfig_1.NullOctokitConfig.name, () => {
         });
         it('remembers existing commit dates', () => {
             const date = Today_1.Today.minus(Duration_1.Duration.of(1).days());
-            const config = new NullOctokitConfig_1.NullOctokitConfig({}, {
+            const config = new GitHubClientNullConfig_1.GitHubClientNullConfig({}, {
                 myUser: date,
             }).withTeamMember('myUser', 'myTeam');
             (0, hamjest_1.assertThat)(config.commitDates, (0, hamjest_1.equalTo)({
@@ -33,7 +33,7 @@ describe(NullOctokitConfig_1.NullOctokitConfig.name, () => {
     describe('adding last commit dates', () => {
         it('adds a commit date', () => {
             const date = Today_1.Today.minus(Duration_1.Duration.of(1).days());
-            const config = new NullOctokitConfig_1.NullOctokitConfig().withLastCommit('someUser', date);
+            const config = new GitHubClientNullConfig_1.GitHubClientNullConfig().withLastCommit('someUser', date);
             (0, hamjest_1.assertThat)(config.commitDates, (0, hamjest_1.equalTo)({
                 someUser: date,
             }));
@@ -42,7 +42,7 @@ describe(NullOctokitConfig_1.NullOctokitConfig.name, () => {
             const date1 = Today_1.Today.minus(Duration_1.Duration.of(1).days());
             const date2 = Today_1.Today.minus(Duration_1.Duration.of(2).days());
             const date3 = Today_1.Today.minus(Duration_1.Duration.of(3).days());
-            const config = new NullOctokitConfig_1.NullOctokitConfig()
+            const config = new GitHubClientNullConfig_1.GitHubClientNullConfig()
                 .withLastCommit('user1', date1)
                 .withLastCommit('user2', date2)
                 .withLastCommit('user3', date3);
@@ -54,7 +54,7 @@ describe(NullOctokitConfig_1.NullOctokitConfig.name, () => {
         });
         it('preserves exsiting team members', () => {
             const date = Today_1.Today.minus(Duration_1.Duration.of(1).days());
-            const config = new NullOctokitConfig_1.NullOctokitConfig()
+            const config = new GitHubClientNullConfig_1.GitHubClientNullConfig()
                 .withTeamMember('someUser', 'someTeam')
                 .withLastCommit('someUser', date);
             (0, hamjest_1.assertThat)(config.teamMembers, (0, hamjest_1.equalTo)({

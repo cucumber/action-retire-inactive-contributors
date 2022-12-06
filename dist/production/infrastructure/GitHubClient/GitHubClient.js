@@ -11,8 +11,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GitHubClient = void 0;
 const events_1 = require("events");
-const OutputTracker_1 = require("./OutputTracker");
-const NullOctokitConfig_1 = require("./NullOctokitConfig");
+const OutputTracker_1 = require("../common/OutputTracker");
+const GitHubClientNullConfig_1 = require("./GitHubClientNullConfig");
+const NullOctokit_1 = require("./NullOctokit");
 const CHANGE_EVENT = 'changeEvent';
 class GitHubClient {
     constructor(octokit, org) {
@@ -20,8 +21,8 @@ class GitHubClient {
         this.org = org;
         this.emitter = new events_1.EventEmitter();
     }
-    static createNull(config = new NullOctokitConfig_1.NullOctokitConfig()) {
-        return new GitHubClient(new NullOctokit(config), '');
+    static createNull(config = new GitHubClientNullConfig_1.GitHubClientNullConfig()) {
+        return new GitHubClient(new NullOctokit_1.NullOctokit(config), '');
     }
     hasCommittedSince(author, date) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -83,64 +84,3 @@ class GitHubClient {
     }
 }
 exports.GitHubClient = GitHubClient;
-class NullOctokit {
-    constructor(config) {
-        this.config = config;
-    }
-    get rest() {
-        return {
-            teams: {
-                addOrUpdateMembershipForUserInOrg: () => __awaiter(this, void 0, void 0, function* () { return nextTick(); }),
-                removeMembershipForUserInOrg: () => __awaiter(this, void 0, void 0, function* () { return nextTick(); }),
-                listMembersInOrg: ({ team_slug }) => __awaiter(this, void 0, void 0, function* () {
-                    var _a;
-                    yield nextTick();
-                    return new NullMembersList((_a = this.config.teamMembers[team_slug]) !== null && _a !== void 0 ? _a : []);
-                }),
-            },
-            repos: {
-                listForOrg: () => __awaiter(this, void 0, void 0, function* () {
-                    yield nextTick();
-                    return new NullRepoList();
-                }),
-                listCommits: ({ author, since, }) => __awaiter(this, void 0, void 0, function* () {
-                    const commitDate = this.config.commitDates[author];
-                    if (commitDate === undefined)
-                        throw new Error(`Attempted to discover commits for null user '${author}', but it wasn't configured`);
-                    yield nextTick();
-                    return new NullCommitList(new Date(since) <= commitDate);
-                }),
-            },
-        };
-    }
-}
-function nextTick() {
-    return __awaiter(this, void 0, void 0, function* () {
-        return new Promise((resolve) => setImmediate(resolve));
-    });
-}
-class NullRepoList {
-    get data() {
-        return [
-            {
-                name: 'null_octokit_repo',
-            },
-        ];
-    }
-}
-class NullCommitList {
-    constructor(hasCommits) {
-        this.hasCommits = hasCommits;
-    }
-    get data() {
-        return this.hasCommits ? ['null_octokit_commit'] : [];
-    }
-}
-class NullMembersList {
-    constructor(teamMembers) {
-        this.teamMembers = teamMembers;
-    }
-    get data() {
-        return this.teamMembers.map((login) => ({ login }));
-    }
-}

@@ -11,10 +11,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const github_1 = require("@actions/github");
 const hamjest_1 = require("hamjest");
-const Duration_1 = require("../Duration");
-const Today_1 = require("../Today");
+const Duration_1 = require("../../Duration");
+const Today_1 = require("../../Today");
 const GitHubClient_1 = require("./GitHubClient");
-const NullOctokitConfig_1 = require("./NullOctokitConfig");
+const GitHubClientNullConfig_1 = require("./GitHubClientNullConfig");
 const org = 'test-inactive-contributor-action';
 const testContributorsTeam = 'test-Contributors';
 const testAlumniTeam = 'test-Alumni';
@@ -125,7 +125,7 @@ describe(GitHubClient_1.GitHubClient.name, () => {
         }));
         it('allows team members to be configured', () => __awaiter(void 0, void 0, void 0, function* () {
             yield assertAsynchronous(() => __awaiter(void 0, void 0, void 0, function* () {
-                const config = new NullOctokitConfig_1.NullOctokitConfig({
+                const config = new GitHubClientNullConfig_1.GitHubClientNullConfig({
                     team1: ['user1', 'user2'],
                     team2: ['user3', 'user4'],
                 });
@@ -140,7 +140,7 @@ describe(GitHubClient_1.GitHubClient.name, () => {
                 const nineDaysAgo = Today_1.Today.minus(Duration_1.Duration.of(9).days());
                 const tenDaysAgo = Today_1.Today.minus(Duration_1.Duration.of(10).days());
                 const elevenDaysAgo = Today_1.Today.minus(Duration_1.Duration.of(11).days());
-                const config = new NullOctokitConfig_1.NullOctokitConfig({}, {
+                const config = new GitHubClientNullConfig_1.GitHubClientNullConfig({}, {
                     user1: elevenDaysAgo,
                     user2: tenDaysAgo,
                     user3: nineDaysAgo,
