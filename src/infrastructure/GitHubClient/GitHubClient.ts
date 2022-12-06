@@ -1,3 +1,4 @@
+import { getOctokit } from '@actions/github'
 import { EventEmitter } from 'events'
 import { OutputTracker } from '../common/OutputTracker'
 import { GitHubClientNullConfig } from './GitHubClientNullConfig'
@@ -17,13 +18,18 @@ export type GitHubChange = {
 export class GitHubClient {
   private readonly emitter = new EventEmitter()
 
+  static create(token: string, org: string) {
+    const octokit = getOctokit(token)
+    return new GitHubClient(octokit, org)
+  }
+
   static createNull(
     config: GitHubClientNullConfig = new GitHubClientNullConfig()
   ) {
     return new GitHubClient(new NullOctokit(config), '')
   }
 
-  constructor(
+  private constructor(
     private readonly octokit: Octokit,
     private readonly org: string
   ) {}

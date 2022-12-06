@@ -22,8 +22,8 @@ const testUser = 'blaisep';
 describe(GitHubClient_1.GitHubClient.name, () => {
     context('adding someone to a team', () => {
         beforeEach(() => __awaiter(void 0, void 0, void 0, function* () {
+            const gitHubClient = client();
             const octokit = (0, github_1.getOctokit)(token());
-            const gitHubClient = new GitHubClient_1.GitHubClient(octokit, org);
             const initialMembers = yield gitHubClient.getMembersOf(testAlumniTeam);
             for (const member of initialMembers) {
                 yield octokit.rest.teams.removeMembershipForUserInOrg({
@@ -162,8 +162,7 @@ function token() {
     return token;
 }
 function client() {
-    const octokit = (0, github_1.getOctokit)(token());
-    return new GitHubClient_1.GitHubClient(octokit, org);
+    return GitHubClient_1.GitHubClient.create(token(), org);
 }
 function assertAsynchronous(fn) {
     return __awaiter(this, void 0, void 0, function* () {

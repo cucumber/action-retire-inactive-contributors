@@ -9,7 +9,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const github_1 = require("@actions/github");
 const Configuration_1 = require("./Configuration");
 const GitHubClient_1 = require("./infrastructure/GitHubClient");
 const retireInactiveContributors_1 = require("./retireInactiveContributors");
@@ -19,8 +18,7 @@ function run() {
         if (!token) {
             throw new Error('Please set GITHUB_TOKEN. See https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token');
         }
-        const octokit = (0, github_1.getOctokit)(token);
-        const github = new GitHubClient_1.GitHubClient(octokit, 'todo-get-org-from-action-parameters');
+        const github = GitHubClient_1.GitHubClient.create(token, 'todo-get-org-from-action-parameters');
         // TODO: read max absence from action parameters
         const configuration = new Configuration_1.Configuration();
         yield (0, retireInactiveContributors_1.retireInactiveContributors)(github, configuration);

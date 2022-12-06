@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GitHubClient = void 0;
+const github_1 = require("@actions/github");
 const events_1 = require("events");
 const OutputTracker_1 = require("../common/OutputTracker");
 const GitHubClientNullConfig_1 = require("./GitHubClientNullConfig");
@@ -20,6 +21,10 @@ class GitHubClient {
         this.octokit = octokit;
         this.org = org;
         this.emitter = new events_1.EventEmitter();
+    }
+    static create(token, org) {
+        const octokit = (0, github_1.getOctokit)(token);
+        return new GitHubClient(octokit, org);
     }
     static createNull(config = new GitHubClientNullConfig_1.GitHubClientNullConfig()) {
         return new GitHubClient(new NullOctokit_1.NullOctokit(config), '');
