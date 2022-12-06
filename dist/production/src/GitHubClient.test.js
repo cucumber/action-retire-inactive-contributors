@@ -12,18 +12,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const github_1 = require("@actions/github");
 const hamjest_1 = require("hamjest");
 const Duration_1 = require("./Duration");
-const OctokitGitHub_1 = require("./OctokitGitHub");
+const GitHubClient_1 = require("./GitHubClient");
 const NullOctokitConfig_1 = require("./NullOctokitConfig");
 const Today_1 = require("./Today");
 const org = 'test-inactive-contributor-action';
 const testContributorsTeam = 'test-Contributors';
 const testAlumniTeam = 'test-Alumni';
 const testUser = 'blaisep';
-describe(OctokitGitHub_1.OctokitGitHub.name, () => {
+describe(GitHubClient_1.GitHubClient.name, () => {
     context('adding someone to a team', () => {
         beforeEach(() => __awaiter(void 0, void 0, void 0, function* () {
             const octokit = (0, github_1.getOctokit)(token());
-            const gitHubClient = new OctokitGitHub_1.OctokitGitHub(octokit, org);
+            const gitHubClient = new GitHubClient_1.GitHubClient(octokit, org);
             const initialMembers = yield gitHubClient.getMembersOf(testAlumniTeam);
             for (const member of initialMembers) {
                 yield octokit.rest.teams.removeMembershipForUserInOrg({
@@ -103,24 +103,24 @@ describe(OctokitGitHub_1.OctokitGitHub.name, () => {
     context('null instance', () => {
         it('does not actually add user to team', () => __awaiter(void 0, void 0, void 0, function* () {
             yield assertAsynchronous(() => __awaiter(void 0, void 0, void 0, function* () {
-                const gitHubClient = OctokitGitHub_1.OctokitGitHub.createNull();
+                const gitHubClient = GitHubClient_1.GitHubClient.createNull();
                 yield gitHubClient.addUserToTeam(testUser, testAlumniTeam);
             }));
         }));
         it('does not actually remove user from team', () => __awaiter(void 0, void 0, void 0, function* () {
             yield assertAsynchronous(() => __awaiter(void 0, void 0, void 0, function* () {
-                const gitHubClient = OctokitGitHub_1.OctokitGitHub.createNull();
+                const gitHubClient = GitHubClient_1.GitHubClient.createNull();
                 yield gitHubClient.removeUserFromTeam(testUser, testAlumniTeam);
             }));
         }));
         it('by default, teams have no members', () => __awaiter(void 0, void 0, void 0, function* () {
             yield assertAsynchronous(() => __awaiter(void 0, void 0, void 0, function* () {
-                const gitHubClient = OctokitGitHub_1.OctokitGitHub.createNull();
+                const gitHubClient = GitHubClient_1.GitHubClient.createNull();
                 (0, hamjest_1.assertThat)(yield gitHubClient.getMembersOf(testContributorsTeam), (0, hamjest_1.equalTo)([]));
             }));
         }));
         it('users with no configured commits throw an exception', () => __awaiter(void 0, void 0, void 0, function* () {
-            const gitHubClient = OctokitGitHub_1.OctokitGitHub.createNull();
+            const gitHubClient = GitHubClient_1.GitHubClient.createNull();
             yield (0, hamjest_1.promiseThat)(gitHubClient.hasCommittedSince(testUser, new Date()), (0, hamjest_1.rejected)((0, hamjest_1.hasProperty)('message', `Attempted to discover commits for null user '${testUser}', but it wasn't configured`)));
         }));
         it('allows team members to be configured', () => __awaiter(void 0, void 0, void 0, function* () {
@@ -129,7 +129,7 @@ describe(OctokitGitHub_1.OctokitGitHub.name, () => {
                     team1: ['user1', 'user2'],
                     team2: ['user3', 'user4'],
                 });
-                const gitHubClient = OctokitGitHub_1.OctokitGitHub.createNull(config);
+                const gitHubClient = GitHubClient_1.GitHubClient.createNull(config);
                 (0, hamjest_1.assertThat)(yield gitHubClient.getMembersOf('team1'), (0, hamjest_1.equalTo)(['user1', 'user2']));
                 (0, hamjest_1.assertThat)(yield gitHubClient.getMembersOf('team2'), (0, hamjest_1.equalTo)(['user3', 'user4']));
                 (0, hamjest_1.assertThat)(yield gitHubClient.getMembersOf('noSuchTeam'), (0, hamjest_1.equalTo)([]));
@@ -145,7 +145,7 @@ describe(OctokitGitHub_1.OctokitGitHub.name, () => {
                     user2: tenDaysAgo,
                     user3: nineDaysAgo,
                 });
-                const gitHubClient = OctokitGitHub_1.OctokitGitHub.createNull(config);
+                const gitHubClient = GitHubClient_1.GitHubClient.createNull(config);
                 const cutOffDate = tenDaysAgo;
                 (0, hamjest_1.assertThat)(yield gitHubClient.hasCommittedSince('user1', cutOffDate), (0, hamjest_1.equalTo)(false));
                 (0, hamjest_1.assertThat)(yield gitHubClient.hasCommittedSince('user2', cutOffDate), (0, hamjest_1.equalTo)(true));
@@ -163,7 +163,7 @@ function token() {
 }
 function client() {
     const octokit = (0, github_1.getOctokit)(token());
-    return new OctokitGitHub_1.OctokitGitHub(octokit, org);
+    return new GitHubClient_1.GitHubClient(octokit, org);
 }
 function assertAsynchronous(fn) {
     return __awaiter(this, void 0, void 0, function* () {

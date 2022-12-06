@@ -14,7 +14,7 @@ const hamjest_1 = require("hamjest");
 const Configuration_1 = require("../../src/Configuration");
 const Duration_1 = require("../../src/Duration");
 const NullOctokitConfig_1 = require("../../src/NullOctokitConfig");
-const OctokitGitHub_1 = require("../../src/OctokitGitHub");
+const GitHubClient_1 = require("../../src/GitHubClient");
 const retireInactiveContributors_1 = require("../../src/retireInactiveContributors");
 const Today_1 = require("../../src/Today");
 (0, cucumber_1.Before)(function () {
@@ -54,7 +54,7 @@ const Today_1 = require("../../src/Today");
 (0, cucumber_1.When)('the action runs', function () {
     return __awaiter(this, void 0, void 0, function* () {
         // Write code here that turns the phrase above into concrete actions
-        const github = OctokitGitHub_1.OctokitGitHub.createNull(this.nullOctokitConfig);
+        const github = GitHubClient_1.GitHubClient.createNull(this.nullOctokitConfig);
         this.githubChanges = github.trackChanges().data;
         yield (0, retireInactiveContributors_1.retireInactiveContributors)(github, this.configuration);
     });

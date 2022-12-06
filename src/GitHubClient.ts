@@ -20,11 +20,11 @@ export type GithubChange = {
   team: string
 }
 
-export class OctokitGitHub {
+export class GitHubClient {
   private readonly emitter = new EventEmitter()
 
   static createNull(config: NullOctokitConfig = new NullOctokitConfig()) {
-    return new OctokitGitHub(new NullOctokit(config), '')
+    return new GitHubClient(new NullOctokit(config), '')
   }
 
   constructor(

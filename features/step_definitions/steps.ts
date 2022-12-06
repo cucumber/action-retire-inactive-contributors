@@ -10,7 +10,7 @@ import { assertThat, equalTo } from 'hamjest'
 import { Configuration } from '../../src/Configuration'
 import { Duration } from '../../src/Duration'
 import { NullOctokitConfig } from '../../src/NullOctokitConfig'
-import { GithubChange, OctokitGitHub } from '../../src/OctokitGitHub'
+import { GithubChange, GitHubClient } from '../../src/GitHubClient'
 import { retireInactiveContributors } from '../../src/retireInactiveContributors'
 import { Today } from '../../src/Today'
 
@@ -73,7 +73,7 @@ Given(
 
 When('the action runs', async function (this: World) {
   // Write code here that turns the phrase above into concrete actions
-  const github = OctokitGitHub.createNull(this.nullOctokitConfig)
+  const github = GitHubClient.createNull(this.nullOctokitConfig)
   this.githubChanges = github.trackChanges().data
   await retireInactiveContributors(github, this.configuration)
 })

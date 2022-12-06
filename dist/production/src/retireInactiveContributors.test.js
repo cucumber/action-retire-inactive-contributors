@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const hamjest_1 = require("hamjest");
 const Configuration_1 = require("./Configuration");
 const Duration_1 = require("./Duration");
-const OctokitGitHub_1 = require("./OctokitGitHub");
+const GitHubClient_1 = require("./GitHubClient");
 const NullOctokitConfig_1 = require("./NullOctokitConfig");
 const retireInactiveContributors_1 = require("./retireInactiveContributors");
 const Today_1 = require("./Today");
@@ -20,7 +20,7 @@ describe(retireInactiveContributors_1.retireInactiveContributors.name, () => {
     it('retires inactive members', () => __awaiter(void 0, void 0, void 0, function* () {
         const maximumAbsenceBeforeRetirement = Duration_1.Duration.of(100).days();
         const configuration = new Configuration_1.Configuration(maximumAbsenceBeforeRetirement);
-        const github = OctokitGitHub_1.OctokitGitHub.createNull(new NullOctokitConfig_1.NullOctokitConfig({
+        const github = GitHubClient_1.GitHubClient.createNull(new NullOctokitConfig_1.NullOctokitConfig({
             committers: ['activeMember', 'inactiveMember'],
         }, {
             activeMember: Today_1.Today.minus(Duration_1.Duration.of(99).days()),

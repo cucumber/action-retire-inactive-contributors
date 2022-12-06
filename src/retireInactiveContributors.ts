@@ -1,9 +1,9 @@
 import { Configuration } from './Configuration'
-import { OctokitGitHub } from './OctokitGitHub'
+import { GitHubClient } from './GitHubClient'
 import { Today } from './Today'
 
 export async function retireInactiveContributors(
-  github: OctokitGitHub,
+  github: GitHubClient,
   configuration: Configuration
 ): Promise<void> {
   const cutOffDate = Today.minus(configuration.maximumAbsenceBeforeRetirement)

@@ -1,7 +1,7 @@
 import { assertThat, equalTo } from 'hamjest'
 import { Configuration } from './Configuration'
 import { Duration } from './Duration'
-import { OctokitGitHub } from './OctokitGitHub'
+import { GitHubClient } from './GitHubClient'
 import { NullOctokitConfig } from './NullOctokitConfig'
 import { retireInactiveContributors } from './retireInactiveContributors'
 import { Today } from './Today'
@@ -11,7 +11,7 @@ describe(retireInactiveContributors.name, () => {
     const maximumAbsenceBeforeRetirement = Duration.of(100).days()
     const configuration = new Configuration(maximumAbsenceBeforeRetirement)
 
-    const github = OctokitGitHub.createNull(
+    const github = GitHubClient.createNull(
       new NullOctokitConfig(
         {
           committers: ['activeMember', 'inactiveMember'],

@@ -1,5 +1,5 @@
 import { Duration } from './Duration'
-import { GithubTeamName, GithubUsername } from './OctokitGitHub'
+import { GithubTeamName, GithubUsername } from './GitHubClient'
 import { Today } from './Today'
 
 export type NullOctokitTeamMembers = {
