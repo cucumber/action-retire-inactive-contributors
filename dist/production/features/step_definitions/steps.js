@@ -72,3 +72,6 @@ const Today_1 = require("../../src/Today");
 (0, cucumber_1.Then)('we should have told GitHub:', function (expectedChanges) {
     (0, hamjest_1.assertThat)(this.githubChanges, (0, hamjest_1.equalTo)(expectedChanges.hashes()));
 });
+(0, cucumber_1.Then)('we should have told GitHub nothing', function () {
+    (0, hamjest_1.assertThat)(this.githubChanges, (0, hamjest_1.equalTo)([]));
+});
