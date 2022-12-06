@@ -1,4 +1,3 @@
-import { GitHubClient } from './retireInactiveContributors'
 import { EventEmitter } from 'events'
 import { OutputTracker } from './OutputTracker'
 import {
@@ -21,7 +20,7 @@ export type GithubChange = {
   team: string
 }
 
-export class OctokitGitHub implements GitHubClient {
+export class OctokitGitHub {
   private readonly emitter = new EventEmitter()
 
   static createNull(config: NullOctokitConfig = new NullOctokitConfig()) {

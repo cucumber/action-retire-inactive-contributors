@@ -1,15 +1,9 @@
 import { Configuration } from './Configuration'
+import { OctokitGitHub } from './OctokitGitHub'
 import { Today } from './Today'
 
-export interface GitHubClient {
-  removeUserFromTeam(user: string, committersTeam: string): Promise<void>
-  hasCommittedSince(author: string, date: Date): Promise<boolean>
-  addUserToTeam(user: string, alumniTeam: string): Promise<void>
-  getMembersOf(team: string): Promise<string[]>
-}
-
 export async function retireInactiveContributors(
-  github: GitHubClient,
+  github: OctokitGitHub,
   configuration: Configuration
 ): Promise<void> {
   const cutOffDate = Today.minus(configuration.maximumAbsenceBeforeRetirement)
