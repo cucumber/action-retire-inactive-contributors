@@ -1,5 +1,5 @@
 import { Configuration } from './Configuration'
-import { GitHubClient } from './GitHubClient'
+import { GitHubClient } from './infrastructure/GitHubClient'
 import { Today } from './Today'
 
 export async function retireInactiveContributors(

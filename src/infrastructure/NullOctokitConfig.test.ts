@@ -1,7 +1,7 @@
 import { assertThat, equalTo } from 'hamjest'
-import { Duration } from './Duration'
+import { Duration } from '../Duration'
 import { NullOctokitConfig } from './NullOctokitConfig'
-import { Today } from './Today'
+import { Today } from '../Today'
 
 describe(NullOctokitConfig.name, () => {
   describe('adding team members', () => {

@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const hamjest_1 = require("hamjest");
-const Duration_1 = require("./Duration");
+const Duration_1 = require("../Duration");
 const NullOctokitConfig_1 = require("./NullOctokitConfig");
-const Today_1 = require("./Today");
+const Today_1 = require("../Today");
 describe(NullOctokitConfig_1.NullOctokitConfig.name, () => {
     describe('adding team members', () => {
         it('can add a team member', () => {

@@ -12,8 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const hamjest_1 = require("hamjest");
 const Configuration_1 = require("./Configuration");
 const Duration_1 = require("./Duration");
-const GitHubClient_1 = require("./GitHubClient");
-const NullOctokitConfig_1 = require("./NullOctokitConfig");
+const GitHubClient_1 = require("./infrastructure/GitHubClient");
+const NullOctokitConfig_1 = require("./infrastructure/NullOctokitConfig");
 const retireInactiveContributors_1 = require("./retireInactiveContributors");
 const Today_1 = require("./Today");
 describe(retireInactiveContributors_1.retireInactiveContributors.name, () => {

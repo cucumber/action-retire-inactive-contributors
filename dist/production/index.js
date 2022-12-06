@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const github_1 = require("@actions/github");
 const Configuration_1 = require("./Configuration");
-const GitHubClient_1 = require("./GitHubClient");
+const GitHubClient_1 = require("./infrastructure/GitHubClient");
 const retireInactiveContributors_1 = require("./retireInactiveContributors");
 function run() {
     return __awaiter(this, void 0, void 0, function* () {

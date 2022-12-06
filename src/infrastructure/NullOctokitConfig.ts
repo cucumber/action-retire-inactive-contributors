@@ -1,6 +1,4 @@
-import { Duration } from './Duration'
 import { GithubTeamName, GithubUsername } from './GitHubClient'
-import { Today } from './Today'
 
 export type NullOctokitTeamMembers = {
   [teamName: GithubTeamName]: GithubUsername[]

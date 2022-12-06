@@ -11,10 +11,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const github_1 = require("@actions/github");
 const hamjest_1 = require("hamjest");
-const Duration_1 = require("./Duration");
+const Duration_1 = require("../Duration");
+const Today_1 = require("../Today");
 const GitHubClient_1 = require("./GitHubClient");
 const NullOctokitConfig_1 = require("./NullOctokitConfig");
-const Today_1 = require("./Today");
 const org = 'test-inactive-contributor-action';
 const testContributorsTeam = 'test-Contributors';
 const testAlumniTeam = 'test-Alumni';

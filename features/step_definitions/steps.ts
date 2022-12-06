@@ -9,8 +9,11 @@ import {
 import { assertThat, equalTo } from 'hamjest'
 import { Configuration } from '../../src/Configuration'
 import { Duration } from '../../src/Duration'
-import { NullOctokitConfig } from '../../src/NullOctokitConfig'
-import { GithubChange, GitHubClient } from '../../src/GitHubClient'
+import { NullOctokitConfig } from '../../src/infrastructure/NullOctokitConfig'
+import {
+  GithubChange,
+  GitHubClient,
+} from '../../src/infrastructure/GitHubClient'
 import { retireInactiveContributors } from '../../src/retireInactiveContributors'
 import { Today } from '../../src/Today'
 

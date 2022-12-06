@@ -1,5 +1,4 @@
 import { getOctokit } from '@actions/github'
-import { assert } from 'console'
 import {
   assertThat,
   equalTo,
@@ -11,10 +10,10 @@ import {
   promiseThat,
   rejected,
 } from 'hamjest'
-import { Duration } from './Duration'
+import { Duration } from '../Duration'
+import { Today } from '../Today'
 import { GitHubClient } from './GitHubClient'
 import { NullOctokitConfig } from './NullOctokitConfig'
-import { Today } from './Today'
 
 const org = 'test-inactive-contributor-action'
 

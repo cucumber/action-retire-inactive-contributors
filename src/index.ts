@@ -1,6 +1,6 @@
 import { getOctokit } from '@actions/github'
 import { Configuration } from './Configuration'
-import { GitHubClient } from './GitHubClient'
+import { GitHubClient } from './infrastructure/GitHubClient'
 import { retireInactiveContributors } from './retireInactiveContributors'
 
 async function run(): Promise<void> {
