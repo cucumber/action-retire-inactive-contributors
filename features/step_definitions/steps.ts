@@ -5,13 +5,15 @@ import {
   Then,
   When,
 } from '@cucumber/cucumber'
-import { assertThat, hasItem, not } from 'hamjest'
+import { assertThat, containsString, hasItem, not } from 'hamjest'
 import { Configuration } from '../../src/Configuration'
 import { Duration } from '../../src/Duration'
 import { FakeGitHub } from '../../src/FakeGitHub'
 import { retireInactiveContributors } from '../../src/retireInactiveContributors'
+import { ActionLog } from '../../src/ActionLog'
 
 type World = {
+  actionLog: ActionLog
   configuration: Configuration
   github: FakeGitHub
 }
@@ -19,6 +21,7 @@ type World = {
 Before(function () {
   this.github = new FakeGitHub()
   this.configuration = new Configuration()
+  this.actionLog = new ActionLog()
 })
 
 defineParameterType({
@@ -102,5 +105,12 @@ Given(
     this.configuration.maximumAbsenceBeforeRetirement = Duration.parse(
       `${maximumDaysAbsent} days`
     )
+  }
+)
+
+Then(
+  'the action log should include:',
+  function (this: World, expectedText: string) {
+    assertThat(this.actionLog.getOutput(), containsString(expectedText))
   }
 )

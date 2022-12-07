@@ -3,7 +3,7 @@ Feature: Record Activity
 
   Rule: The action SHALL record how many users were checked
 
-    @todo
+    @wip
     Scenario: Multiple users in the committers team
       Given a user Greg is part of the committers team
       Given a user Lisa is part of the committers team
