@@ -3,7 +3,6 @@ import { getOctokit } from '@actions/github'
 import { Configuration } from './Configuration'
 import { OctokitGitHub } from './OctokitGitHub'
 import { retireInactiveContributors } from './retireInactiveContributors'
-import { ActionLog } from './ActionLog'
 
 export async function run(
   maximumAbsenceBeforeRetirementInput: string,
@@ -21,7 +20,7 @@ export async function run(
     maximumAbsenceBeforeRetirement,
     alumniTeam
   )
-  const logger = new ActionLog()
-  console.log({ configuration })
+  const logger = octokit.log
+  logger.info(JSON.stringify({ configuration }))
   await retireInactiveContributors(github, configuration, logger)
 }

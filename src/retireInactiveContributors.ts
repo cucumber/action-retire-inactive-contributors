@@ -1,6 +1,5 @@
 import { Configuration } from './Configuration'
 import { Today } from './Today'
-import { ActionLog } from './ActionLog'
 
 export interface GitHubClient {
   removeUserFromTeam(user: string, committersTeam: string): Promise<void>
@@ -9,10 +8,14 @@ export interface GitHubClient {
   getMembersOf(team: string): Promise<string[]>
 }
 
+export interface Logger {
+  info(message: string): void
+}
+
 export async function retireInactiveContributors(
   github: GitHubClient,
   configuration: Configuration,
-  logger: ActionLog
+  logger: Logger
 ): Promise<void> {
   const cutOffDate = Today.minus(configuration.maximumAbsenceBeforeRetirement)
   const alumniTeam = configuration.alumniTeam
