@@ -17,7 +17,7 @@ Feature: Record Activity
     Scenario: Action moves a user from Committers to Alumni
       Given the maximum absence before retirement is 100 days
       And a user Greg is part of the committers team
-      And the create date of Greg's last commit was 100 days ago
+      And the create date of Greg's last commit was 101 days ago
       When the action runs
       Then the action log should include:
         """
