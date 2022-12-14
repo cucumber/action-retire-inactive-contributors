@@ -1,5 +1,6 @@
 import { Duration } from './Duration'
 import { getOctokit } from '@actions/github'
+import * as logger from '@actions/core'
 import { Configuration } from './Configuration'
 import { OctokitGitHub } from './OctokitGitHub'
 import { retireInactiveContributors } from './retireInactiveContributors'
@@ -20,7 +21,6 @@ export async function run(
     maximumAbsenceBeforeRetirement,
     alumniTeam
   )
-  const logger = octokit.log
   logger.info(JSON.stringify({ configuration }))
   await retireInactiveContributors(github, configuration, logger)
 }
