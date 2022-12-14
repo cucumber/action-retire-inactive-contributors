@@ -9499,6 +9499,29 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
+/***/ 1542:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ActionLog = void 0;
+class ActionLog {
+    constructor() {
+        this.messages = [];
+    }
+    info(message) {
+        this.messages.push(message);
+    }
+    getOutput() {
+        return this.messages.join('\n');
+    }
+}
+exports.ActionLog = ActionLog;
+
+
+/***/ }),
+
 /***/ 1031:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -9677,16 +9700,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.retireInactiveContributors = void 0;
 const Today_1 = __nccwpck_require__(1637);
-function retireInactiveContributors(github, configuration) {
+function retireInactiveContributors(github, configuration, logger) {
     return __awaiter(this, void 0, void 0, function* () {
         const cutOffDate = Today_1.Today.minus(configuration.maximumAbsenceBeforeRetirement);
         const alumniTeam = configuration.alumniTeam;
         const committersTeam = 'committers';
         const committersTeamMembers = yield github.getMembersOf(committersTeam);
+        logger.info(`Reviewing permissions for ${committersTeamMembers.length} users...`);
         for (const author of committersTeamMembers) {
             if (!(yield github.hasCommittedSince(author, cutOffDate))) {
                 github.addUserToTeam(author, alumniTeam);
+                logger.info(`Added user ${author} to ${alumniTeam} team`);
                 github.removeUserFromTeam(author, committersTeam);
+                logger.info(`Removed user ${author} from ${committersTeam} team`);
             }
         }
     });
@@ -9717,14 +9743,16 @@ const github_1 = __nccwpck_require__(5438);
 const Configuration_1 = __nccwpck_require__(1031);
 const OctokitGitHub_1 = __nccwpck_require__(2312);
 const retireInactiveContributors_1 = __nccwpck_require__(7391);
+const ActionLog_1 = __nccwpck_require__(1542);
 function run(maximumAbsenceBeforeRetirementInput, githubOrgname, alumniTeam, token) {
     return __awaiter(this, void 0, void 0, function* () {
         const octokit = (0, github_1.getOctokit)(token);
         const maximumAbsenceBeforeRetirement = Duration_1.Duration.parse(maximumAbsenceBeforeRetirementInput);
         const github = new OctokitGitHub_1.OctokitGitHub(octokit, githubOrgname);
         const configuration = new Configuration_1.Configuration(maximumAbsenceBeforeRetirement, alumniTeam);
+        const logger = new ActionLog_1.ActionLog();
         console.log({ configuration });
-        yield (0, retireInactiveContributors_1.retireInactiveContributors)(github, configuration);
+        yield (0, retireInactiveContributors_1.retireInactiveContributors)(github, configuration, logger);
     });
 }
 exports.run = run;

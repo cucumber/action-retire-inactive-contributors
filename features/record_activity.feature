@@ -3,7 +3,6 @@ Feature: Record Activity
 
   Rule: The action SHALL record how many users were checked
 
-    @wip
     Scenario: Multiple users in the committers team
       Given a user Greg is part of the committers team
       Given a user Lisa is part of the committers team
@@ -15,7 +14,6 @@ Feature: Record Activity
 
   Rule: The action SHALL record changes
 
-    @todo
     Scenario: Action moves a user from Committers to Alumni
       Given the maximum absence before retirement is 100 days
       And a user Greg is part of the committers team
@@ -23,6 +21,6 @@ Feature: Record Activity
       When the action runs
       Then the action log should include:
         """
-        Removed user Greg from committers team
         Added user Greg to alumni team
+        Removed user Greg from committers team
         """
