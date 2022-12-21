@@ -1,0 +1,35 @@
+name: Run the action
+
+on:
+  # push:
+  #   branches: [ "*" ]
+
+jobs:
+  retire_inactives:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Run the action itself, on the cucumber org
+      uses: ./
+      with:
+        github-orgname: cucumber
+        maximum-absence-before-retirement: 366 days
+        alumni-team: Alumni
+      env:
+        GITHUB_TOKEN: ${{ secrets.OCTOKIT_TOKEN }} 
+  run-prod:  # YOLO
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm run  # ??
+      env:
+        CUCUMBER_PUBLISH_TOKEN: ${{ secrets.CUCUMBER_PUBLISH_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.OCTOKIT_TOKEN }}
