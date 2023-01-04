@@ -12,7 +12,7 @@ Feature: Move inactive users
 
     Scenario: Greg has become inactive
       And a user Greg is part of the committers team
-      And the create date of Greg's last commit was 100 days ago
+      And the create date of Greg's last commit was 101 days ago
       When the action runs
       Then Greg should be in the alumni team
       And Greg should not be in the committers team
