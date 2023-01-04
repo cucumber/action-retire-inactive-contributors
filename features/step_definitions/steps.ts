@@ -69,9 +69,21 @@ Given(
   }
 )
 
-When('the action runs', function (this: World) {
-  // Write code here that turns the phrase above into concrete actions
-  retireInactiveContributors(this.github, this.configuration, this.actionLog)
+When('the action runs', async function (this: World) {
+  await retireInactiveContributors(
+    this.github,
+    this.configuration,
+    this.actionLog
+  )
+})
+
+When('the action runs with the dry-run option', async function (this: World) {
+  this.configuration.dryRun = true
+  await retireInactiveContributors(
+    this.github,
+    this.configuration,
+    this.actionLog
+  )
 })
 
 Then(

@@ -9508,10 +9508,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Configuration = void 0;
 const DEFAULT_MAXIMUM_ABSENCE = 365;
 const DEFAULT_ALUMNI_TEAM = 'alumni';
+const DEFAULT_DRY_RUN = true;
 class Configuration {
-    constructor(maximumAbsenceBeforeRetirement = DEFAULT_MAXIMUM_ABSENCE, alumniTeam = DEFAULT_ALUMNI_TEAM) {
+    constructor(maximumAbsenceBeforeRetirement = DEFAULT_MAXIMUM_ABSENCE, alumniTeam = DEFAULT_ALUMNI_TEAM, dryRun = DEFAULT_DRY_RUN) {
         this.maximumAbsenceBeforeRetirement = maximumAbsenceBeforeRetirement;
         this.alumniTeam = alumniTeam;
+        this.dryRun = dryRun;
     }
 }
 exports.Configuration = Configuration;
