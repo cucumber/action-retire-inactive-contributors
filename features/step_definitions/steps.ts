@@ -126,3 +126,7 @@ Then(
     assertThat(this.actionLog.getOutput(), containsString(expectedText))
   }
 )
+
+Given('dry-run is disabled', function (this: World) {
+  this.configuration.dryRun = false
+})

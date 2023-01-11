@@ -1,7 +1,6 @@
 Feature: Dry run
 	The dry run option allows us to simulate without actually making any changes to the users permissions.
 
-  @wip
   Scenario: Greg has become inactive
     Given the maximum absence before retirement is 100 days
     And a user Greg is part of the committers team

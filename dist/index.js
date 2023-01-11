@@ -9688,9 +9688,13 @@ function retireInactiveContributors(github, configuration, logger) {
         logger.info(`Reviewing permissions for ${committersTeamMembers.length} users...`);
         for (const author of committersTeamMembers) {
             if (!(yield github.hasCommittedSince(author, cutOffDate))) {
-                github.addUserToTeam(author, alumniTeam);
+                if (configuration.dryRun == false) {
+                    yield github.addUserToTeam(author, alumniTeam);
+                }
                 logger.info(`Added user ${author} to ${alumniTeam} team`);
-                github.removeUserFromTeam(author, committersTeam);
+                if (configuration.dryRun == false) {
+                    yield github.removeUserFromTeam(author, committersTeam);
+                }
                 logger.info(`Removed user ${author} from ${committersTeam} team`);
             }
         }

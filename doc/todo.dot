@@ -1,0 +1,6 @@
+digraph {
+  "Ship to production" -> "Implement Dry run";
+  "Ship to production" -> "Test Dry Run in the Cucumber Org";
+  "Dry run" -> "Failing scenario";
+  "Dry run" -> "Make the scenario pass";
+}

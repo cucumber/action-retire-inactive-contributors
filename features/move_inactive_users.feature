@@ -6,7 +6,8 @@ Feature: Move inactive users
   into the alumni group.
 
   Background: 
-    Given the maximum absence before retirement is 100 days
+    Given the maximum absence before retirement is 100 days 
+    And dry-run is disabled
 
   Rule: Users become inactive after a specified time
 
