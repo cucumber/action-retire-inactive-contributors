@@ -2,6 +2,8 @@
 
 # retire-inactive-contributor README.md
 
+This is one result of [the new contributors ensemble, a weekly exercise in ensemble programming.](https://cucumber.io/docs/community/new-contributors/)
+
 ## Now as a Github action
 
 When this Github action runs:
