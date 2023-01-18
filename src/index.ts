@@ -12,5 +12,6 @@ run(
   getInput('maximum-absence-before-retirement'),
   getInput('github-orgname'),
   getInput('alumni-team'),
-  token
+  token,
+  getInput('dry-run')
 )

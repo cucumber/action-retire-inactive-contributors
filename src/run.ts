@@ -9,7 +9,8 @@ export async function run(
   maximumAbsenceBeforeRetirementInput: string,
   githubOrgname: string,
   alumniTeam: string,
-  token: string
+  token: string,
+  dryRun?: boolean
 ): Promise<void> {
   const octokit = getOctokit(token)
   const maximumAbsenceBeforeRetirement = Duration.parse(
@@ -19,7 +20,8 @@ export async function run(
 
   const configuration = new Configuration(
     maximumAbsenceBeforeRetirement,
-    alumniTeam
+    alumniTeam,
+    dryRun
   )
   logger.info(JSON.stringify({ configuration }))
   await retireInactiveContributors(github, configuration, logger)

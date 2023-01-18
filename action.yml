@@ -13,6 +13,9 @@ inputs:
   alumni-team: 
     required: true
     description: "name of the alumni team, where inactive users will be retired to"
+  dry-run:
+    required: false
+    description: "Run without making changes"
 
 
 
