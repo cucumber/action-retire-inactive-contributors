@@ -15,13 +15,14 @@ jobs:
     - name: Run the action itself, on the https://github.com/test-inactive-contributor-action org
       uses: ./
       with:
-        github-orgname: cucumber
-        maximum-absence-before-retirement: 365 days
-        alumni-team: Alumni
+        github-orgname: test-inactive-contributor-action
+        maximum-absence-before-retirement: 1 second
+        alumni-team: test-Alumni
         dry-run: true
       env:
         GITHUB_TOKEN: ${{ secrets.OCTOKIT_TOKEN }} 
   integration-tests:
+    needs: integration-dry-run
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
