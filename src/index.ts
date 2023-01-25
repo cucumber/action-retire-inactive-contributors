@@ -13,5 +13,5 @@ run(
   getInput('github-orgname'),
   getInput('alumni-team'),
   token,
-  getInput('dry-run')
+  getInput('dry-run') == 'true'
 )

@@ -4,3 +4,4 @@ coverage
 .idea
 .envrc
 dist/dev
+.DS_Store
