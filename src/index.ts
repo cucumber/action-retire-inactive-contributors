@@ -14,4 +14,4 @@ run(
   getInput('alumni-team'),
   token,
   getInput('dry-run')
-  )
+)
