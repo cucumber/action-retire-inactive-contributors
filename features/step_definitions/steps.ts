@@ -78,7 +78,7 @@ When('the action runs', async function (this: World) {
 })
 
 When('the action runs with the dry-run option', async function (this: World) {
-  this.configuration.dryRun = true
+  this.configuration.dryRun = 'read-only'
   await retireInactiveContributors(
     this.github,
     this.configuration,
@@ -128,5 +128,5 @@ Then(
 )
 
 Given('dry-run is disabled', function (this: World) {
-  this.configuration.dryRun = false
+  this.configuration.dryRun = 'update'
 })

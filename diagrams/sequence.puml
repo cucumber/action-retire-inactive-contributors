@@ -1,15 +1,26 @@
 @startuml
-entity Scheduler as s
+entity "GitHub CI" as s
 participant Github_Action as action
 database Github_API as gh
+database Repository as repo
 
-s -> action: Check for Inactive Contributors
+group DryRun Secnario
+s <- repo: trigger event
+note right
+manual command or a cron event
+end note
+s -> repo: trigger Github Actions
+
 activate action
+action -> gh: Read ./github/workflows/action.yml
+action -> gh: Run jobs...
 action -> gh: request auth
-action <-- gh: session token
+action <-- gh: receive session token
 action -> gh: Get org members
 action <--  gh:(List of members)
 action -> gh: has committed since {absence}?
+
+end group
 
 note right
 "absence" is the duration of inactivity

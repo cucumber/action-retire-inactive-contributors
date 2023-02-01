@@ -26,11 +26,11 @@ export async function retireInactiveContributors(
   )
   for (const author of committersTeamMembers) {
     if (!(await github.hasCommittedSince(author, cutOffDate))) {
-      if (configuration.dryRun == false) {
+      if (configuration.dryRun == 'update') {
         await github.addUserToTeam(author, alumniTeam)
       }
       logger.info(`Added user ${author} to ${alumniTeam} team`)
-      if (configuration.dryRun == false) {
+      if (configuration.dryRun == 'update') {
         await github.removeUserFromTeam(author, committersTeam)
       }
       logger.info(`Removed user ${author} from ${committersTeam} team`)
