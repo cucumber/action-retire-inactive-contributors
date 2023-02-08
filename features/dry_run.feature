@@ -8,8 +8,3 @@ Feature: Dry run
     When the action runs with the dry-run option
     Then Greg should not be in the alumni team
     And Greg should be in the committers team
-    And the action log should include:
-      """
-      Added user Greg to alumni team
-      Removed user Greg from committers team
-      """

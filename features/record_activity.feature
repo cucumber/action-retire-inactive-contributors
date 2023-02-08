@@ -21,6 +21,19 @@ Feature: Record Activity
       When the action runs
       Then the action log should include:
         """
-        Added user Greg to alumni team
-        Removed user Greg from committers team
+        Adding user Greg to alumni team
+        Removing user Greg from committers team
+        """
+
+  Rule: The action SHALL record simulated changes in dry-run mode
+
+    Scenario: Action runs in read-only mode
+      Given the maximum absence before retirement is 100 days
+      And a user Greg is part of the committers team
+      And the create date of Greg's last commit was 101 days ago
+      When the action runs with the dry-run option
+      Then the action log should include:
+        """
+        Read-only: Add user Greg to alumni team
+        Read-only: Remove user Greg from committers team
         """
