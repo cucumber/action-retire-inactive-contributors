@@ -1,6 +1,6 @@
 import { GitHubClient, Logger } from './retireInactiveContributors'
 
-export class ReadOnlyGitHubClient implements GitHubClient {
+export class UpdatingGitHubClient implements GitHubClient {
   constructor(
     private readonly client: GitHubClient,
     private readonly logger: Logger
@@ -15,14 +15,12 @@ export class ReadOnlyGitHubClient implements GitHubClient {
   }
 
   addUserToTeam(user: string, alumniTeam: string): Promise<void> {
-    this.logger.info(`Read-only: Add user ${user} to ${alumniTeam} team`)
-    return Promise.resolve()
+    this.logger.info(`Adding user ${user} to ${alumniTeam} team`)
+    return this.client.addUserToTeam(user, alumniTeam)
   }
 
   removeUserFromTeam(user: string, committersTeam: string): Promise<void> {
-    this.logger.info(
-      `Read-only: Remove user ${user} from ${committersTeam} team`
-    )
-    return Promise.resolve()
+    this.logger.info(`Removing user ${user} from ${committersTeam} team`)
+    return this.client.removeUserFromTeam(user, committersTeam)
   }
 }

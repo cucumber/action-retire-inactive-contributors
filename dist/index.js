@@ -9652,8 +9652,9 @@ function isGithubRequestError(candidate) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ReadOnlyGitHubClient = void 0;
 class ReadOnlyGitHubClient {
-    constructor(client) {
+    constructor(client, logger) {
         this.client = client;
+        this.logger = logger;
     }
     hasCommittedSince(author, date) {
         return this.client.hasCommittedSince(author, date);
@@ -9661,10 +9662,12 @@ class ReadOnlyGitHubClient {
     getMembersOf(team) {
         return this.client.getMembersOf(team);
     }
-    addUserToTeam() {
+    addUserToTeam(user, alumniTeam) {
+        this.logger.info(`Read-only: Add user ${user} to ${alumniTeam} team`);
         return Promise.resolve();
     }
-    removeUserFromTeam() {
+    removeUserFromTeam(user, committersTeam) {
+        this.logger.info(`Read-only: Remove user ${user} from ${committersTeam} team`);
         return Promise.resolve();
     }
 }
@@ -9691,6 +9694,38 @@ exports.Today = Today;
 
 /***/ }),
 
+/***/ 1126:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UpdatingGitHubClient = void 0;
+class UpdatingGitHubClient {
+    constructor(client, logger) {
+        this.client = client;
+        this.logger = logger;
+    }
+    hasCommittedSince(author, date) {
+        return this.client.hasCommittedSince(author, date);
+    }
+    getMembersOf(team) {
+        return this.client.getMembersOf(team);
+    }
+    addUserToTeam(user, alumniTeam) {
+        this.logger.info(`Adding user ${user} to ${alumniTeam} team`);
+        return this.client.addUserToTeam(user, alumniTeam);
+    }
+    removeUserFromTeam(user, committersTeam) {
+        this.logger.info(`Removing user ${user} from ${committersTeam} team`);
+        return this.client.removeUserFromTeam(user, committersTeam);
+    }
+}
+exports.UpdatingGitHubClient = UpdatingGitHubClient;
+
+
+/***/ }),
+
 /***/ 7391:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -9708,11 +9743,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.retireInactiveContributors = void 0;
 const ReadonlyGitHubClient_1 = __nccwpck_require__(6179);
+const UpdatingGitHubClient_1 = __nccwpck_require__(1126);
 const Today_1 = __nccwpck_require__(1637);
 function retireInactiveContributors(github, configuration, logger) {
     return __awaiter(this, void 0, void 0, function* () {
         if (configuration.dryRun == 'read-only') {
-            github = new ReadonlyGitHubClient_1.ReadOnlyGitHubClient(github);
+            github = new ReadonlyGitHubClient_1.ReadOnlyGitHubClient(github, logger);
+        }
+        else {
+            github = new UpdatingGitHubClient_1.UpdatingGitHubClient(github, logger);
         }
         const cutOffDate = Today_1.Today.minus(configuration.maximumAbsenceBeforeRetirement);
         const alumniTeam = configuration.alumniTeam;
@@ -9722,9 +9761,7 @@ function retireInactiveContributors(github, configuration, logger) {
         for (const author of committersTeamMembers) {
             if (!(yield github.hasCommittedSince(author, cutOffDate))) {
                 yield github.addUserToTeam(author, alumniTeam);
-                logger.info(`Added user ${author} to ${alumniTeam} team`);
                 yield github.removeUserFromTeam(author, committersTeam);
-                logger.info(`Removed user ${author} from ${committersTeam} team`);
             }
         }
     });
