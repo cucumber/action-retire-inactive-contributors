@@ -9500,12 +9500,13 @@ function wrappy (fn, cb) {
 /***/ }),
 
 /***/ 1031:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Configuration = void 0;
+const Duration_1 = __nccwpck_require__(5055);
 const DEFAULT_MAXIMUM_ABSENCE = 365;
 const DEFAULT_ALUMNI_TEAM = 'alumni';
 const DEFAULT_DRY_RUN = 'read-only';
@@ -9514,6 +9515,9 @@ class Configuration {
         this.maximumAbsenceBeforeRetirement = maximumAbsenceBeforeRetirement;
         this.alumniTeam = alumniTeam;
         this.dryRun = dryRun;
+    }
+    static from(inputs) {
+        return new this(Duration_1.Duration.parse(inputs.maximumAbsenceBeforeRetirement), inputs.alumniTeam, inputs.dryRun == 'false' ? 'update' : 'read-only');
     }
 }
 exports.Configuration = Configuration;
@@ -9806,19 +9810,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
-const Duration_1 = __nccwpck_require__(5055);
 const github_1 = __nccwpck_require__(5438);
 const logger = __importStar(__nccwpck_require__(2186));
 const Configuration_1 = __nccwpck_require__(1031);
 const OctokitGitHub_1 = __nccwpck_require__(2312);
 const retireInactiveContributors_1 = __nccwpck_require__(7391);
-function run(maximumAbsenceBeforeRetirementInput, githubOrgname, alumniTeam, token, dryRunInput) {
+function run(inputs) {
     return __awaiter(this, void 0, void 0, function* () {
-        const octokit = (0, github_1.getOctokit)(token);
-        const maximumAbsenceBeforeRetirement = Duration_1.Duration.parse(maximumAbsenceBeforeRetirementInput);
-        const github = new OctokitGitHub_1.OctokitGitHub(octokit, githubOrgname);
-        const dryRun = dryRunInput == 'false' ? 'update' : 'read-only';
-        const configuration = new Configuration_1.Configuration(maximumAbsenceBeforeRetirement, alumniTeam, dryRun);
+        const configuration = Configuration_1.Configuration.from(inputs);
+        const octokit = (0, github_1.getOctokit)(inputs.token);
+        const github = new OctokitGitHub_1.OctokitGitHub(octokit, inputs.githubOrgname);
         logger.info(JSON.stringify({ configuration }));
         yield (0, retireInactiveContributors_1.retireInactiveContributors)(github, configuration, logger);
     });
@@ -10015,7 +10016,13 @@ const token = process.env.GITHUB_TOKEN;
 if (!token) {
     throw new Error('Please set GITHUB_TOKEN. See https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token');
 }
-(0, run_1.run)((0, core_1.getInput)('maximum-absence-before-retirement'), (0, core_1.getInput)('github-orgname'), (0, core_1.getInput)('alumni-team'), token, (0, core_1.getInput)('dry-run'));
+(0, run_1.run)({
+    maximumAbsenceBeforeRetirement: (0, core_1.getInput)('maximum-absence-before-retirement'),
+    githubOrgname: (0, core_1.getInput)('github-orgname'),
+    alumniTeam: (0, core_1.getInput)('alumni-team'),
+    dryRun: (0, core_1.getInput)('dry-run'),
+    token,
+});
 
 })();
 
