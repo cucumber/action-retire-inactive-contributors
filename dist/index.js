@@ -9644,6 +9644,35 @@ function isGithubRequestError(candidate) {
 
 /***/ }),
 
+/***/ 6179:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ReadOnlyGitHubClient = void 0;
+class ReadOnlyGitHubClient {
+    constructor(client) {
+        this.client = client;
+    }
+    hasCommittedSince(author, date) {
+        return this.client.hasCommittedSince(author, date);
+    }
+    getMembersOf(team) {
+        return this.client.getMembersOf(team);
+    }
+    addUserToTeam() {
+        return Promise.resolve();
+    }
+    removeUserFromTeam() {
+        return Promise.resolve();
+    }
+}
+exports.ReadOnlyGitHubClient = ReadOnlyGitHubClient;
+
+
+/***/ }),
+
 /***/ 1637:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -9678,9 +9707,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.retireInactiveContributors = void 0;
+const ReadonlyGitHubClient_1 = __nccwpck_require__(6179);
 const Today_1 = __nccwpck_require__(1637);
 function retireInactiveContributors(github, configuration, logger) {
     return __awaiter(this, void 0, void 0, function* () {
+        if (configuration.dryRun == 'read-only') {
+            github = new ReadonlyGitHubClient_1.ReadOnlyGitHubClient(github);
+        }
         const cutOffDate = Today_1.Today.minus(configuration.maximumAbsenceBeforeRetirement);
         const alumniTeam = configuration.alumniTeam;
         const committersTeam = 'committers';
@@ -9688,13 +9721,9 @@ function retireInactiveContributors(github, configuration, logger) {
         logger.info(`Reviewing permissions for ${committersTeamMembers.length} users...`);
         for (const author of committersTeamMembers) {
             if (!(yield github.hasCommittedSince(author, cutOffDate))) {
-                if (configuration.dryRun == 'update') {
-                    yield github.addUserToTeam(author, alumniTeam);
-                }
+                yield github.addUserToTeam(author, alumniTeam);
                 logger.info(`Added user ${author} to ${alumniTeam} team`);
-                if (configuration.dryRun == 'update') {
-                    yield github.removeUserFromTeam(author, committersTeam);
-                }
+                yield github.removeUserFromTeam(author, committersTeam);
                 logger.info(`Removed user ${author} from ${committersTeam} team`);
             }
         }
