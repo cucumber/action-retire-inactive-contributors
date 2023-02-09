@@ -8,10 +8,10 @@ if (!token) {
   )
 }
 
-run(
-  getInput('maximum-absence-before-retirement'),
-  getInput('github-orgname'),
-  getInput('alumni-team'),
+run({
+  maximumAbsenceBeforeRetirement: getInput('maximum-absence-before-retirement'),
+  githubOrgname: getInput('github-orgname'),
+  alumniTeam: getInput('alumni-team'),
+  dryRun: getInput('dry-run'),
   token,
-  getInput('dry-run')
-)
+})
