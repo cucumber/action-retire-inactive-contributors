@@ -11,6 +11,8 @@ When this Github action runs:
     - Moves inactive contributors to a less-privileged alumni team 
     - If an inactive contributor has custom permissions, these permissions are revoked
 
+![Sequence Diagram](doc/diagrams/sequence.png)
+
 ## Usage Example
 
 Add this text to your workflow config `.github/workflows/main.yml`
@@ -34,8 +36,6 @@ jobs:
           maximum-absence-before-retirement: 1 year
           alumni-team: Alumni
 ```
-
-![Sequence Diagram](doc/diagrams/sequence.png)
 
 > Previously, a bot built with [Probot](https://github.com/probot/probot) that Retire inactive contributors from one team to another, now done using a GitHub Action
 

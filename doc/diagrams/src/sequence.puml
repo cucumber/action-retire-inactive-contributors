@@ -1,4 +1,5 @@
 @startuml
+!theme materia-outline
 entity "GitHub CI" as s
 participant Github_Action as action
 database Github_API as gh
@@ -10,12 +11,10 @@ note left
 manually, via git hook, 
 or a cron event
 end note
-action -> repo: read the workflow files
-
 activate action
-action -> repo: Read ./github/workflows/action.yml
-action -> gh: Run with dryrun = read-only
-action -> gh: request auth
+action <--> repo: Read ./github/workflows/action.yml
+action <--> repo: Read configuration
+action -> gh: request authentication
 action <-- gh: receive session token
 action -> gh: Get org members
 note right
