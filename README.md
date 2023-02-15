@@ -35,7 +35,7 @@ jobs:
           alumni-team: Alumni
 ```
 
-![Sequence Diagram](diagrams/sequence.png)
+![Sequence Diagram](doc/diagrams/sequence.png)
 
 > Previously, a bot built with [Probot](https://github.com/probot/probot) that Retire inactive contributors from one team to another, now done using a GitHub Action
 
