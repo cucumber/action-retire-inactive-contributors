@@ -1,0 +1,42 @@
+@startuml
+entity "GitHub CI" as s
+participant Github_Action as action
+database Github_API as gh
+database Repository as repo
+
+
+s -> action: Trigger the action
+note left
+manually, via git hook, 
+or a cron event
+end note
+action -> repo: read the workflow files
+
+activate action
+action -> repo: Read ./github/workflows/action.yml
+action -> gh: Run with dryrun = read-only
+action -> gh: request auth
+action <-- gh: receive session token
+action -> gh: Get org members
+note right
+A list of member and activity info
+end note
+
+action <--  gh:(List of members)
+action -> gh: has committed since {absence}?
+
+note right
+"absence" is the duration of inactivity
+end note
+
+group When absence is > activity days
+alt Impact is Read-only
+    action -> s: Log without changes
+
+    else impact is update    
+    action -> gh: remove from Committers, move to Alumni
+    end group
+action -> s: Log the changes    
+end group
+deactivate
+@enduml
