@@ -2,7 +2,7 @@ name: Integration
 
 on:
   workflow_run:
-    workflows: ["Dry Run"]
+    workflows: ["Read-Only"]
     branches: [ main ]
     types:
       - completed
