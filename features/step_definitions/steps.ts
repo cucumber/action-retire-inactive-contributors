@@ -71,7 +71,7 @@ Given(
 
 // TODO: rename step to "when the action runs in update mode"
 When('the action runs', async function (this: World) {
-  this.configuration.dryRun = 'update'
+  this.configuration.readOnly = 'update'
   await retireInactiveContributors(
     this.github,
     this.configuration,
@@ -82,7 +82,7 @@ When('the action runs', async function (this: World) {
 When(
   'the action runs with the read-only input set to true',
   async function (this: World) {
-    this.configuration.dryRun = 'read-only'
+    this.configuration.readOnly = 'read-only'
     await retireInactiveContributors(
       this.github,
       this.configuration,
@@ -133,5 +133,5 @@ Then(
 )
 
 Given('dry-run is disabled', function (this: World) {
-  this.configuration.dryRun = 'update'
+  this.configuration.readOnly = 'update'
 })

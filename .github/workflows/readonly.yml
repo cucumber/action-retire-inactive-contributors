@@ -1,4 +1,4 @@
-name: Dry Run
+name: Read-Only
 on:
   workflow_run:
     workflows: ["Test"]
@@ -17,7 +17,7 @@ jobs:
         github-orgname: test-inactive-contributor-action
         maximum-absence-before-retirement: 1 second
         alumni-team: test-Alumni
-        dry-run: true
+        read-only: true
       env:
         GITHUB_TOKEN: ${{ secrets.OCTOKIT_TOKEN }} 
   

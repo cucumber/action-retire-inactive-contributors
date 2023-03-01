@@ -19,7 +19,7 @@ export async function retireInactiveContributors(
   configuration: Configuration,
   logger: Logger
 ): Promise<void> {
-  if (configuration.dryRun == 'read-only') {
+  if (configuration.readOnly == 'read-only') {
     github = new ReadOnlyGitHubClient(github, logger)
   } else {
     github = new UpdatingGitHubClient(github, logger)

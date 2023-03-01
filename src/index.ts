@@ -12,6 +12,6 @@ run({
   maximumAbsenceBeforeRetirement: getInput('maximum-absence-before-retirement'),
   githubOrgname: getInput('github-orgname'),
   alumniTeam: getInput('alumni-team'),
-  dryRun: getInput('dry-run'),
+  readOnly: getInput('read-only'),
   token,
 })

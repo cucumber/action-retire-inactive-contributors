@@ -9509,15 +9509,15 @@ exports.Configuration = void 0;
 const Duration_1 = __nccwpck_require__(5055);
 const DEFAULT_MAXIMUM_ABSENCE = 365;
 const DEFAULT_ALUMNI_TEAM = 'alumni';
-const DEFAULT_DRY_RUN = 'read-only';
+const DEFAULT_READ_ONLY = 'read-only';
 class Configuration {
-    constructor(maximumAbsenceBeforeRetirement = DEFAULT_MAXIMUM_ABSENCE, alumniTeam = DEFAULT_ALUMNI_TEAM, dryRun = DEFAULT_DRY_RUN) {
+    constructor(maximumAbsenceBeforeRetirement = DEFAULT_MAXIMUM_ABSENCE, alumniTeam = DEFAULT_ALUMNI_TEAM, readOnly = DEFAULT_READ_ONLY) {
         this.maximumAbsenceBeforeRetirement = maximumAbsenceBeforeRetirement;
         this.alumniTeam = alumniTeam;
-        this.dryRun = dryRun;
+        this.readOnly = readOnly;
     }
     static from(inputs) {
-        return new this(Duration_1.Duration.parse(inputs.maximumAbsenceBeforeRetirement), inputs.alumniTeam, inputs.dryRun == 'false' ? 'update' : 'read-only');
+        return new this(Duration_1.Duration.parse(inputs.maximumAbsenceBeforeRetirement), inputs.alumniTeam, inputs.readOnly == 'false' ? 'update' : 'read-only');
     }
 }
 exports.Configuration = Configuration;
@@ -9751,7 +9751,7 @@ const UpdatingGitHubClient_1 = __nccwpck_require__(1126);
 const Today_1 = __nccwpck_require__(1637);
 function retireInactiveContributors(github, configuration, logger) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (configuration.dryRun == 'read-only') {
+        if (configuration.readOnly == 'read-only') {
             github = new ReadonlyGitHubClient_1.ReadOnlyGitHubClient(github, logger);
         }
         else {
@@ -10020,7 +10020,7 @@ if (!token) {
     maximumAbsenceBeforeRetirement: (0, core_1.getInput)('maximum-absence-before-retirement'),
     githubOrgname: (0, core_1.getInput)('github-orgname'),
     alumniTeam: (0, core_1.getInput)('alumni-team'),
-    dryRun: (0, core_1.getInput)('dry-run'),
+    readOnly: (0, core_1.getInput)('read-only'),
     token,
 });
 
