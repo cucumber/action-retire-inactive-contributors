@@ -31,7 +31,7 @@ Feature: Record Activity
       Given the maximum absence before retirement is 100 days
       And a user Greg is part of the committers team
       And the create date of Greg's last commit was 101 days ago
-      When the action runs with the dry-run option
+      When the action runs with the read-only input set to true
       Then the action log should include:
         """
         Read-only: Add user Greg to alumni team

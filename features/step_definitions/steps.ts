@@ -79,15 +79,17 @@ When('the action runs', async function (this: World) {
   )
 })
 
-// TODO: rename step to "when the action runs in read-only mode"
-When('the action runs with the dry-run option', async function (this: World) {
-  this.configuration.dryRun = 'read-only'
-  await retireInactiveContributors(
-    this.github,
-    this.configuration,
-    this.actionLog
-  )
-})
+When(
+  'the action runs with the read-only input set to true',
+  async function (this: World) {
+    this.configuration.dryRun = 'read-only'
+    await retireInactiveContributors(
+      this.github,
+      this.configuration,
+      this.actionLog
+    )
+  }
+)
 
 Then(
   '{user} should be in {team}',
