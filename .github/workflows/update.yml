@@ -1,0 +1,20 @@
+name: Update
+
+on:
+  schedule:
+    # weekly on Sunday at 13:00 UTC
+    - cron: '0 13 * * 0'
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Run the action against the cucumber org
+      uses: ./
+      with:
+        github-orgname: cucumber
+        maximum-absence-before-retirement: 1 year
+        alumni-team: Alumni
+        read-only: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.OCTOKIT_TOKEN }} 
