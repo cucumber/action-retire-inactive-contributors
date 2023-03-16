@@ -1,6 +1,6 @@
 {
   "name": "action-retire-inactive-contributor",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "private": true,
   "description": "Retire inactive contributors from one team to another",
   "author": "Matt Wynne, Kate Dames, Blaise Pabon <matt@cucumber.io>",
