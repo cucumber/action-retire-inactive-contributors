@@ -76,31 +76,45 @@ describe(OctokitGitHub.name, () => {
     })
 
     it('returns true if they have', async () => {
+      // Given
       const gitHubClient = client()
       const dateOnWhichMattCommitted = new Date(2022, 3, 1) // April 1.
       const hasCommitted = await gitHubClient.hasCommittedSince(
+        // When
         'mattwynne',
         dateOnWhichMattCommitted
       )
+
+      // Then
       assertThat(hasCommitted, is(true))
     })
   })
 
   it('gets members of a team', async () => {
+    // Given
     const gitHubClient = client()
+
+    // When
     const members = await gitHubClient.getMembersOf('fishcakes')
+
+    // Then
     assertThat(members, equalTo(['blaisep', 'funficient']))
   })
 
   it('throws a useful error when trying to get members of a non-existent org', async () => {
+    // Given
     const org = 'non-existent-org'
     const octokit = getOctokit(token())
     const gitHubClient = new OctokitGitHub(octokit, org)
+
+    // When
     await promiseThat(
       gitHubClient.getMembersOf('fishcakes'),
       rejected(
         allOf(
           instanceOf(UnableToGetMembersError),
+
+          // Then
           hasProperty(
             'message',
             'Not Found, unable to get members of fishcakes from: https://api.github.com/orgs/non-existent-org/teams/fishcakes/members'
