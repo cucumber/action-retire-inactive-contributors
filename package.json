@@ -1,6 +1,6 @@
 {
   "name": "action-retire-inactive-contributor",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Retire inactive contributors from one team to another",
   "author": "Matt Wynne, Kate Dames, Blaise Pabon <matt@cucumber.io>",
@@ -33,7 +33,7 @@
     "hamjest": "^3.7.3",
     "prettier": "^2.6.2",
     "ts-node": "^10.5.0",
-    "typescript": "^4.1.3"
+    "typescript": "^5.0.0"
   },
   "engines": {
     "node": ">= 10.13.0"
