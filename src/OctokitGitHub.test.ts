@@ -21,11 +21,13 @@ const org = 'test-inactive-contributor-action'
 describe(OctokitGitHub.name, () => {
   context('adding someone to a team', () => {
     it('adds a new member to a team', async () => {
+      // Given
       const octokit = getOctokit(token())
       const gitHubClient = new OctokitGitHub(octokit, org)
       const teamSlug = 'test-Alumni'
       const initialMembers = await gitHubClient.getMembersOf(teamSlug)
       for (const member of initialMembers) {
+        // When
         await octokit.rest.teams.removeMembershipForUserInOrg({
           org,
           team_slug: teamSlug,
@@ -34,6 +36,8 @@ describe(OctokitGitHub.name, () => {
       }
       await gitHubClient.addUserToTeam('blaisep', teamSlug)
       const members = await gitHubClient.getMembersOf(teamSlug)
+
+      // Then
       assertThat(members, hasItem('blaisep'))
     })
   })
@@ -58,11 +62,16 @@ describe(OctokitGitHub.name, () => {
 
   context('working out if a user has committed recently', () => {
     it('returns false if they have not', async () => {
+      // Given
       const gitHubClient = client()
+
+      // When
       const hasCommitted = await gitHubClient.hasCommittedSince(
         'olleolleolle',
         new Date()
       )
+
+      // Then
       assertThat(hasCommitted, is(falsey()))
     })
 
