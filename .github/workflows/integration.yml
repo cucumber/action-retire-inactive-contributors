@@ -11,7 +11,7 @@ jobs:
   integration-tests:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Run the action itself, on the https://github.com/test-inactive-contributor-action org
       uses: ./
       with:
