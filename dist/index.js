@@ -9511,13 +9511,13 @@ const DEFAULT_MAXIMUM_ABSENCE = 365;
 const DEFAULT_ALUMNI_TEAM = 'alumni';
 const DEFAULT_READ_ONLY = 'read-only';
 class Configuration {
+    static from(inputs) {
+        return new this(Duration_1.Duration.parse(inputs.maximumAbsenceBeforeRetirement), inputs.alumniTeam, inputs.readOnly == 'false' ? 'update' : 'read-only');
+    }
     constructor(maximumAbsenceBeforeRetirement = DEFAULT_MAXIMUM_ABSENCE, alumniTeam = DEFAULT_ALUMNI_TEAM, readOnly = DEFAULT_READ_ONLY) {
         this.maximumAbsenceBeforeRetirement = maximumAbsenceBeforeRetirement;
         this.alumniTeam = alumniTeam;
         this.readOnly = readOnly;
-    }
-    static from(inputs) {
-        return new this(Duration_1.Duration.parse(inputs.maximumAbsenceBeforeRetirement), inputs.alumniTeam, inputs.readOnly == 'false' ? 'update' : 'read-only');
     }
 }
 exports.Configuration = Configuration;
@@ -9782,7 +9782,11 @@ exports.retireInactiveContributors = retireInactiveContributors;
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
