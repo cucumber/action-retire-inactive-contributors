@@ -37,3 +37,13 @@ Feature: Record Activity
         Read-only: Add user Greg to alumni team
         Read-only: Remove user Greg from committers team
         """
+@wip
+  Rule: The action SHALL notify changes of status
+
+    Scenario: Action runs in read-write mode
+      Given a user Greg is part of the committers team
+      When a user Greg is removed from the committers team
+      Then the action sends a notification:
+        """
+        The user Greg has been moved from committers to alumni due to inactivity        
+        """
