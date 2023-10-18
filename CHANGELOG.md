@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 ## [0.2.0] - 2023-03-16
+## Changed
+- Paginate when listing members of the org, so we get all of them at once.
 
 ## [0.1.0] - 2023-03-16
 ### Added
