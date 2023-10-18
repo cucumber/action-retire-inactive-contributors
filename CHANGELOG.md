@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [0.3.0] - 2023-10-18
 ### Changed
 - Paginate when listing members of the org, so we get all of them at once.
 
@@ -20,7 +22,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.0.0]
 
-[Unreleased]: https://github.com/cucumber/action-retire-inactive-contributors/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/cucumber/action-retire-inactive-contributors/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/cucumber/action-retire-inactive-contributors/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/cucumber/action-retire-inactive-contributors/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/cucumber/action-retire-inactive-contributors/compare/v0.0.0...v0.1.0
 [0.0.0]: https://github.com/cucumber/action-retire-inactive-contributors/compare/eea13d866ec1ee795013d829dedfbac128fd4db2...v0.0.0
