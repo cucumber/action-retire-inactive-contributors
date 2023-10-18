@@ -1,17 +1,19 @@
 import { GitHub } from '@actions/github/lib/utils'
 import { UnableToGetMembersError } from './Errors'
-import { GitHubClient } from './retireInactiveContributors'
+import { GitHubClient, Logger } from './retireInactiveContributors'
 
 export class OctokitGitHub implements GitHubClient {
   constructor(
     private readonly octokit: InstanceType<typeof GitHub>,
-    private readonly org: string
+    private readonly org: string,
+    private readonly logger: Logger
   ) {}
 
   async hasCommittedSince(author: string, date: Date): Promise<boolean> {
     const response = await this.octokit.rest.repos.listForOrg({ org: this.org })
     const repos = response.data.map((repoData) => repoData.name)
     for (const repo of repos) {
+      this.logger.info(`Checking for recent commits in '${repo}' repo...`)
       const result = await this.octokit.rest.repos.listCommits({
         owner: this.org,
         repo,
@@ -19,9 +21,11 @@ export class OctokitGitHub implements GitHubClient {
         since: date.toISOString(),
       })
       if (result.data.length > 0) {
+        // logger.info("Found ${result.data.length} recent commits.")
         return true
       }
     }
+    // logger.info("Found no recent commits :(")
     return false
   }
 

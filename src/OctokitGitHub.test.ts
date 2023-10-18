@@ -2,6 +2,7 @@ import { getOctokit } from '@actions/github'
 import {
   allOf,
   assertThat,
+  containsString,
   equalTo,
   falsey,
   hasItem,
@@ -14,16 +15,18 @@ import {
 } from 'hamjest'
 import { UnableToGetMembersError } from './Errors'
 import { OctokitGitHub } from './OctokitGitHub'
+import { ActionLog } from './ActionLog'
 
 // This really exists on GitHub
 const org = 'test-inactive-contributor-action'
+let logger: ActionLog
 
 describe(OctokitGitHub.name, () => {
   context('adding someone to a team', () => {
     it('adds a new member to a team', async () => {
       // Given
       const octokit = getOctokit(token())
-      const gitHubClient = new OctokitGitHub(octokit, org)
+      const gitHubClient = new OctokitGitHub(octokit, org, logger)
       const teamSlug = 'test-Alumni'
       const initialMembers = await gitHubClient.getMembersOf(teamSlug)
       for (const member of initialMembers) {
@@ -88,6 +91,22 @@ describe(OctokitGitHub.name, () => {
       // Then
       assertThat(hasCommitted, is(true))
     })
+
+    it('logs', async () => {
+      const gitHubClient = client()
+      const dateOnWhichMattCommitted = new Date(2022, 3, 1) // April 1.
+      await gitHubClient.hasCommittedSince(
+        // When
+        'mattwynne',
+        dateOnWhichMattCommitted
+      )
+
+      // Then
+      assertThat(
+        logger.getOutput(),
+        containsString("Checking for recent commits in '.github' repo...")
+      )
+    })
   })
 
   it('gets members of a team', async () => {
@@ -105,7 +124,7 @@ describe(OctokitGitHub.name, () => {
     // Given
     const org = 'non-existent-org'
     const octokit = getOctokit(token())
-    const gitHubClient = new OctokitGitHub(octokit, org)
+    const gitHubClient = new OctokitGitHub(octokit, org, logger)
 
     // When
     await promiseThat(
@@ -137,5 +156,6 @@ function token() {
 
 function client() {
   const octokit = getOctokit(token())
-  return new OctokitGitHub(octokit, org)
+  logger = new ActionLog()
+  return new OctokitGitHub(octokit, org, logger)
 }

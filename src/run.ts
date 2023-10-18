@@ -8,7 +8,7 @@ import { RawInputs } from './RawInputs'
 export async function run(inputs: RawInputs): Promise<void> {
   const configuration = Configuration.from(inputs)
   const octokit = getOctokit(inputs.token)
-  const github = new OctokitGitHub(octokit, inputs.githubOrgname)
+  const github = new OctokitGitHub(octokit, inputs.githubOrgname, logger)
   logger.info(JSON.stringify({ configuration }))
   await retireInactiveContributors(github, configuration, logger)
 }

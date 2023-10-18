@@ -9582,15 +9582,17 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OctokitGitHub = void 0;
 const Errors_1 = __nccwpck_require__(4934);
 class OctokitGitHub {
-    constructor(octokit, org) {
+    constructor(octokit, org, logger) {
         this.octokit = octokit;
         this.org = org;
+        this.logger = logger;
     }
     hasCommittedSince(author, date) {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield this.octokit.rest.repos.listForOrg({ org: this.org });
             const repos = response.data.map((repoData) => repoData.name);
             for (const repo of repos) {
+                this.logger.info(`Checking for recent commits in '${repo}' repo...`);
                 const result = yield this.octokit.rest.repos.listCommits({
                     owner: this.org,
                     repo,
@@ -9598,9 +9600,11 @@ class OctokitGitHub {
                     since: date.toISOString(),
                 });
                 if (result.data.length > 0) {
+                    // logger.info("Found ${result.data.length} recent commits.")
                     return true;
                 }
             }
+            // logger.info("Found no recent commits :(")
             return false;
         });
     }
@@ -9823,7 +9827,7 @@ function run(inputs) {
     return __awaiter(this, void 0, void 0, function* () {
         const configuration = Configuration_1.Configuration.from(inputs);
         const octokit = (0, github_1.getOctokit)(inputs.token);
-        const github = new OctokitGitHub_1.OctokitGitHub(octokit, inputs.githubOrgname);
+        const github = new OctokitGitHub_1.OctokitGitHub(octokit, inputs.githubOrgname, logger);
         logger.info(JSON.stringify({ configuration }));
         yield (0, retireInactiveContributors_1.retireInactiveContributors)(github, configuration, logger);
     });
