@@ -46,11 +46,14 @@ export class OctokitGitHub implements GitHubClient {
 
   async getMembersOf(team: string): Promise<string[]> {
     try {
-      const result = await this.octokit.rest.teams.listMembersInOrg({
-        org: this.org,
-        team_slug: team,
-      })
-      return result.data.map((user) => user.login)
+      const result = await this.octokit.paginate(
+        this.octokit.rest.teams.listMembersInOrg,
+        {
+          org: this.org,
+          team_slug: team,
+        }
+      )
+      return result.map((user) => user.login)
     } catch (err: unknown) {
       if (isGithubRequestError(err)) {
         throw new UnableToGetMembersError(

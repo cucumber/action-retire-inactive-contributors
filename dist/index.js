@@ -9625,11 +9625,11 @@ class OctokitGitHub {
     getMembersOf(team) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = yield this.octokit.rest.teams.listMembersInOrg({
+                const result = yield this.octokit.paginate(this.octokit.rest.teams.listMembersInOrg, {
                     org: this.org,
                     team_slug: team,
                 });
-                return result.data.map((user) => user.login);
+                return result.map((user) => user.login);
             }
             catch (err) {
                 if (isGithubRequestError(err)) {
