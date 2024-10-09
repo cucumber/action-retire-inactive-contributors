@@ -1,0 +1,26 @@
+# 3. run npm in a container
+
+Date: 2023-10-09
+
+## Status
+
+Draft
+
+## Context
+
+This is a typescript project and uses `npm` to run tests and execute the code. New contributors may not want to install npm just for this project.
+Other contributors (myself) don't want to install and maintain npm on their development machine.
+
+## Alternatives
+
+Create a dockerfile to run NPM in a container with access to the source code.
+Using a pipeline automation tool like Dagger to build and run the containers without depending on Dockerfile
+
+## Decision
+
+
+## Consequences
+
+    - Both Alternatives require a working OCI container runtime (eg. Docker/Moby, podman, containerd, rancher, etc)
+    - Using Dockerfile is a widely used convention *but* requires familiarity with the Dockerfile DSL
+    - Using Dagger reduces the number of APIs *but* requires the Dagger SDK for Typescript
