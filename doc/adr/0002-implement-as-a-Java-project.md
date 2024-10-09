@@ -4,7 +4,10 @@ Date: 2023-06-21
 
 ## Status
 
-Draft
+Wontfix
+We decided not to proceed because of:
+- lack of interest
+- a desire to use existing projects as example content (ie. learn on projects that are already in use)
 
 ## Context
 
