@@ -142,6 +142,14 @@ describe(OctokitGitHub.name, () => {
       )
     )
   })
+
+  it('get list of all repositories', async () => {
+    const gitHubClient = client()
+
+    const repoList = await gitHubClient.getRepositories()
+
+    assertThat(repoList, hasItem('.github'))
+  })
 })
 
 function token() {
