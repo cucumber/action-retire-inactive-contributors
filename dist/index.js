@@ -9656,7 +9656,7 @@ class OctokitGitHub {
                 const response = yield this.octokit.paginate(this.octokit.rest.repos.listForOrg, {
                     org: this.org,
                 });
-                return response.map(r => r.name);
+                return response.map((r) => r.name);
             }
             catch (err) {
                 if ((0, Errors_2.isGithubRequestError)(err)) {
