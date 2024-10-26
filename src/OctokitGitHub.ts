@@ -76,7 +76,7 @@ export class OctokitGitHub implements GitHubClient {
           org: this.org,
         }
       )
-      return response.map(r => r.name)
+      return response.map((r) => r.name)
     } catch (err: unknown) {
       if (isGithubRequestError(err)) {
         throw new UnableToGetRepositoriesError(
