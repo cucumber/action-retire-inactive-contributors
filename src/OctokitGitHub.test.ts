@@ -12,7 +12,6 @@ import {
   not,
   promiseThat,
   rejected,
-  greaterThan,
 } from 'hamjest'
 import { UnableToGetMembersError } from './Errors'
 import { OctokitGitHub } from './OctokitGitHub'
