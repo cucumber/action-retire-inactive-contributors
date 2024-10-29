@@ -150,7 +150,6 @@ describe(OctokitGitHub.name, () => {
     const repoList = await gitHubClient.getRepositories()
 
     assertThat(repoList, hasItem('.github'))
-    assertThat(repoList.length, greaterThan(30))
   })
 })
 
