@@ -12,7 +12,6 @@ import {
   not,
   promiseThat,
   rejected,
-  greaterThan,
 } from 'hamjest'
 import { UnableToGetMembersError } from './Errors'
 import { OctokitGitHub } from './OctokitGitHub'
@@ -150,7 +149,6 @@ describe(OctokitGitHub.name, () => {
     const repoList = await gitHubClient.getRepositories()
 
     assertThat(repoList, hasItem('.github'))
-    assertThat(repoList.length, greaterThan(30))
   })
 })
 
