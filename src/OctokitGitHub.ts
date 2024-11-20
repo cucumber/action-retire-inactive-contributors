@@ -1,6 +1,7 @@
 import { GitHub } from '@actions/github/lib/utils'
-import { UnableToGetMembersError } from './Errors'
+import { UnableToGetMembersError, UnableToGetRepositoriesError } from './Errors'
 import { GitHubClient, Logger } from './retireInactiveContributors'
+import { isGithubRequestError } from './Errors'
 
 export class OctokitGitHub implements GitHubClient {
   constructor(
@@ -10,8 +11,7 @@ export class OctokitGitHub implements GitHubClient {
   ) {}
 
   async hasCommittedSince(author: string, date: Date): Promise<boolean> {
-    const response = await this.octokit.rest.repos.listForOrg({ org: this.org })
-    const repos = response.data.map((repoData) => repoData.name)
+    const repos = await this.getRepositories()
     for (const repo of repos) {
       this.logger.info(`Checking for recent commits in '${repo}' repo...`)
       const result = await this.octokit.rest.repos.listCommits({
@@ -67,19 +67,23 @@ export class OctokitGitHub implements GitHubClient {
       throw err
     }
   }
-}
 
-type GithubRequestError = {
-  message: string
-  request: {
-    url: string
+  async getRepositories(): Promise<string[]> {
+    try {
+      const response = await this.octokit.paginate(
+        this.octokit.rest.repos.listForOrg,
+        {
+          org: this.org,
+        }
+      )
+      return response.map((r) => r.name)
+    } catch (err: unknown) {
+      if (isGithubRequestError(err)) {
+        throw new UnableToGetRepositoriesError(
+          `${err.message}, unable to get repositories of ${this.org} from: ${err.request.url}`
+        )
+      }
+      throw err
+    }
   }
-}
-
-function isGithubRequestError(
-  candidate: unknown
-): candidate is GithubRequestError {
-  return Boolean(
-    candidate && typeof candidate == 'object' && 'request' in candidate
-  )
 }

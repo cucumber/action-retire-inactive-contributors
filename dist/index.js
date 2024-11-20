@@ -9556,10 +9556,17 @@ exports.Duration = Duration;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.UnableToGetMembersError = void 0;
+exports.isGithubRequestError = exports.UnableToGetRepositoriesError = exports.UnableToGetMembersError = void 0;
 class UnableToGetMembersError extends Error {
 }
 exports.UnableToGetMembersError = UnableToGetMembersError;
+class UnableToGetRepositoriesError extends Error {
+}
+exports.UnableToGetRepositoriesError = UnableToGetRepositoriesError;
+function isGithubRequestError(candidate) {
+    return Boolean(candidate && typeof candidate == 'object' && 'request' in candidate);
+}
+exports.isGithubRequestError = isGithubRequestError;
 
 
 /***/ }),
@@ -9581,6 +9588,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OctokitGitHub = void 0;
 const Errors_1 = __nccwpck_require__(4934);
+const Errors_2 = __nccwpck_require__(4934);
 class OctokitGitHub {
     constructor(octokit, org, logger) {
         this.octokit = octokit;
@@ -9589,8 +9597,7 @@ class OctokitGitHub {
     }
     hasCommittedSince(author, date) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield this.octokit.rest.repos.listForOrg({ org: this.org });
-            const repos = response.data.map((repoData) => repoData.name);
+            const repos = yield this.getRepositories();
             for (const repo of repos) {
                 this.logger.info(`Checking for recent commits in '${repo}' repo...`);
                 const result = yield this.octokit.rest.repos.listCommits({
@@ -9636,8 +9643,24 @@ class OctokitGitHub {
                 return result.map((user) => user.login);
             }
             catch (err) {
-                if (isGithubRequestError(err)) {
+                if ((0, Errors_2.isGithubRequestError)(err)) {
                     throw new Errors_1.UnableToGetMembersError(`${err.message}, unable to get members of ${team} from: ${err.request.url}`);
+                }
+                throw err;
+            }
+        });
+    }
+    getRepositories() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield this.octokit.paginate(this.octokit.rest.repos.listForOrg, {
+                    org: this.org,
+                });
+                return response.map((r) => r.name);
+            }
+            catch (err) {
+                if ((0, Errors_2.isGithubRequestError)(err)) {
+                    throw new Errors_1.UnableToGetRepositoriesError(`${err.message}, unable to get repositories of ${this.org} from: ${err.request.url}`);
                 }
                 throw err;
             }
@@ -9645,9 +9668,6 @@ class OctokitGitHub {
     }
 }
 exports.OctokitGitHub = OctokitGitHub;
-function isGithubRequestError(candidate) {
-    return Boolean(candidate && typeof candidate == 'object' && 'request' in candidate);
-}
 
 
 /***/ }),
