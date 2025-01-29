@@ -43,6 +43,6 @@
     "@actions/github": "^6.0.0",
     "@octokit/rest": "^20.0.0",
     "mocha": "^11.0.0",
-    "parse-duration": "^1.0.2"
+    "parse-duration": "^2.0.0"
   }
 }
