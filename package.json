@@ -17,7 +17,7 @@
     "test:acceptance": "cucumber-js --tags 'not @todo and not @wip'",
     "test:acceptance:wip": "cucumber-js --tags @wip",
     "test:unit": "mocha src/**/*.test.ts",
-    "lint": "eslint . --ext .ts",
+    "lint": "eslint . -c .ts",
     "format": "prettier --config .prettierrc '{src,features}/**/*.ts' --write"
   },
   "devDependencies": {
